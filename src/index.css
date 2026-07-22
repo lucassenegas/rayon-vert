@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-teal: #2DBFA6;
+  --color-caramel: #6B5640;
+  --color-cream: #FBF8F2;
+  --color-deep: #163C33;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+body {
+  background-color: #FBF8F2;
+  color: #1C2E29;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #F3EEE3;
+}
+::-webkit-scrollbar-thumb {
+  background: #2DBFA6;
+  border-radius: 2px;
+}
+
+/* Cursor */
+::selection {
+  background: rgba(45, 191, 166, 0.25);
+  color: #163C33;
+}
+
+@layer utilities {
+  .text-gradient-teal {
+    background: linear-gradient(135deg, #2DBFA6, #5FD1BB 50%, #6B5640);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+
+  .mask-radial {
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  /* formes signature "blob" organiques — réservées aux visuels portrait (About / Restaurant) */
+  .blob-1 {
+    border-radius: 63% 37% 54% 46% / 43% 37% 63% 57%;
+  }
+  .blob-2 {
+    border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+  }
+}
