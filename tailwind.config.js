@@ -21,6 +21,7 @@ export default {
           light:   '#D4A461',
           dark:    '#93672A',   // assombri pour rester lisible en texte / bouton
           deep:    '#7A5522',
+          soft:    '#E0B778',   // or éclairci — lisible sur les fonds verts sombres
         },
         // fond : le crème exact du logo
         cream: {
