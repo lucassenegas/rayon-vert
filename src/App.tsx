@@ -80,13 +80,13 @@ function useFormspree(endpoint: string) {
 
 // ─── styles partagés ─────────────────────────────────────────────────────────
 
-const btnPrimary = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-teal text-white hover:bg-teal-dark transition-all duration-300 shadow-lg shadow-teal/20'
-const btnDark = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-caramel text-white hover:bg-caramel-dark transition-all duration-300 disabled:opacity-60'
-const btnGhost = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full border-2 border-teal text-teal-dark hover:bg-teal hover:text-white transition-all duration-300'
+const btnPrimary = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-forest text-white hover:bg-forest-dark transition-all duration-300 shadow-lg shadow-forest/20'
+const btnDark = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-gold-dark text-white hover:bg-gold-deep transition-all duration-300 disabled:opacity-60'
+const btnGhost = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full border-2 border-forest text-forest-dark hover:bg-forest hover:text-white transition-all duration-300'
 
 const fieldWrap = 'flex flex-col gap-1.5'
 const fieldLabel = 'font-sans text-[10px] tracking-widest uppercase text-ink-soft/80'
-const fieldInput = 'w-full bg-cream-soft border border-transparent rounded-2xl px-4 py-3 font-sans text-sm text-ink placeholder:text-ink-soft/40 outline-none focus:border-teal transition-colors'
+const fieldInput = 'w-full bg-cream-soft border border-transparent rounded-2xl px-4 py-3 font-sans text-sm text-ink placeholder:text-ink-soft/40 outline-none focus:border-forest transition-colors'
 
 // ─── data ────────────────────────────────────────────────────────────────────
 
@@ -170,16 +170,16 @@ const navLinks = [
 function Divider({ className = '' }: { className?: string }) {
   return (
     <div className={`flex items-center gap-4 ${className}`}>
-      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
-      <div className="w-1.5 h-1.5 rounded-full bg-teal/60" />
-      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-forest/40 to-transparent" />
+      <div className="w-1.5 h-1.5 rounded-full bg-forest/60" />
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-forest/40 to-transparent" />
     </div>
   )
 }
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-teal-dark font-medium mb-3">
+    <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest-dark font-medium mb-3">
       {children}
     </p>
   )
@@ -192,7 +192,7 @@ function SuccessNote({ children }: { children: ReactNode }) {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center text-center gap-2 py-6"
     >
-      <CircleCheck size={32} className="text-teal" />
+      <CircleCheck size={32} className="text-forest" />
       <p className="font-chewy text-lg text-ink">{children}</p>
     </motion.div>
   )
@@ -216,7 +216,7 @@ function BlobCluster({ main, secondary, accentIcon, mainShape, secondaryShape, a
   return (
     <div className="relative max-w-md mx-auto lg:max-w-none mt-[14%] mb-[12%]">
       {/* halo derrière le blob principal */}
-      <div className={`absolute -inset-5 bg-teal-pale ${mainShape} blur-2xl opacity-60`} aria-hidden="true" />
+      <div className={`absolute -inset-5 bg-forest-pale ${mainShape} blur-2xl opacity-60`} aria-hidden="true" />
 
       {/* blob principal — photo focale */}
       <div className={`relative aspect-[4/5] w-full overflow-hidden ${mainShape} shadow-2xl shadow-ink/15`}>
@@ -273,7 +273,7 @@ function ReservationDialog({ open, onOpenChange, title, icon, children }: {
                       {icon}
                       {title}
                     </Dialog.Title>
-                    <Dialog.Close className="w-9 h-9 rounded-full bg-cream-soft hover:bg-teal-pale flex items-center justify-center transition-colors flex-shrink-0" aria-label="Fermer">
+                    <Dialog.Close className="w-9 h-9 rounded-full bg-cream-soft hover:bg-forest-pale flex items-center justify-center transition-colors flex-shrink-0" aria-label="Fermer">
                       <X size={18} className="text-ink" />
                     </Dialog.Close>
                   </div>
@@ -505,7 +505,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
         {/* Logo */}
         <a href="#" className="group flex-shrink-0 flex items-center gap-2">
           <p className={`font-chewy text-2xl sm:text-3xl leading-none transition-colors ${scrolled ? 'text-deep' : 'text-white drop-shadow-sm'}`}>
-            Le <span className="text-teal">Rayon Vert</span>
+            Le <span className="text-forest">Rayon Vert</span>
           </p>
         </a>
 
@@ -516,7 +516,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
               key={link.label}
               href={link.href}
               className={`font-sans text-[12px] font-medium tracking-wide px-3.5 py-2 rounded-full transition-colors duration-300 ${
-                scrolled ? 'text-ink-soft hover:bg-teal-pale hover:text-teal-dark' : 'text-white/90 hover:bg-white/15'
+                scrolled ? 'text-ink-soft hover:bg-forest-pale hover:text-forest-dark' : 'text-white/90 hover:bg-white/15'
               }`}
             >
               {link.label}
@@ -532,7 +532,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
               aria-haspopup="listbox"
               aria-expanded={langOpen}
               className={`inline-flex items-center gap-1 font-sans text-[11px] font-medium px-2.5 py-2 rounded-full transition-colors duration-300 ${
-                scrolled ? 'text-ink-soft hover:bg-teal-pale hover:text-teal-dark' : 'text-white/80 hover:bg-white/15'
+                scrolled ? 'text-ink-soft hover:bg-forest-pale hover:text-forest-dark' : 'text-white/80 hover:bg-white/15'
               }`}
             >
               <Globe size={14} />
@@ -552,10 +552,10 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
                   <button
                     role="option"
                     aria-selected="true"
-                    className="w-full flex items-center justify-between px-4 py-2.5 font-sans text-[12px] text-ink hover:bg-teal-pale/60 transition-colors"
+                    className="w-full flex items-center justify-between px-4 py-2.5 font-sans text-[12px] text-ink hover:bg-forest-pale/60 transition-colors"
                   >
                     Français
-                    <CircleCheck size={14} className="text-teal" />
+                    <CircleCheck size={14} className="text-forest" />
                   </button>
                   <button
                     role="option"
@@ -577,7 +577,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
             rel="noreferrer"
             aria-label="Instagram"
             className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${
-              scrolled ? 'text-ink-soft hover:bg-teal-pale hover:text-teal-dark' : 'text-white/80 hover:bg-white/15'
+              scrolled ? 'text-ink-soft hover:bg-forest-pale hover:text-forest-dark' : 'text-white/80 hover:bg-white/15'
             }`}
           >
             <Instagram size={16} />
@@ -586,7 +586,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
           <button
             onClick={onReserve}
             className={`inline-flex items-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-6 py-2.5 rounded-full shadow-md transition-all duration-300 ${
-              scrolled ? 'bg-teal text-white shadow-teal/25 hover:bg-teal-dark' : 'bg-white text-deep shadow-ink/10 hover:bg-teal hover:text-white'
+              scrolled ? 'bg-forest text-white shadow-forest/25 hover:bg-forest-dark' : 'bg-white text-deep shadow-ink/10 hover:bg-forest hover:text-white'
             }`}
           >
             <CalendarDays size={13} />
@@ -619,7 +619,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  className="font-chewy text-3xl text-deep hover:text-teal transition-colors"
+                  className="font-chewy text-3xl text-deep hover:text-forest transition-colors"
                   onClick={() => setMenuOpen(false)}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -644,14 +644,16 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
-function Hero({ onReserve }: { onReserve: () => void }) {
+function Hero() {
   const { scrollY } = useScroll()
   const imgY = useTransform(scrollY, [0, 600], [0, 100])
-  const overlayOpacity = useTransform(scrollY, [0, 400], [0.5, 0.8])
+  const overlayOpacity = useTransform(scrollY, [0, 400], [0.22, 0.55])
 
   return (
-    <section className="relative h-screen min-h-[640px] flex items-center justify-center overflow-hidden">
-      {/* Parallax image */}
+    <section className="relative h-screen min-h-[620px] overflow-hidden">
+      {/* Fond parallax — remplacer <img> par <video> quand le drone sera monté :
+          <video src={A('drone.mp4')} autoPlay muted loop playsInline
+                 className="w-full h-full object-cover scale-110" /> */}
       <motion.div className="absolute inset-0" style={{ y: imgY }}>
         <img
           src={A('DJI_0148-scaled.jpg')}
@@ -661,124 +663,107 @@ function Hero({ onReserve }: { onReserve: () => void }) {
         />
       </motion.div>
 
-      {/* Gradient overlays */}
+      {/* Voiles — assez légers pour laisser respirer la vidéo, assez denses
+          pour que le logo reste lisible en haut de l'écran */}
       <motion.div className="absolute inset-0 bg-deep" style={{ opacity: overlayOpacity }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/10 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-deep/50 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-deep/60 via-transparent to-deep/45" />
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-16">
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-2 mb-6"
-          initial={{ opacity: 0, y: 20 }}
+      {/* Logo seul, centré dans la partie haute */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-start pt-24 sm:pt-28 px-6">
+        <motion.img
+          src={A('logo.png')}
+          alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe"
+          className="w-[260px] sm:w-[320px] lg:w-[380px] h-auto"
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 font-sans text-[11px] tracking-widest uppercase text-white/90">
-            <MapPin size={12} className="text-teal" />
-            Deshaies · Guadeloupe · ★★★
-          </span>
-          <a
-            href="tel:+590590284323"
-            className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 font-sans text-[11px] tracking-widest text-white/90 hover:bg-white/25 transition-colors"
-          >
-            <Phone size={12} className="text-teal" />
-            +590 (0)590 28 43 23
-          </a>
-          <a
-            href="mailto:contact@hotels-deshaies.com"
-            className="hidden sm:inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 font-sans text-[11px] tracking-widest text-white/90 hover:bg-white/25 transition-colors"
-          >
-            <Mail size={12} className="text-teal" />
-            contact@hotels-deshaies.com
-          </a>
+          transition={{ delay: 0.4, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+
+      {/* Indicateur de défilement — masqué sur mobile */}
+      <motion.div
+        className="hidden sm:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-1.5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 1 }}
+      >
+        <div className="w-5 h-8 rounded-full border-2 border-white/70 flex justify-center pt-1.5">
+          <motion.div
+            className="w-1 h-1.5 rounded-full bg-white"
+            animate={{ y: [0, 8, 0], opacity: [1, 0, 1] }}
+            transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
+          />
+        </div>
+        <ChevronDown size={12} className="text-white/80" />
+      </motion.div>
+    </section>
+  )
+}
+
+
+// ─── Intro ────────────────────────────────────────────────────────────────────
+
+function Intro({ onReserve }: { onReserve: () => void }) {
+  const { ref, isInView } = useScrollFade(0.1)
+
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-4">
+      <div className="max-w-3xl mx-auto text-center" ref={ref}>
+        <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
+          <SectionLabel>Deshaies · Guadeloupe · ★★★</SectionLabel>
         </motion.div>
 
         <motion.h1
-          className="font-chewy text-5xl sm:text-6xl lg:text-8xl text-white leading-[1.05] mb-6"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="font-chewy text-4xl sm:text-5xl lg:text-6xl text-deep leading-[1.1] mt-4"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.1}
         >
-          Une promesse<br />entre <span className="text-teal">mer et montagne</span>
+          Une promesse entre <span className="text-forest">mer et montagne</span>
         </motion.h1>
 
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 1.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="origin-center"
-        >
-          <Divider className="mb-4 max-w-xs mx-auto" />
-        </motion.div>
-
         <motion.p
-          className="font-sans text-base sm:text-lg text-white/85 leading-relaxed mb-6 max-w-xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
+          className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed mt-6"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.2}
         >
-          Hôtel familial niché dans la végétation tropicale. Piscine à débordement, restaurant panoramique, vue imprenable sur la mer.
+          Vingt-deux chambres posées à flanc de morne, face à la mer des Caraïbes.
+          Un hôtel familial de charme où l'on vient pour la piscine à débordement,
+          la table créole et ces couchers de soleil que l'on regarde sans rien dire.
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-3 justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.7, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-wrap justify-center gap-x-10 gap-y-4 mt-10"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.3}
+        >
+          {[['22', 'Chambres'], ['4.4', 'Google'], ['4.3', 'TripAdvisor']].map(([num, label]) => (
+            <div key={label} className="text-center">
+              <p className="font-chewy text-3xl text-forest-dark leading-none">{num}</p>
+              <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft/70 mt-1.5">{label}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          className="flex flex-col sm:flex-row gap-3 justify-center mt-10"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.4}
         >
           <button onClick={onReserve} className={btnPrimary}>
             <CalendarDays size={14} />
             Réserver votre séjour
           </button>
-          <a
-            href="#chambres"
-            className="inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full border-2 border-white/40 text-white hover:border-white hover:bg-white/10 transition-all duration-300"
-          >
+          <a href="#chambres" className={btnGhost}>
             Voir les chambres
           </a>
-        </motion.div>
-
-        <motion.div
-          className="flex justify-center gap-8 mt-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-        >
-          <div>
-            <p className="font-chewy text-2xl text-white leading-none">22</p>
-            <p className="font-sans text-[9px] tracking-widest uppercase text-white/50 mt-1">Chambres</p>
-          </div>
-          {[['4.4', 'Google'], ['4.3', 'TripAdvisor']].map(([num, label]) => (
-            <a key={label} href="#avis" className="hover:opacity-80 transition-opacity">
-              <p className="font-chewy text-2xl text-white leading-none">{num}</p>
-              <p className="font-sans text-[9px] tracking-widest uppercase text-white/50 mt-1">{label}</p>
-            </a>
-          ))}
-        </motion.div>
-
-        {/* Scroll indicator — masqué sur mobile (icône souris peu pertinente au toucher) */}
-        <motion.div
-          className="hidden sm:flex mt-10 flex-col items-center gap-1.5 mx-auto w-fit"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.4, duration: 1 }}
-        >
-          <div className="w-5 h-8 rounded-full border-2 border-white/70 flex justify-center pt-1.5">
-            <motion.div
-              className="w-1 h-1.5 rounded-full bg-white"
-              animate={{ y: [0, 8, 0], opacity: [1, 0, 1] }}
-              transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
-            />
-          </div>
-          <div className="flex flex-col items-center -space-y-3">
-            <motion.div animate={{ opacity: [0.25, 1, 0.25] }} transition={{ repeat: Infinity, duration: 1.6, delay: 0 }}>
-              <ChevronDown size={12} className="text-white/80" />
-            </motion.div>
-            <motion.div animate={{ opacity: [0.25, 1, 0.25] }} transition={{ repeat: Infinity, duration: 1.6, delay: 0.25 }}>
-              <ChevronDown size={12} className="text-white/80" />
-            </motion.div>
-          </div>
         </motion.div>
       </div>
     </section>
@@ -800,7 +785,7 @@ function About() {
             secondary={{ src: A('flamboyants-scaled.jpg'), alt: 'Jardin tropical en fleurs' }}
             mainShape="blob-1"
             secondaryShape="blob-2"
-            accentBg="bg-teal"
+            accentBg="bg-forest"
             accentIcon={<Waves size={20} className="text-white" />}
           />
         </motion.div>
@@ -811,7 +796,7 @@ function About() {
             <SectionLabel>Bienvenue</SectionLabel>
             <h2 className="font-chewy text-4xl lg:text-5xl text-deep leading-tight mb-6">
               Un hôtel à taille humaine,<br />
-              face à la <span className="text-teal">mer des Caraïbes</span>
+              face à la <span className="text-forest">mer des Caraïbes</span>
             </h2>
           </motion.div>
 
@@ -847,7 +832,7 @@ function About() {
           >
             {[['22', 'Chambres'], ['★★★', 'Classé'], ['∞', 'Vue mer']].map(([num, label]) => (
               <div key={label} className="flex items-center gap-3 bg-white rounded-full pl-4 pr-5 py-2.5 shadow-md shadow-ink/5">
-                <p className="font-chewy text-xl text-teal-dark">{num}</p>
+                <p className="font-chewy text-xl text-forest-dark">{num}</p>
                 <p className="font-sans text-[10px] text-ink-soft leading-tight max-w-[4.5rem]">{label}</p>
               </div>
             ))}
@@ -865,7 +850,7 @@ function Highlights() {
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-4">
-      <div className="max-w-7xl mx-auto bg-teal-pale rounded-6xl px-4 sm:px-8 py-10" ref={ref}>
+      <div className="max-w-7xl mx-auto bg-forest-pale rounded-6xl px-4 sm:px-8 py-10" ref={ref}>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {amenities.map(({ icon: Icon, label, desc }, i) => (
             <motion.div
@@ -877,7 +862,7 @@ function Highlights() {
               custom={i * 0.1}
             >
               <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-md shadow-ink/5">
-                <Icon size={20} className="text-teal-dark" />
+                <Icon size={20} className="text-forest-dark" />
               </div>
               <p className="font-sans text-[12px] font-medium tracking-wide uppercase text-deep">{label}</p>
               <p className="font-sans text-[12px] text-ink-soft leading-relaxed">{desc}</p>
@@ -906,7 +891,7 @@ function Rooms({ onSelectRoom }: { onSelectRoom: (key: string) => void }) {
             href="https://www.hotels-deshaies.com/tarifs-reservation-hotel-deshaies-guadeloupe"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-sans text-[12px] text-ink-soft hover:text-teal-dark transition-colors"
+            className="inline-flex items-center gap-1.5 font-sans text-[12px] text-ink-soft hover:text-forest-dark transition-colors"
             variants={fadeUp}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
@@ -958,13 +943,13 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
       </div>
 
       <div className="p-6 sm:p-7 flex flex-col flex-1">
-        <p className="font-sans text-[11px] tracking-wide uppercase text-teal-dark mb-1">{room.subtitle}</p>
+        <p className="font-sans text-[11px] tracking-wide uppercase text-forest-dark mb-1">{room.subtitle}</p>
         <h3 className="font-chewy text-2xl text-deep mb-3 leading-tight">{room.title}</h3>
         <p className="font-sans text-sm text-ink-soft leading-relaxed mb-4 flex-1">{room.description}</p>
 
         <div className="flex gap-2 flex-wrap mb-5">
           {room.features.map((f) => (
-            <span key={f} className="font-sans text-[11px] text-teal-dark bg-teal-pale px-3 py-1 rounded-full">{f}</span>
+            <span key={f} className="font-sans text-[11px] text-forest-dark bg-forest-pale px-3 py-1 rounded-full">{f}</span>
           ))}
         </div>
 
@@ -975,24 +960,24 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
             <div className="flex gap-1.5 mb-2">
               <button
                 onClick={() => setHalfBoard(false)}
-                className={`font-sans text-[10px] px-2.5 py-1 rounded-full border transition-colors ${!halfBoard ? 'bg-teal border-teal text-white' : 'border-teal/50 text-teal-dark'}`}
+                className={`font-sans text-[10px] px-2.5 py-1 rounded-full border transition-colors ${!halfBoard ? 'bg-forest border-forest text-white' : 'border-forest/50 text-forest-dark'}`}
               >
                 Chambre
               </button>
               <button
                 onClick={() => setHalfBoard(true)}
-                className={`font-sans text-[10px] px-2.5 py-1 rounded-full border transition-colors ${halfBoard ? 'bg-teal border-teal text-white' : 'border-teal/50 text-teal-dark'}`}
+                className={`font-sans text-[10px] px-2.5 py-1 rounded-full border transition-colors ${halfBoard ? 'bg-forest border-forest text-white' : 'border-forest/50 text-forest-dark'}`}
               >
                 Demi-pension
               </button>
             </div>
-            <p className="font-chewy text-xl text-teal-dark">
+            <p className="font-chewy text-xl text-forest-dark">
               dès {halfBoard ? room.priceHalfBoard : room.priceRoom}€ <span className="font-sans text-[11px] text-ink-soft font-normal">/nuit</span>
             </p>
           </div>
           <button
             onClick={() => onSelectRoom(room.key)}
-            className="font-sans text-[11px] font-medium tracking-wide uppercase text-caramel border-b border-caramel/50 hover:border-caramel pb-0.5 transition-colors flex-shrink-0"
+            className="font-sans text-[11px] font-medium tracking-wide uppercase text-gold-dark border-b border-gold-dark/50 hover:border-gold-dark pb-0.5 transition-colors flex-shrink-0"
           >
             Réserver
           </button>
@@ -1017,7 +1002,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
               secondary={{ src: A('IMG_0406-scaled.jpg'), alt: 'Moules frites, cuisine créole' }}
               mainShape="blob-2"
               secondaryShape="blob-1"
-              accentBg="bg-caramel"
+              accentBg="bg-gold"
               accentIcon={<UtensilsCrossed size={18} className="text-white" />}
               reverse
             />
@@ -1028,7 +1013,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
             <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
               <SectionLabel>Cuisine créole</SectionLabel>
               <h2 className="font-chewy text-4xl lg:text-5xl text-deep leading-tight mb-6">
-                Une table qui regarde<br /><span className="text-teal">l'horizon</span>
+                Une table qui regarde<br /><span className="text-forest">l'horizon</span>
               </h2>
             </motion.div>
 
@@ -1101,9 +1086,9 @@ function PoolFeature() {
       <div className="absolute inset-0 bg-gradient-to-b from-deep via-transparent to-deep" />
 
       <motion.div className="relative z-10 text-center px-6" style={{ y: textY, opacity }}>
-        <p className="font-sans text-[11px] tracking-widest-xl uppercase text-teal mb-4">Piscine à débordement</p>
+        <p className="font-sans text-[11px] tracking-widest-xl uppercase text-forest mb-4">Piscine à débordement</p>
         <p className="font-chewy text-3xl sm:text-4xl lg:text-5xl text-white leading-tight max-w-2xl mx-auto">
-          Là où l'horizon<br /><span className="text-teal">se fond dans la mer</span>
+          Là où l'horizon<br /><span className="text-forest">se fond dans la mer</span>
         </p>
       </motion.div>
     </section>
@@ -1131,14 +1116,14 @@ function Activities() {
         {activities.map(({ icon: Icon, name, desc }, i) => (
           <motion.div
             key={name}
-            className="bg-teal-pale rounded-5xl p-6 text-center flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform duration-300"
+            className="bg-forest-pale rounded-5xl p-6 text-center flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform duration-300"
             variants={fadeUp}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
             custom={i * 0.1}
           >
             <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center">
-              <Icon size={18} className="text-teal-dark" />
+              <Icon size={18} className="text-forest-dark" />
             </div>
             <h3 className="font-chewy text-lg text-deep">{name}</h3>
             <p className="font-sans text-[12px] text-ink-soft leading-relaxed">{desc}</p>
@@ -1234,21 +1219,21 @@ function Gallery() {
             </p>
 
             <button
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-teal hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-forest hover:bg-white/20 transition-colors flex items-center justify-center"
               onClick={() => setSelected(null)}
               aria-label="Fermer"
             >
               <X size={22} />
             </button>
             <button
-              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 text-white/80 hover:text-teal hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 text-white/80 hover:text-forest hover:bg-white/20 transition-colors flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); goPrev() }}
               aria-label="Photo précédente"
             >
               <ChevronLeft size={24} />
             </button>
             <button
-              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 text-white/80 hover:text-teal hover:bg-white/20 transition-colors flex items-center justify-center"
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 text-white/80 hover:text-forest hover:bg-white/20 transition-colors flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); goNext() }}
               aria-label="Photo suivante"
             >
@@ -1270,7 +1255,7 @@ function Avis() {
     <section id="avis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep">
       <div className="max-w-7xl mx-auto">
         <motion.div className="text-center mb-14" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} ref={ref}>
-          <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-teal font-medium mb-3">Avis voyageurs</p>
+          <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest font-medium mb-3">Avis voyageurs</p>
           <h2 className="font-chewy text-4xl lg:text-5xl text-cream">Ce que disent nos clients</h2>
         </motion.div>
 
@@ -1284,9 +1269,9 @@ function Avis() {
               animate={isInView ? 'visible' : 'hidden'}
               custom={i * 0.12}
             >
-              <Quote size={20} className="text-teal mb-3" />
+              <Quote size={20} className="text-forest mb-3" />
               <div className="flex gap-0.5 mb-3">
-                {[...Array(5)].map((_, s) => <Star key={s} size={12} className="fill-teal-dark text-teal-dark" />)}
+                {[...Array(5)].map((_, s) => <Star key={s} size={12} className="fill-forest-dark text-forest-dark" />)}
               </div>
               <p className="font-chewy italic text-base text-ink leading-relaxed mb-4">"{t.text}"</p>
               <p className="font-sans text-sm font-medium text-deep">{t.author}</p>
@@ -1300,9 +1285,9 @@ function Avis() {
             href="https://www.tripadvisor.fr/Hotel_Review-g580415-d2366289-Reviews-Hotel_Restaurant_Le_Rayon_Vert-Deshaies_Basse_Terre_Island_Guadeloupe.html"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md shadow-ink/5 font-sans text-sm font-medium text-teal-dark hover:shadow-lg transition-shadow"
+            className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md shadow-ink/5 font-sans text-sm font-medium text-forest-dark hover:shadow-lg transition-shadow"
           >
-            <Star size={14} className="fill-teal-dark text-teal-dark" />
+            <Star size={14} className="fill-forest-dark text-forest-dark" />
             Voir tous les avis sur TripAdvisor
           </a>
         </div>
@@ -1320,9 +1305,9 @@ function ReserveCTA({ onReserve }: { onReserve: () => void }) {
     <section id="reserver" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep">
       <div className="max-w-xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-teal font-medium mb-3">Réservation directe</p>
+          <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest font-medium mb-3">Réservation directe</p>
           <h2 className="font-chewy text-4xl lg:text-5xl text-cream mb-4">
-            Réservez votre <span className="text-teal">séjour</span>
+            Réservez votre <span className="text-forest">séjour</span>
           </h2>
           <p className="font-sans text-sm text-cream/60 mb-10 max-w-md mx-auto">
             Meilleur tarif garanti en réservation directe · Réponse sous 24h · Sans frais de dossier
@@ -1353,7 +1338,7 @@ function ContactSection({ onContact }: { onContact: () => void }) {
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
           <SectionLabel>Nous contacter</SectionLabel>
           <h2 className="font-chewy text-3xl lg:text-4xl text-deep leading-tight mb-4">
-            Une question, un <span className="text-teal">devis de groupe</span> ?
+            Une question, un <span className="text-forest">devis de groupe</span> ?
           </h2>
           <p className="font-sans text-sm text-ink-soft leading-relaxed mb-8 max-w-md mx-auto">
             Réservation de groupe, événement privé ou simple question : notre équipe vous répond sous 24h.
@@ -1367,10 +1352,10 @@ function ContactSection({ onContact }: { onContact: () => void }) {
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.1}
         >
-          <a href="tel:+590590284323" className="flex items-center gap-2 bg-teal-pale rounded-full px-5 py-3 font-sans text-sm text-teal-dark hover:bg-teal hover:text-white transition-colors">
+          <a href="tel:+590590284323" className="flex items-center gap-2 bg-forest-pale rounded-full px-5 py-3 font-sans text-sm text-forest-dark hover:bg-forest hover:text-white transition-colors">
             <Phone size={14} /> +590 (0)590 28 43 23
           </a>
-          <a href="mailto:contact@hotels-deshaies.com" className="flex items-center gap-2 bg-teal-pale rounded-full px-5 py-3 font-sans text-sm text-teal-dark hover:bg-teal hover:text-white transition-colors">
+          <a href="mailto:contact@hotels-deshaies.com" className="flex items-center gap-2 bg-forest-pale rounded-full px-5 py-3 font-sans text-sm text-forest-dark hover:bg-forest hover:text-white transition-colors">
             <Mail size={14} /> contact@hotels-deshaies.com
           </a>
         </motion.div>
@@ -1402,14 +1387,14 @@ function Footer() {
       <div className="max-w-7xl mx-auto" ref={ref}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
           <motion.div className="sm:col-span-2 lg:col-span-1" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-            <p className="font-chewy text-2xl text-deep mb-2">Le <span className="text-teal">Rayon Vert</span></p>
+            <p className="font-chewy text-2xl text-deep mb-2">Le <span className="text-forest">Rayon Vert</span></p>
             <p className="font-sans text-sm text-ink-soft leading-relaxed mb-5">
               Hôtel de charme familial à Deshaies, Guadeloupe. Vue imprenable sur la mer des Caraïbes, piscine à débordement, restaurant créole.
             </p>
             <div className="flex gap-2">
               {socials.map(({ label, icon: Icon, href }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  className="w-10 h-10 rounded-full bg-teal-pale text-teal-dark flex items-center justify-center hover:bg-teal hover:text-white transition-colors">
+                  className="w-10 h-10 rounded-full bg-forest-pale text-forest-dark flex items-center justify-center hover:bg-forest hover:text-white transition-colors">
                   <Icon size={16} />
                 </a>
               ))}
@@ -1417,28 +1402,28 @@ function Footer() {
           </motion.div>
 
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.1}>
-            <h4 className="font-sans text-[11px] tracking-widest uppercase text-teal-dark font-medium mb-4">L'hôtel</h4>
+            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">L'hôtel</h4>
             <ul className="space-y-2.5">
               {navLinks.map((link) => (
-                <li key={link.label}><a href={link.href} className="font-sans text-sm text-ink-soft hover:text-teal-dark transition-colors">{link.label}</a></li>
+                <li key={link.label}><a href={link.href} className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">{link.label}</a></li>
               ))}
             </ul>
           </motion.div>
 
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.15}>
-            <h4 className="font-sans text-[11px] tracking-widest uppercase text-teal-dark font-medium mb-4">Réservation</h4>
+            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">Réservation</h4>
             <ul className="space-y-2.5">
-              <li><a href="#reserver" className="font-sans text-sm text-ink-soft hover:text-teal-dark transition-colors">Réserver en direct</a></li>
-              <li><a href="https://www.hotels-deshaies.com/tarifs-reservation-hotel-deshaies-guadeloupe" target="_blank" rel="noopener noreferrer" className="font-sans text-sm text-ink-soft hover:text-teal-dark transition-colors">Tarifs</a></li>
-              <li><a href="#devis" className="font-sans text-sm text-ink-soft hover:text-teal-dark transition-colors">Devis groupe</a></li>
+              <li><a href="#reserver" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">Réserver en direct</a></li>
+              <li><a href="https://www.hotels-deshaies.com/tarifs-reservation-hotel-deshaies-guadeloupe" target="_blank" rel="noopener noreferrer" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">Tarifs</a></li>
+              <li><a href="#devis" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">Devis groupe</a></li>
             </ul>
           </motion.div>
 
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
-            <h4 className="font-sans text-[11px] tracking-widest uppercase text-teal-dark font-medium mb-4">Contact</h4>
+            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">Contact</h4>
             <ul className="space-y-2.5">
-              <li><a href="tel:+590590284323" className="font-sans text-sm text-ink-soft hover:text-teal-dark transition-colors">+590 (0)590 28 43 23</a></li>
-              <li><a href="mailto:contact@hotels-deshaies.com" className="font-sans text-sm text-ink-soft hover:text-teal-dark transition-colors">contact@hotels-deshaies.com</a></li>
+              <li><a href="tel:+590590284323" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">+590 (0)590 28 43 23</a></li>
+              <li><a href="mailto:contact@hotels-deshaies.com" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">contact@hotels-deshaies.com</a></li>
               <li className="font-sans text-sm text-ink-soft/70">Deshaies, Guadeloupe</li>
             </ul>
           </motion.div>
@@ -1467,7 +1452,8 @@ export default function App() {
   return (
     <div className="bg-cream min-h-screen">
       <Navbar onReserve={() => setModal('sejour')} />
-      <Hero onReserve={() => setModal('sejour')} />
+      <Hero />
+      <Intro onReserve={() => setModal('sejour')} />
       <About />
       <Highlights />
       <Rooms onSelectRoom={(key) => { setPresetRoom(key); setModal('sejour') }} />
@@ -1484,7 +1470,7 @@ export default function App() {
         open={modal === 'sejour'}
         onOpenChange={(v) => setModal(v ? 'sejour' : null)}
         title="Réserver votre séjour"
-        icon={<CalendarDays size={20} className="text-teal" />}
+        icon={<CalendarDays size={20} className="text-forest" />}
       >
         <SejourFormContent presetRoom={presetRoom} onPresetRoomChange={setPresetRoom} />
       </ReservationDialog>
@@ -1493,7 +1479,7 @@ export default function App() {
         open={modal === 'restaurant'}
         onOpenChange={(v) => setModal(v ? 'restaurant' : null)}
         title="Réserver une table"
-        icon={<UtensilsCrossed size={20} className="text-teal" />}
+        icon={<UtensilsCrossed size={20} className="text-forest" />}
       >
         <RestaurantFormContent />
       </ReservationDialog>
@@ -1502,7 +1488,7 @@ export default function App() {
         open={modal === 'contact'}
         onOpenChange={(v) => setModal(v ? 'contact' : null)}
         title="Nous contacter"
-        icon={<Mail size={20} className="text-teal" />}
+        icon={<Mail size={20} className="text-forest" />}
       >
         <ContactFormContent />
       </ReservationDialog>
