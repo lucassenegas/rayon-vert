@@ -390,12 +390,21 @@ function RestaurantFormContent() {
           <label className={fieldLabel}>Heure *</label>
           <select name="heure" required className={fieldInput}>
             <option value="">--</option>
-            <option value="12:00">12h00</option>
-            <option value="12:30">12h30</option>
-            <option value="13:00">13h00</option>
-            <option value="19:00">19h00</option>
-            <option value="19:30">19h30</option>
-            <option value="20:00">20h00</option>
+            <optgroup label="Déjeuner · vendredi, samedi & dimanche">
+              <option value="11:30">11h30</option>
+              <option value="12:00">12h00</option>
+              <option value="12:30">12h30</option>
+              <option value="13:00">13h00</option>
+              <option value="13:30">13h30</option>
+            </optgroup>
+            <optgroup label="Dîner · tous les soirs">
+              <option value="18:00">18h00</option>
+              <option value="18:30">18h30</option>
+              <option value="19:00">19h00</option>
+              <option value="19:30">19h30</option>
+              <option value="20:00">20h00</option>
+              <option value="20:30">20h30</option>
+            </optgroup>
           </select>
         </div>
       </div>
@@ -1039,6 +1048,20 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
             </motion.p>
 
             <motion.div
+              className="flex items-start gap-3 bg-forest-pale rounded-3xl px-5 py-4 mb-8"
+              variants={fadeUp}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              custom={0.25}
+            >
+              <Waves size={18} className="text-forest-dark flex-shrink-0 mt-0.5" />
+              <p className="font-sans text-sm text-forest-dark leading-relaxed">
+                <span className="font-medium">Piscine offerte.</span> L'accès à la piscine à débordement
+                est inclus pour tous les clients du restaurant, midi comme soir.
+              </p>
+            </motion.div>
+
+            <motion.div
               className="bg-white rounded-4xl p-6 space-y-1 mb-8"
               variants={fadeUp}
               initial="hidden"
@@ -1046,8 +1069,8 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
               custom={0.3}
             >
               {[
-                { label: 'Vendredi – Dimanche', hours: 'Midi · 12h–14h' },
-                { label: 'Tous les soirs', hours: '19h–21h' },
+                { label: 'Déjeuner · vendredi, samedi & dimanche', hours: '11h30 – 14h15' },
+                { label: 'Dîner · tous les soirs', hours: '18h00 – 21h00' },
               ].map(({ label, hours }) => (
                 <div key={label} className="flex justify-between items-center py-2.5 border-b border-cream-dark last:border-0">
                   <p className="font-sans text-sm text-ink-soft">{label}</p>
