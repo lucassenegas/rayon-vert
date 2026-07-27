@@ -80,9 +80,9 @@ function useFormspree(endpoint: string) {
 
 // ─── styles partagés ─────────────────────────────────────────────────────────
 
-const btnPrimary = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-forest text-white hover:bg-forest-dark transition-all duration-300 shadow-lg shadow-forest/20'
-const btnDark = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-gold-dark text-white hover:bg-gold-deep transition-all duration-300 disabled:opacity-60'
-const btnGhost = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full border-2 border-forest text-forest-dark hover:bg-forest hover:text-white transition-all duration-300'
+const btnPrimary = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-gold text-deep hover:bg-gold-dark hover:text-white transition-all duration-300 shadow-lg shadow-gold/25'
+const btnDark = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full bg-gold text-deep hover:bg-gold-dark hover:text-white transition-all duration-300 shadow-lg shadow-gold/25 disabled:opacity-60'
+const btnGhost = 'inline-flex items-center justify-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-8 py-3.5 rounded-full border-2 border-gold text-deep hover:bg-gold hover:text-deep transition-all duration-300'
 
 const fieldWrap = 'flex flex-col gap-1.5'
 const fieldLabel = 'font-sans text-[10px] tracking-widest uppercase text-ink-soft/80'
@@ -177,9 +177,9 @@ function Divider({ className = '' }: { className?: string }) {
   )
 }
 
-function SectionLabel({ children }: { children: ReactNode }) {
+function SectionLabel({ children, onDark = false }: { children: ReactNode; onDark?: boolean }) {
   return (
-    <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest-dark font-medium mb-3">
+    <p className={`font-sans text-[12px] tracking-widest-xl uppercase font-medium mb-3 ${onDark ? 'text-gold-soft' : 'text-gold-dark'}`}>
       {children}
     </p>
   )
@@ -716,7 +716,12 @@ function Intro({ onReserve }: { onReserve: () => void }) {
     <section className="px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-4">
       <div className="max-w-3xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
-          <SectionLabel>Deshaies · Guadeloupe · ★★★</SectionLabel>
+          <p className="font-sans text-[15px] sm:text-[17px] tracking-widest-xl uppercase font-medium text-forest-dark mb-1">
+            Deshaies · Guadeloupe
+          </p>
+          <p className="text-gold text-2xl sm:text-3xl tracking-[0.25em] leading-none mb-4" aria-label="Hôtel 3 étoiles">
+            ★★★
+          </p>
         </motion.div>
 
         <motion.h1
@@ -1092,9 +1097,9 @@ function PoolFeature() {
       <div className="absolute inset-0 bg-gradient-to-b from-deep via-transparent to-deep" />
 
       <motion.div className="relative z-10 text-center px-6" style={{ y: textY, opacity }}>
-        <p className="font-sans text-[11px] tracking-widest-xl uppercase text-forest mb-4">Piscine à débordement</p>
+        <p className="font-sans text-[13px] tracking-widest-xl uppercase text-gold-soft font-medium mb-4">Piscine à débordement</p>
         <p className="font-chewy text-3xl sm:text-4xl lg:text-5xl text-white leading-tight max-w-2xl mx-auto">
-          Là où l'horizon<br /><span className="text-forest">se fond dans la mer</span>
+          Là où l'horizon<br /><span className="text-gold-soft">se fond dans la mer</span>
         </p>
       </motion.div>
     </section>
@@ -1261,7 +1266,7 @@ function Avis() {
     <section id="avis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep-panel">
       <div className="max-w-7xl mx-auto">
         <motion.div className="text-center mb-14" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} ref={ref}>
-          <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest font-medium mb-3">Avis voyageurs</p>
+          <SectionLabel onDark>Avis voyageurs</SectionLabel>
           <h2 className="font-chewy text-4xl lg:text-5xl text-cream">Ce que disent nos clients</h2>
         </motion.div>
 
@@ -1275,9 +1280,9 @@ function Avis() {
               animate={isInView ? 'visible' : 'hidden'}
               custom={i * 0.12}
             >
-              <Quote size={20} className="text-forest mb-3" />
+              <Quote size={20} className="text-gold mb-3" />
               <div className="flex gap-0.5 mb-3">
-                {[...Array(5)].map((_, s) => <Star key={s} size={12} className="fill-forest-dark text-forest-dark" />)}
+                {[...Array(5)].map((_, s) => <Star key={s} size={15} className="fill-gold text-gold" />)}
               </div>
               <p className="font-chewy italic text-base text-ink leading-relaxed mb-4">"{t.text}"</p>
               <p className="font-sans text-sm font-medium text-deep">{t.author}</p>
@@ -1293,7 +1298,7 @@ function Avis() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md shadow-ink/5 font-sans text-sm font-medium text-forest-dark hover:shadow-lg transition-shadow"
           >
-            <Star size={14} className="fill-forest-dark text-forest-dark" />
+            <Star size={14} className="fill-gold text-gold" />
             Voir tous les avis sur TripAdvisor
           </a>
         </div>
@@ -1311,9 +1316,9 @@ function ReserveCTA({ onReserve }: { onReserve: () => void }) {
     <section id="reserver" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep-panel">
       <div className="max-w-xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest font-medium mb-3">Réservation directe</p>
+          <SectionLabel onDark>Réservation directe</SectionLabel>
           <h2 className="font-chewy text-4xl lg:text-5xl text-cream mb-4">
-            Réservez votre <span className="text-forest">séjour</span>
+            Réservez votre <span className="text-gold-soft">séjour</span>
           </h2>
           <p className="font-sans text-sm text-cream/60 mb-10 max-w-md mx-auto">
             Meilleur tarif garanti en réservation directe · Réponse sous 24h · Sans frais de dossier
