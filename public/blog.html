@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le journal — Hôtel Le Rayon Vert, Deshaies</title>
+<meta name="description" content="Le journal de l'Hôtel Le Rayon Vert à Deshaies : nos actualités, nos bonnes adresses et nos conseils pour découvrir la Guadeloupe.">
+<link rel="canonical" href="https://lucassenegas.github.io/rayon-vert/blog.html">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./favicon-96.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./favicon-180.png">
+<meta name="theme-color" content="#E6D6BC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hôtel Le Rayon Vert">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Le journal — Le Rayon Vert, Deshaies">
+<meta property="og:description" content="Nos actualités, nos bonnes adresses et nos conseils pour découvrir la Guadeloupe.">
+<meta property="og:url" content="https://lucassenegas.github.io/rayon-vert/blog.html">
+<meta property="og:image" content="https://lucassenegas.github.io/rayon-vert/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#016B5B; --forest-light:#0E9280; --forest-dark:#014539; --forest-pale:#E0EDEA;
+  --gold:#BF893B; --gold-dark:#93672A; --gold-soft:#E0B778;
+  --cream:#FAF5EF; --cream-soft:#F3EBE0; --cream-dark:#E8DDCE; --sand:#E6D6BC;
+  --deep:#04302A; --panel:#015B4C;
+  --ink:#172C29; --ink-soft:#5A6B68;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--cream-soft)}
+::-webkit-scrollbar-thumb{background:var(--forest);border-radius:2px}
+::selection{background:rgba(1,107,91,.18);color:var(--forest-dark)}
+a{color:inherit}
+img{display:block;max-width:100%}
+
+.etat{display:none;background:var(--cream-dark);padding:11px 18px;font-size:12.5px;color:var(--gold-dark);gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:center}
+.etat b{font-weight:500;color:var(--forest-dark)}
+.etat button{font:inherit;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--deep);border:0;border-radius:999px;padding:7px 16px;cursor:pointer}
+
+.retour{max-width:860px;margin:0 auto;padding:18px 24px 0}
+.retour a{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .3s;background:none;border:0;cursor:pointer;font-family:inherit}
+.retour a:hover{color:var(--forest-dark)}
+
+header{text-align:center;padding:26px 26px 30px}
+header img.logo{width:170px;margin:0 auto 22px}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px}
+h1{font-family:'Chewy',cursive;font-weight:400;font-size:48px;line-height:1.05;color:var(--forest-dark)}
+.sub{font-size:14px;color:var(--ink-soft);margin-top:14px;max-width:46ch;margin-left:auto;margin-right:auto;line-height:1.65}
+
+main{max-width:860px;margin:0 auto;padding:22px 24px 40px}
+.vue{display:none}
+.vue.on{display:block;animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.vue.on{animation:none}}
+
+.liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.carte{background:#fff;border-radius:1.75rem;overflow:hidden;cursor:pointer;transition:transform .35s,box-shadow .35s;display:flex;flex-direction:column}
+.carte:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(1,69,57,.13)}
+.carte .ph{aspect-ratio:16/10;background:var(--forest-pale);overflow:hidden}
+.carte .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.carte:hover .ph img{transform:scale(1.05)}
+.carte .bd{padding:18px 20px 22px;flex:1;display:flex;flex-direction:column}
+.carte .dt{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px}
+.carte h3{font-size:17px;font-weight:500;color:var(--forest-dark);line-height:1.35;margin-bottom:8px}
+.carte p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;flex:1}
+.carte .lire{margin-top:14px;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dark);border-bottom:1px solid var(--gold);padding-bottom:2px;align-self:flex-start}
+
+.vide{text-align:center;padding:50px 20px;color:var(--ink-soft);font-size:15px;line-height:1.7}
+
+article .ph{aspect-ratio:16/9;border-radius:2rem;overflow:hidden;margin-bottom:26px;background:var(--forest-pale)}
+article .ph img{width:100%;height:100%;object-fit:cover}
+article .dt{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px}
+article h2{font-family:'Chewy',cursive;font-weight:400;font-size:36px;line-height:1.15;color:var(--forest-dark);margin-bottom:8px}
+article .chapo{font-size:16px;color:var(--ink-soft);line-height:1.7;margin:16px 0 26px;padding-bottom:24px;border-bottom:1px solid var(--cream-dark)}
+article .corps p{font-size:15.5px;line-height:1.85;margin-bottom:20px}
+article .corps h3{font-size:19px;font-weight:500;color:var(--forest-dark);margin:32px 0 12px}
+
+.cta{max-width:860px;margin:34px auto 0;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.cta a{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:14px 30px;border-radius:999px;transition:all .3s}
+.cta .p{background:var(--gold);color:var(--deep);box-shadow:0 8px 22px rgba(191,137,59,.28)}
+.cta .p:hover{background:var(--gold-dark);color:#fff}
+.cta .s{border:2px solid var(--gold);color:var(--deep)}
+.cta .s:hover{background:var(--gold)}
+
+footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px;padding:42px 26px 46px}
+.f-in{max-width:860px;margin:0 auto}
+.f-title{font-family:'Chewy',cursive;font-size:22px;color:#fff;margin-bottom:10px}
+.f-in p{font-size:13px;font-weight:300;color:rgba(255,255,255,.66);line-height:1.65;max-width:56ch}
+.stamp{margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:520px){
+  header{padding:20px 22px 24px}
+  header img.logo{width:140px}
+  h1{font-size:36px}
+  article h2{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<div class="etat" id="etat"></div>
+
+<div class="retour"><a id="lien-retour" href="./">&larr; Retour au site</a></div>
+
+<header id="entete">
+  <img class="logo" src="./assets/logo.png" alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe">
+  <div class="eyebrow">Le journal</div>
+  <h1>Nos actualités</h1>
+  <p class="sub">Nos nouvelles, nos bonnes adresses et nos conseils pour découvrir Deshaies et la côte sous le vent.</p>
+</header>
+
+<main>
+  <div class="vue on" id="vue-liste"><div class="liste" id="liste"></div></div>
+  <div class="vue" id="vue-article"><article id="article"></article></div>
+</main>
+
+<div class="cta">
+  <a class="p" href="./">Réserver votre séjour</a>
+  <a class="s" href="./carte.html">Voir la carte du restaurant</a>
+</div>
+
+<footer>
+  <div class="f-in">
+    <div class="f-title">Hôtel Le Rayon Vert</div>
+    <p>Hôtel de charme familial 3 étoiles à Deshaies, Guadeloupe. 22 chambres avec vue sur la mer des Caraïbes, piscine à débordement et restaurant créole panoramique.</p>
+    <div class="stamp">
+      <span id="stamp"></span>
+      <span>436 Allée Lacoque · 97126 Deshaies</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Adresse CSV publiée du tableur des articles
+   (Google Sheets → Fichier → Partager → Publier sur le web → CSV).
+   Tant qu'elle est vide, la page affiche le message d'attente. */
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vScJjM41wMY7hbxLg3DvSJNvmPRNkzhrvZ2ZwXp2HvLLlNqXAD9qaye_ukYuJbpx1qwAGO1Jsa1LiPW/pub?output=csv";
+
+/* Colonnes attendues :
+   Slug, Titre, Date, Image, Résumé, Contenu, Publié
+   — Slug   : identifiant court sans accent ni espace, sert d'adresse (?a=slug)
+   — Image  : nom d'un fichier de public/assets, ou adresse complète en https
+   — Contenu: le texte de l'article, un paragraphe par ligne vide.
+              Une ligne commençant par ## devient un intertitre.
+   — Publié : OUI pour afficher, NON pour garder en brouillon */
+
+const DONNEES_SECOURS = `Slug,Titre,Date,Image,Résumé,Contenu,Publié`;
+
+function parseCSV(txt){
+  const rows=[]; let row=[], cur='', q=false;
+  for(let i=0;i<txt.length;i++){
+    const c=txt[i];
+    if(q){
+      if(c==='"'){ if(txt[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=c;
+    } else {
+      if(c==='"') q=true;
+      else if(c===','){ row.push(cur); cur=''; }
+      else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+      else if(c!=='\r') cur+=c;
+    }
+  }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  const head=rows.shift().map(h=>h.trim());
+  return rows.filter(r=>r.some(v=>v.trim()!=='')).map(r=>{
+    const o={}; head.forEach((h,i)=>o[h]=(r[i]||'').trim()); return o;
+  });
+}
+
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function img(src){
+  if(!src) return '';
+  return /^https?:\/\//.test(src) ? src : './assets/'+src;
+}
+
+function dateFr(v){
+  if(!v) return '';
+  const d=new Date(v);
+  if(isNaN(d)) return v;
+  return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+}
+
+/* Le contenu est du texte simple : ligne vide = nouveau paragraphe,
+   ligne débutant par ## = intertitre. */
+function corps(txt){
+  return String(txt||'').split(/\n\s*\n/).map(b=>{
+    const t=b.trim();
+    if(!t) return '';
+    if(t.startsWith('##')) return `<h3>${esc(t.replace(/^#+\s*/,''))}</h3>`;
+    return `<p>${esc(t).replace(/\n/g,'<br>')}</p>`;
+  }).join('');
+}
+
+let ARTICLES=[];
+
+function afficherListe(){
+  const l=document.getElementById('liste');
+  document.getElementById('entete').style.display='';
+  document.getElementById('vue-liste').classList.add('on');
+  document.getElementById('vue-article').classList.remove('on');
+  document.getElementById('lien-retour').textContent='← Retour au site';
+  document.getElementById('lien-retour').setAttribute('href','./');
+
+  if(!ARTICLES.length){
+    l.innerHTML=`<div class="vide" style="grid-column:1/-1">
+      Nos premiers articles arrivent très bientôt.<br>Revenez nous voir dans quelques jours.</div>`;
+    document.getElementById('stamp').textContent='';
+    return;
+  }
+
+  l.innerHTML=ARTICLES.map(a=>`
+    <div class="carte" data-slug="${esc(a.Slug)}">
+      <div class="ph">${a.Image?`<img src="${esc(img(a.Image))}" alt="${esc(a.Titre)}" loading="lazy">`:''}</div>
+      <div class="bd">
+        <div class="dt">${esc(dateFr(a.Date))}</div>
+        <h3>${esc(a.Titre)}</h3>
+        <p>${esc(a['Résumé'])}</p>
+        <span class="lire">Lire l'article</span>
+      </div>
+    </div>`).join('');
+
+  l.querySelectorAll('.carte').forEach(c=>{
+    c.onclick=()=>ouvrir(c.dataset.slug,true);
+  });
+  document.getElementById('stamp').textContent=`${ARTICLES.length} article${ARTICLES.length>1?'s':''}`;
+}
+
+function ouvrir(slug,pousser){
+  const a=ARTICLES.find(x=>x.Slug===slug);
+  if(!a) return afficherListe();
+
+  document.getElementById('entete').style.display='none';
+  document.getElementById('vue-liste').classList.remove('on');
+  document.getElementById('vue-article').classList.add('on');
+  document.getElementById('article').innerHTML=`
+    ${a.Image?`<div class="ph"><img src="${esc(img(a.Image))}" alt="${esc(a.Titre)}"></div>`:''}
+    <div class="dt">${esc(dateFr(a.Date))}</div>
+    <h2>${esc(a.Titre)}</h2>
+    ${a['Résumé']?`<p class="chapo">${esc(a['Résumé'])}</p>`:''}
+    <div class="corps">${corps(a.Contenu)}</div>`;
+
+  const r=document.getElementById('lien-retour');
+  r.textContent='← Tous les articles';
+  r.setAttribute('href','./blog.html');
+  document.title=`${a.Titre} — Hôtel Le Rayon Vert`;
+
+  if(pousser) history.pushState({slug},'', '?a='+encodeURIComponent(slug));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function router(){
+  const slug=new URLSearchParams(location.search).get('a');
+  if(slug) ouvrir(slug,false); else afficherListe();
+}
+
+window.addEventListener('popstate',router);
+document.getElementById('lien-retour').addEventListener('click',e=>{
+  if(document.getElementById('vue-article').classList.contains('on')){
+    e.preventDefault(); history.pushState({},'', './blog.html'); afficherListe();
+  }
+});
+
+async function charger(){
+  let txt=DONNEES_SECOURS, live=false;
+  if(CSV_URL){
+    try{
+      const r=await fetch(CSV_URL,{cache:'no-store'});
+      if(r.ok){ txt=await r.text(); live=true; }
+    }catch(e){}
+  }
+  ARTICLES=parseCSV(txt)
+    .filter(a=>a.Slug && (a['Publié']||'OUI').toUpperCase()!=='NON')
+    .sort((x,y)=>new Date(y.Date||0)-new Date(x.Date||0));
+  router();
+
+  const e=document.getElementById('etat');
+  if(live || !CSV_URL){ e.style.display='none'; }
+  else{
+    e.style.display='flex';
+    e.innerHTML='<span><b>Journal hors ligne</b> — les articles récents n\'apparaissent pas.</span><button type="button" id="retry">Réessayer</button>';
+    document.getElementById('retry').onclick=charger;
+  }
+}
+
+charger();
+if(CSV_URL) setInterval(charger,300000);
+</script>
+</body>
+</html>
