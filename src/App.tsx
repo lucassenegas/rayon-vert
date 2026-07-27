@@ -1222,7 +1222,6 @@ function parseCSVSimple(txt: string): Record<string, string>[] {
 }
 
 function Blog() {
-  const { ref, isInView } = useScrollFade(0.1)
   const [articles, setArticles] = useState<Article[]>([])
   const piste = useRef<HTMLDivElement>(null)
 
@@ -1259,12 +1258,12 @@ function Blog() {
 
   return (
     <section id="journal" className="py-24 lg:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="flex items-end justify-between gap-6 mb-10"
           variants={fadeUp}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          animate="visible"
         >
           <div>
             <SectionLabel>Le journal</SectionLabel>
@@ -1295,7 +1294,7 @@ function Blog() {
           className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           variants={fadeUp}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          animate="visible"
           custom={0.1}
         >
           {articles.map(a => (
@@ -1327,7 +1326,7 @@ function Blog() {
           className="flex justify-center mt-10"
           variants={fadeUp}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          animate="visible"
           custom={0.2}
         >
           <a href={BLOG_URL} className={btnGhost}>
