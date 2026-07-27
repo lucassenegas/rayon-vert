@@ -5,7 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import {
   ChevronDown, ChevronLeft, ChevronRight, MapPin, Phone, Mail, Star, Wifi, Wind, Coffee, Waves, Menu, X, ExternalLink,
   CalendarDays, Users, UtensilsCrossed, CircleCheck, Send, Loader2, BedDouble, FileText,
-  Umbrella, Fish, TreePine, Anchor, Instagram, Facebook, Quote, Globe,
+  Umbrella, Fish, TreePine, Anchor, Instagram, Facebook, Quote, Globe, Heart, Cake, PartyPopper, Briefcase,
 } from 'lucide-react'
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
@@ -48,6 +48,9 @@ const FORM_ENDPOINTS = {
 }
 // Carte du restaurant — à remplacer par le vrai PDF une fois fourni.
 const CARTE_URL = `${import.meta.env.BASE_URL}carte.html`
+const BLOG_URL = `${import.meta.env.BASE_URL}blog.html`
+/* Même tableur que la page blog.html — laisser vide masque la section. */
+const BLOG_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vScJjM41wMY7hbxLg3DvSJNvmPRNkzhrvZ2ZwXp2HvLLlNqXAD9qaye_ukYuJbpx1qwAGO1Jsa1LiPW/pub?output=csv'
 
 type ModalKind = 'sejour' | 'restaurant' | 'contact' | null
 
@@ -464,8 +467,30 @@ function ContactFormContent() {
         <input type="tel" name="telephone" placeholder="+33 6 00 00 00 00" className={fieldInput} />
       </div>
       <div className={fieldWrap}>
-        <label className={fieldLabel}>Message</label>
-        <textarea name="message" rows={4} placeholder="..." className={fieldInput + ' resize-none'} />
+        <label className={fieldLabel}>Motif de la demande</label>
+        <select name="motif" className={fieldInput} defaultValue="">
+          <option value="">--</option>
+          <option value="Mariage">Mariage</option>
+          <option value="Baptême">Baptême</option>
+          <option value="Anniversaire">Anniversaire</option>
+          <option value="Séminaire / entreprise">Séminaire ou entreprise</option>
+          <option value="Réservation de groupe">Réservation de groupe</option>
+          <option value="Autre">Autre demande</option>
+        </select>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div className={fieldWrap}>
+          <label className={fieldLabel}>Date envisagée</label>
+          <input type="date" name="date_evenement" min={TODAY} className={fieldInput} />
+        </div>
+        <div className={fieldWrap}>
+          <label className={fieldLabel}>Nombre de personnes</label>
+          <input type="number" name="personnes" min={1} placeholder="40" className={fieldInput} />
+        </div>
+      </div>
+      <div className={fieldWrap}>
+        <label className={fieldLabel}>Votre projet</label>
+        <textarea name="message" rows={4} placeholder="Décrivez-nous votre événement : ambiance souhaitée, repas, hébergement des invités..." className={fieldInput + ' resize-none'} />
       </div>
       <button type="submit" disabled={status === 'sending'} className={btnDark + ' w-full !py-4'}>
         {status === 'sending' ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
@@ -1168,6 +1193,154 @@ function Activities() {
   )
 }
 
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+type Article = { Slug: string; Titre: string; Date: string; Image: string; 'Résumé': string; 'Publié': string }
+
+function parseCSVSimple(txt: string): Record<string, string>[] {
+  const rows: string[][] = []
+  let row: string[] = [], cur = '', q = false
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i]
+    if (q) {
+      if (c === '"') { if (txt[i + 1] === '"') { cur += '"'; i++ } else q = false }
+      else cur += c
+    } else {
+      if (c === '"') q = true
+      else if (c === ',') { row.push(cur); cur = '' }
+      else if (c === '\n') { row.push(cur); rows.push(row); row = []; cur = '' }
+      else if (c !== '\r') cur += c
+    }
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row) }
+  const head = (rows.shift() || []).map(h => h.trim())
+  return rows.filter(r => r.some(v => v.trim() !== '')).map(r => {
+    const o: Record<string, string> = {}
+    head.forEach((h, i) => (o[h] = (r[i] || '').trim()))
+    return o
+  })
+}
+
+function Blog() {
+  const { ref, isInView } = useScrollFade(0.1)
+  const [articles, setArticles] = useState<Article[]>([])
+  const piste = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!BLOG_CSV) return
+    let vivant = true
+    fetch(BLOG_CSV, { cache: 'no-store' })
+      .then(r => (r.ok ? r.text() : Promise.reject()))
+      .then(t => {
+        if (!vivant) return
+        const lus = (parseCSVSimple(t) as unknown as Article[])
+          .filter(a => a.Slug && (a['Publié'] || 'OUI').toUpperCase() !== 'NON')
+          .sort((x, y) => +new Date(y.Date || 0) - +new Date(x.Date || 0))
+          .slice(0, 6)
+        setArticles(lus)
+      })
+      .catch(() => {})
+    return () => { vivant = false }
+  }, [])
+
+  // Tant qu'aucun article n'est publié, la section n'existe pas.
+  if (!articles.length) return null
+
+  const glisser = (sens: number) => {
+    const el = piste.current
+    if (el) el.scrollBy({ left: sens * (el.clientWidth * 0.8), behavior: 'smooth' })
+  }
+
+  const dateFr = (v: string) => {
+    const d = new Date(v)
+    return isNaN(+d) ? v : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+  }
+  const src = (v: string) => (/^https?:\/\//.test(v) ? v : A(v))
+
+  return (
+    <section id="journal" className="py-24 lg:py-32 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
+        <motion.div
+          className="flex items-end justify-between gap-6 mb-10"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <div>
+            <SectionLabel>Le journal</SectionLabel>
+            <h2 className="font-chewy text-3xl lg:text-4xl text-deep leading-tight">
+              Nos <span className="text-forest">actualités</span>
+            </h2>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => glisser(-1)}
+              aria-label="Articles précédents"
+              className="hidden sm:flex w-10 h-10 rounded-full border border-cream-dark items-center justify-center text-ink-soft hover:bg-forest-pale hover:text-forest-dark transition-colors"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              onClick={() => glisser(1)}
+              aria-label="Articles suivants"
+              className="hidden sm:flex w-10 h-10 rounded-full border border-cream-dark items-center justify-center text-ink-soft hover:bg-forest-pale hover:text-forest-dark transition-colors"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </motion.div>
+
+        <motion.div
+          ref={piste}
+          className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.1}
+        >
+          {articles.map(a => (
+            <a
+              key={a.Slug}
+              href={`${BLOG_URL}?a=${encodeURIComponent(a.Slug)}`}
+              className="group flex-shrink-0 w-[280px] sm:w-[320px] snap-start bg-white rounded-4xl overflow-hidden hover:shadow-xl hover:shadow-forest-dark/10 transition-all duration-500"
+            >
+              <div className="aspect-[16/10] bg-forest-pale overflow-hidden">
+                {a.Image && (
+                  <img
+                    src={src(a.Image)}
+                    alt={a.Titre}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                )}
+              </div>
+              <div className="p-5">
+                <p className="font-sans text-[10px] tracking-widest uppercase text-gold-dark mb-2">{dateFr(a.Date)}</p>
+                <h3 className="font-sans text-base font-medium text-forest-dark leading-snug mb-2">{a.Titre}</h3>
+                <p className="font-sans text-[13px] text-ink-soft leading-relaxed line-clamp-3">{a['Résumé']}</p>
+              </div>
+            </a>
+          ))}
+        </motion.div>
+
+        <motion.div
+          className="flex justify-center mt-10"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.2}
+        >
+          <a href={BLOG_URL} className={btnGhost}>
+            <FileText size={14} />
+            Tous les articles
+          </a>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+
 // ─── Gallery ──────────────────────────────────────────────────────────────────
 
 function Gallery() {
@@ -1370,13 +1543,36 @@ function ContactSection({ onContact }: { onContact: () => void }) {
     <section id="devis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          <SectionLabel>Nous contacter</SectionLabel>
+          <SectionLabel>Événements privés</SectionLabel>
           <h2 className="font-chewy text-3xl lg:text-4xl text-deep leading-tight mb-4">
-            Une question, un <span className="text-forest">devis de groupe</span> ?
+            Célébrez face à la <span className="text-forest">mer des Caraïbes</span>
           </h2>
-          <p className="font-sans text-sm text-ink-soft leading-relaxed mb-8 max-w-md mx-auto">
-            Réservation de groupe, événement privé ou simple question : notre équipe vous répond sous 24h.
+          <p className="font-sans text-sm text-ink-soft leading-relaxed mb-8 max-w-lg mx-auto">
+            Mariage les pieds dans le jardin tropical, baptême en famille, anniversaire au
+            coucher du soleil, séminaire au calme : nous privatisons le restaurant, la terrasse
+            panoramique et les chambres pour votre événement. Dites-nous ce que vous imaginez,
+            nous vous répondons sous 24h avec une proposition sur mesure.
           </p>
+        </motion.div>
+
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10"
+          variants={fadeUp}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          custom={0.05}
+        >
+          {[
+            { icon: Heart, label: 'Mariages' },
+            { icon: Cake, label: 'Baptêmes' },
+            { icon: PartyPopper, label: 'Anniversaires' },
+            { icon: Briefcase, label: 'Séminaires' },
+          ].map(({ icon: Icon, label }) => (
+            <div key={label} className="bg-forest-pale rounded-3xl px-4 py-5 flex flex-col items-center gap-2">
+              <Icon size={20} className="text-forest-dark" />
+              <p className="font-sans text-[12px] font-medium text-forest-dark text-center">{label}</p>
+            </div>
+          ))}
         </motion.div>
 
         <motion.div
@@ -1405,7 +1601,7 @@ function ContactSection({ onContact }: { onContact: () => void }) {
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
           <button onClick={onContact} className={btnDark}>
             <Send size={14} />
-            Nous contacter
+            Demander un devis
           </button>
         </motion.div>
       </div>
@@ -1513,6 +1709,7 @@ export default function App() {
       <PoolFeature />
       <Activities />
       <Gallery />
+      <Blog />
       <ReserveCTA onReserve={() => setModal('sejour')} />
       <ContactSection onContact={() => setModal('contact')} />
       <Footer />
