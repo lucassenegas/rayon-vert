@@ -503,7 +503,13 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
         }`}
       >
         {/* Logo */}
-        <a href="#" className="group flex-shrink-0 flex items-center gap-2">
+        <a href="#" className="group flex-shrink-0 flex items-center gap-2.5">
+          <img
+            src={A('logo-mark-gold.png')}
+            alt=""
+            aria-hidden="true"
+            className="h-8 sm:h-9 w-auto"
+          />
           <p className={`font-chewy text-2xl sm:text-3xl leading-none transition-colors ${scrolled ? 'text-deep' : 'text-white drop-shadow-sm'}`}>
             Le <span className="text-forest">Rayon Vert</span>
           </p>
@@ -586,7 +592,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
           <button
             onClick={onReserve}
             className={`inline-flex items-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-6 py-2.5 rounded-full shadow-md transition-all duration-300 ${
-              scrolled ? 'bg-forest text-white shadow-forest/25 hover:bg-forest-dark' : 'bg-white text-deep shadow-ink/10 hover:bg-forest hover:text-white'
+              scrolled ? 'bg-gold text-deep shadow-gold/30 hover:bg-gold-dark hover:text-white' : 'bg-gold text-deep shadow-ink/20 hover:bg-gold-dark hover:text-white'
             }`}
           >
             <CalendarDays size={13} />
@@ -1252,7 +1258,7 @@ function Avis() {
   const { ref, isInView } = useScrollFade()
 
   return (
-    <section id="avis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep">
+    <section id="avis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep-panel">
       <div className="max-w-7xl mx-auto">
         <motion.div className="text-center mb-14" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} ref={ref}>
           <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest font-medium mb-3">Avis voyageurs</p>
@@ -1302,7 +1308,7 @@ function ReserveCTA({ onReserve }: { onReserve: () => void }) {
   const { ref, isInView } = useScrollFade()
 
   return (
-    <section id="reserver" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep">
+    <section id="reserver" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep-panel">
       <div className="max-w-xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
           <p className="font-sans text-[10px] tracking-widest-2xl uppercase text-forest font-medium mb-3">Réservation directe</p>
@@ -1357,6 +1363,14 @@ function ContactSection({ onContact }: { onContact: () => void }) {
           </a>
           <a href="mailto:contact@hotels-deshaies.com" className="flex items-center gap-2 bg-forest-pale rounded-full px-5 py-3 font-sans text-sm text-forest-dark hover:bg-forest hover:text-white transition-colors">
             <Mail size={14} /> contact@hotels-deshaies.com
+          </a>
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=436+All%C3%A9e+Lacoque+97126+Deshaies+Guadeloupe"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-forest-pale rounded-full px-5 py-3 font-sans text-sm text-forest-dark hover:bg-forest hover:text-white transition-colors"
+          >
+            <MapPin size={14} /> 436 Allée Lacoque, 97126 Deshaies
           </a>
         </motion.div>
 
@@ -1424,7 +1438,16 @@ function Footer() {
             <ul className="space-y-2.5">
               <li><a href="tel:+590590284323" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">+590 (0)590 28 43 23</a></li>
               <li><a href="mailto:contact@hotels-deshaies.com" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">contact@hotels-deshaies.com</a></li>
-              <li className="font-sans text-sm text-ink-soft/70">Deshaies, Guadeloupe</li>
+              <li>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=436+All%C3%A9e+Lacoque+97126+Deshaies+Guadeloupe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors"
+                >
+                  436 Allée Lacoque<br />97126 Deshaies, Guadeloupe
+                </a>
+              </li>
             </ul>
           </motion.div>
         </div>
