@@ -10,10 +10,10 @@ export default {
         // ── Palette extraite du logo (lucky_copie.pdf) ──────────────────
         // primaire : le vert du lettrage « LE RAYON VERT », avec ses nuances
         forest: {
-          DEFAULT: '#0A6041',   // vert médian du dégradé de la typo
-          light:   '#14855C',   // éclairci — hovers, accents, survols
-          dark:    '#01452E',   // vert le plus profond du dégradé
-          pale:    '#E3EDE5',   // teinte sage très claire — fonds, pastilles
+          DEFAULT: '#016B5B',   // bleu-vert médian du dégradé de la typo
+          light:   '#0E9280',   // éclairci — hovers, accents, survols
+          dark:    '#014539',   // le plus profond du dégradé
+          pale:    '#E0EDEA',   // teinte très claire — fonds, pastilles
         },
         // secondaire : l'or plein du mot « HÔTEL »
         gold: {
@@ -31,14 +31,14 @@ export default {
         },
         // ancrage sombre (footer, CTA) — vert forêt poussé au plus profond
         deep: {
-          DEFAULT: '#04301F',   // texte et voiles
-          light:   '#01452E',
-          panel:   '#0A5138',   // grands aplats pleine largeur (Avis, CTA) — éclairci
+          DEFAULT: '#04302A',   // texte et voiles
+          light:   '#014539',
+          panel:   '#015B4C',   // grands aplats pleine largeur (Avis, CTA)
         },
         // texte sur fond clair — encre légèrement verdie
         ink: {
-          DEFAULT: '#1B2E24',
-          soft:    '#5D6B60',
+          DEFAULT: '#172C29',
+          soft:    '#5A6B68',
         },
       },
       fontFamily: {
