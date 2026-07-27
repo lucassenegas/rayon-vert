@@ -514,7 +514,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
         {/* Logo */}
         <a href="#" className="group flex-shrink-0 flex items-center gap-2.5">
           <img
-            src={A('logo-mark-gold.png')}
+            src={A('logo-mark.png')}
             alt=""
             aria-hidden="true"
             className="h-8 sm:h-9 w-auto"
