@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La carte du restaurant — Hôtel Le Rayon Vert, Deshaies</title>
+<meta name="description" content="La carte du restaurant de l'Hôtel Le Rayon Vert à Deshaies, Guadeloupe. Cuisine créole, poissons du jour et saveurs de la mer, face au coucher de soleil.">
+<link rel="canonical" href="https://lucassenegas.github.io/rayon-vert/carte.html">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./favicon-96.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./favicon-180.png">
+<meta name="theme-color" content="#E6D6BC">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Hôtel Le Rayon Vert">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="La carte du restaurant — Le Rayon Vert, Deshaies">
+<meta property="og:description" content="Cuisine créole, poissons du jour et saveurs de la mer, face au coucher de soleil sur la Caraïbe.">
+<meta property="og:url" content="https://lucassenegas.github.io/rayon-vert/carte.html">
+<meta property="og:image" content="https://lucassenegas.github.io/rayon-vert/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#016B5B; --forest-light:#0E9280; --forest-dark:#014539; --forest-pale:#E0EDEA;
+  --gold:#BF893B; --gold-light:#D4A461; --gold-dark:#93672A; --gold-soft:#E0B778;
+  --cream:#FAF5EF; --cream-soft:#F3EBE0; --cream-dark:#E8DDCE;
+  --deep:#04302A; --panel:#015B4C;
+  --ink:#172C29; --ink-soft:#5A6B68;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--cream-soft)}
+::-webkit-scrollbar-thumb{background:var(--forest);border-radius:2px}
+::selection{background:rgba(1,107,91,.18);color:var(--forest-dark)}
+a{color:inherit}
+
+.etat{display:none;background:var(--cream-dark);padding:11px 18px;font-size:12.5px;color:var(--gold-dark);gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:center}
+.etat b{font-weight:500;color:var(--forest-dark)}
+.etat button{font:inherit;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--deep);border:0;border-radius:999px;padding:7px 16px;cursor:pointer;transition:background .3s}
+.etat button:hover{background:var(--gold-dark);color:#fff}
+
+.retour{max-width:760px;margin:0 auto;padding:18px 24px 0}
+.retour a{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .3s}
+.retour a:hover{color:var(--forest-dark)}
+
+header{text-align:center;padding:26px 26px 34px}
+header img.logo{width:190px;height:auto;margin:0 auto 22px;display:block}
+.eyebrow{font-size:12px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px}
+h1{font-family:'Chewy',cursive;font-weight:400;font-size:50px;line-height:1.05;color:var(--forest-dark);letter-spacing:.01em}
+.place{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:12px}
+
+.infos{max-width:760px;margin:6px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.info{background:var(--forest-pale);border-radius:1.5rem;padding:16px 20px}
+.info .lb{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:6px}
+.info .vl{font-size:14px;color:var(--forest-dark);line-height:1.5}
+.info .vl b{font-weight:500}
+
+nav{position:sticky;top:0;z-index:30;background:rgba(250,245,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--cream-dark);padding:12px 0;margin-top:30px}
+.nav-in{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 20px;max-width:800px;margin:0 auto}
+.nav-in::-webkit-scrollbar{display:none}
+nav button{font:inherit;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;background:var(--cream-soft);color:var(--ink-soft);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;transition:all .3s}
+nav button:hover{background:var(--cream-dark);color:var(--forest-dark)}
+nav button.on{background:var(--forest);color:#fff;box-shadow:0 6px 16px rgba(1,107,91,.26)}
+
+main{max-width:760px;margin:0 auto;padding:0 24px 40px}
+.sec{display:none}
+.sec.on{display:block;animation:fadeUp .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.sec.on{animation:none}}
+
+.sec-head{padding:38px 0 6px}
+.sec-head h2{font-family:'Chewy',cursive;font-weight:400;font-size:34px;line-height:1.15;color:var(--forest-dark)}
+.sec-head .rule{width:56px;height:3px;background:var(--gold);border-radius:999px;margin-top:14px}
+
+.d{display:flex;align-items:baseline;justify-content:space-between;gap:18px;padding:17px 0;border-bottom:1px solid var(--cream-dark)}
+.d:last-child{border-bottom:none}
+.d .nm{font-size:16px;font-weight:500;color:var(--ink);line-height:1.3}
+.d .ds{font-size:13.5px;font-weight:300;color:var(--ink-soft);line-height:1.55;margin-top:5px;max-width:52ch}
+.d .pr{font-size:16px;font-weight:500;color:var(--forest);white-space:nowrap}
+
+.tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:3px 9px;margin-left:8px;vertical-align:2px}
+.t-nouveau{background:var(--forest-pale);color:var(--forest-dark)}
+.t-suggestion,.t-spécialité{background:rgba(191,137,59,.16);color:var(--gold-dark)}
+.t-végé{background:transparent;color:var(--forest-dark);box-shadow:inset 0 0 0 1px var(--forest-light)}
+.t-epuise{background:var(--cream-dark);color:var(--ink-soft)}
+
+.d.off .nm{color:#A5ADAA;text-decoration:line-through;text-decoration-thickness:1px}
+.d.off .ds{color:#B6BDBA;text-decoration:none}
+.d.off .pr{color:#B6BDBA;font-weight:300}
+.d.off .tag:not(.t-epuise){opacity:.3}
+.empty{font-size:14px;color:var(--ink-soft);padding:22px 0}
+
+.cta{max-width:760px;margin:10px auto 0;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.cta a{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:14px 30px;border-radius:999px;transition:all .3s}
+.cta .p{background:var(--gold);color:var(--deep);box-shadow:0 8px 22px rgba(191,137,59,.28)}
+.cta .p:hover{background:var(--gold-dark);color:#fff}
+.cta .s{border:2px solid var(--gold);color:var(--deep)}
+.cta .s:hover{background:var(--gold)}
+
+footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px;padding:42px 26px 46px}
+.f-in{max-width:760px;margin:0 auto}
+.f-title{font-family:'Chewy',cursive;font-size:22px;color:#fff;margin-bottom:10px}
+.f-in p{font-size:13px;font-weight:300;color:rgba(255,255,255,.66);line-height:1.65;max-width:56ch}
+.stamp{margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:520px){
+  header{padding:20px 22px 28px}
+  header img.logo{width:150px}
+  h1{font-size:38px}
+  .sec-head h2{font-size:28px}
+  .d{gap:12px}
+  .d .nm{font-size:15px}
+  .d .pr{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<div class="etat" id="etat"></div>
+
+<div class="retour"><a href="./">&larr; Retour au site</a></div>
+
+<header>
+  <img class="logo" src="./assets/logo.png" alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe">
+  <div class="eyebrow">Restaurant · Cuisine créole</div>
+  <h1>La carte</h1>
+  <div class="place">Deshaies · Guadeloupe</div>
+</header>
+
+<div class="infos">
+  <div class="info">
+    <div class="lb">Déjeuner</div>
+    <div class="vl">Vendredi, samedi &amp; dimanche<br><b>11h30 – 14h15</b></div>
+  </div>
+  <div class="info">
+    <div class="lb">Dîner</div>
+    <div class="vl">Tous les soirs<br><b>18h00 – 21h00</b></div>
+  </div>
+  <div class="info">
+    <div class="lb">Piscine offerte</div>
+    <div class="vl">Accès inclus à la piscine à débordement pour tous les clients du restaurant.</div>
+  </div>
+</div>
+
+<nav><div class="nav-in" id="nav"></div></nav>
+<main id="main"></main>
+
+<div class="cta">
+  <a class="p" href="tel:+590590284323">Réserver une table</a>
+  <a class="s" href="./">Découvrir l'hôtel</a>
+</div>
+
+<footer>
+  <div class="f-in">
+    <div class="f-title">Allergènes</div>
+    <p>Nos plats sont susceptibles de contenir tous genres d'allergènes. Le tableau d'origine des viandes est disponible sur demande auprès de votre serveur.</p>
+    <div class="stamp">
+      <span id="stamp"></span>
+      <span>436 Allée Lacoque · 97126 Deshaies</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbeWNzrRtMOdtqJR-EUO7fk1XJeJeOvGiKLNmOR1IhT1lCgzZP6rGEGZqDJOsGPWNAWms0WMdEczbE/pub?gid=1933963057&single=true&output=csv";
+
+const ORDRE_SECTIONS = ["Tapas & finger food","Entrées","Spécialités créoles","Viandes","Burgers","Poissons & fruits de mer","Desserts","Coupes de glaces","Glaces alcoolisées"];
+
+const DONNEES_SECOURS = `Section,Ordre,Nom du plat,Description,Prix (€),Badge,Disponible
+Tapas & finger food,1,Accras de morue,"Beignets croustillants, sauce chien maison",9.5,,OUI
+Tapas & finger food,2,Rillettes de la mer,"Mix thon, dorade, marlin · toasts grillés",13.8,,OUI
+Tapas & finger food,3,Poissons fumés & toasts,"Thon, marlin, espadon, thazard · beurre citronné",16.9,,OUI
+Tapas & finger food,4,Toasts de boudin,Boudin antillais poêlé · oignon rouge mariné au citron vert · coriandre,11.5,,OUI
+Tapas & finger food,5,Guacamole créole,"Avocat, piment végétarien, coriandre, citron vert · chips de plantain maison",10.5,Végé,OUI
+Tapas & finger food,6,Frites de manioc,"Manioc frit croustillant, fleur de sel · sauce créole ou mayo citron-coriandre",8.5,Végé,OUI
+Entrées,1,Tartare de bœuf à la créole,"Bœuf haché au couteau, piment végétarien, câpres, citron vert, coriandre fraîche, jaune d'œuf",16.5,Nouveau,OUI
+Entrées,2,Poisson à la tahitienne,"Poisson cru mariné au lait de coco, citron vert, coriandre et légumes croquants",15.8,,OUI
+Entrées,3,Tartare de thon aux agrumes,"Thon rouge, orange, citron vert, gingembre frais, huile de sésame, graines de sésame torréfiées",16.5,,OUI
+Entrées,4,Salade Ti-Créole,"Jeunes pousses, cœur de palmiste, mangue verte, tomates cerises, poulet fumé émincé, vinaigrette fruit de la passion, coco grillé",15.5,Suggestion,OUI
+Entrées,5,Salade crevette & avocat,"Crevettes poêlées à l'ail, avocat tranché, pamplemousse rose, roquette, vinaigrette coriandre-gingembre",16.8,,OUI
+Entrées,6,Méli-mélo du maraîcher,Assortiment de légumes cuisinés et crudités,21.5,Végé,OUI
+Spécialités créoles,1,Assiette créole,"Poisson fumé, rillettes de la mer, thon à la tahitienne, accras, boudin antillais et crudités",28.8,,OUI
+Spécialités créoles,2,Colombo de poulet,"Poulet mijoté au colombo, pommes de terre, riz créole",24.8,Nouveau,OUI
+Spécialités créoles,3,Ouassou et aiguillettes de poulet au lait de coco,"Ouassou et aiguillettes de poulet, sauce au lait de coco, riz créole",32.5,Spécialité,OUI
+Viandes,1,Poulet fumé,,24.8,,OUI
+Viandes,2,Pluma de cochon,,26.5,,OUI
+Viandes,3,Magret de canard,,28.8,,OUI
+Viandes,4,Brochette d'agneau,,29.5,,OUI
+Viandes,5,Entrecôte,,31.8,,OUI
+Burgers,1,Burger Rayon Vert,"Steak haché, cheddar, oignons caramélisés, tomate, salade, sauce créole maison, pain brioché",24.8,,OUI
+Burgers,2,Burger Thazard,"Filet de thazard grillé, avocat, tomate, salade, mayo citron-coriandre, pain brioché",24.8,,OUI
+Poissons & fruits de mer,1,Dorade en croûte de sel,Dorade entière cuite en croûte de gros sel · beurre citronné aux herbes,32,,OUI
+Poissons & fruits de mer,2,Thon mi-cuit en croûte de sésame,"Pavé de thon saisi, croûte de sésame dorée, sauce soja-gingembre, salade de concombre au citron vert",29.5,Nouveau,OUI
+Poissons & fruits de mer,3,Millefeuille de thon aubergine,,29.5,,OUI
+Poissons & fruits de mer,4,Mi-cuit de thazard,"Thazard à cœur rosé, sauce vierge créole, légumes du marché",29.5,,OUI
+Poissons & fruits de mer,5,Chatrou grillé,"Marinade créole, citron vert, légumes du marché, sauce vierge aux herbes",31.5,Spécialité,OUI
+Poissons & fruits de mer,6,Moules frites à la crème,"Moules fraîches, crème, échalotes, persil",25.8,,OUI
+Poissons & fruits de mer,7,Langouste grillée à la créole,Riz et légumes · selon arrivage,Sur demande,,OUI
+Desserts,1,Salade de fruits de saison,"Mangue, ananas, banane, maracuja, citron vert, menthe fraîche, sucre de canne",8.5,Nouveau,OUI
+Desserts,2,Fruits de saison au rhum,"Mangue, ananas, banane flambée, sucre de canne, rhum vieux, zeste de citron vert",11.5,Nouveau,OUI
+Desserts,3,Moelleux au chocolat,"Sauce chocolat, 1 boule vanille",11.5,,OUI
+Desserts,4,Profiteroles au chocolat,Glace vanille et sauce chocolat chaude,11.5,,OUI
+Desserts,5,Café ou thé gourmand,4 mini-desserts et boisson chaude,12.5,,OUI
+Desserts,6,Gaufre,"Sauce chocolat, caramel beurre salé ou chantilly",6.5,,OUI
+Coupes de glaces,1,Passion des îles,"Mangue, passion, acerola, fruits rouges, chantilly",13.5,,OUI
+Coupes de glaces,2,Chocolat liégeois,"Rhum raisin, sauce chocolat, chantilly",13.5,,OUI
+Coupes de glaces,3,Coco Kiss,"Vanille pacane, coco, sauce chocolat, chantilly",13.5,,OUI
+Coupes de glaces,4,Dame blanche,"3 boules vanille, sauce chocolat, chantilly",13.5,,OUI
+Coupes de glaces,5,Banana split créole,"Coco, vanille pacane, rhum raisin, banane, sauce chocolat",13.5,,OUI
+Coupes de glaces,6,Piste verte,"Menthe-choco, chocolat, sauce chocolat, chantilly",13.5,,OUI
+Glaces alcoolisées,1,Ice Green,"Menthe choco, chocolat, 2 cl Get 27",15.5,,OUI
+Glaces alcoolisées,2,Amiral,"Mangue, passion, 2 cl rhum blanc",15.5,,OUI
+Glaces alcoolisées,3,Pirate,"Rhum raisin, vanille pacane, 2 cl rhum vieux",15.5,,OUI`;
+
+function parseCSV(txt){
+  const rows=[]; let row=[], cur='', q=false;
+  for(let i=0;i<txt.length;i++){
+    const c=txt[i];
+    if(q){
+      if(c==='"'){ if(txt[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=c;
+    } else {
+      if(c==='"') q=true;
+      else if(c===','){ row.push(cur); cur=''; }
+      else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+      else if(c!=='\r') cur+=c;
+    }
+  }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  const head=rows.shift().map(h=>h.trim());
+  return rows.filter(r=>r.some(v=>v.trim()!=='')).map(r=>{
+    const o={}; head.forEach((h,i)=>o[h]=(r[i]||'').trim()); return o;
+  });
+}
+
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function prix(v){
+  if(!v) return '';
+  const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));
+  return isNaN(n) ? v : n.toFixed(2).replace('.',',')+' €';
+}
+
+let PLATS=[];
+
+function render(){
+  const nav=document.getElementById('nav'), main=document.getElementById('main');
+  nav.innerHTML=''; main.innerHTML='';
+
+  const connues=ORDRE_SECTIONS.filter(s=>PLATS.some(p=>p.Section===s));
+  const autres=[...new Set(PLATS.map(p=>p.Section))].filter(s=>s&&!ORDRE_SECTIONS.includes(s));
+  const sections=[...connues,...autres];
+
+  sections.forEach((s,idx)=>{
+    const b=document.createElement('button');
+    b.textContent=s;
+    b.className=idx===0?'on':'';
+    b.onclick=()=>{
+      nav.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+      main.querySelectorAll('.sec').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      document.getElementById('sec-'+idx).classList.add('on');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+    nav.appendChild(b);
+
+    const items=PLATS.filter(p=>p.Section===s).sort((a,c)=>{
+      const oa=parseInt(a.Ordre)||999, oc=parseInt(c.Ordre)||999;
+      return oa!==oc ? oa-oc : (a['Nom du plat']||'').localeCompare(c['Nom du plat']||'');
+    });
+
+    const sec=document.createElement('section');
+    sec.className='sec'+(idx===0?' on':'');
+    sec.id='sec-'+idx;
+    let html=`<div class="sec-head"><h2>${esc(s)}</h2><div class="rule"></div></div>`;
+    if(!items.length) html+=`<div class="empty">Aucun plat dans cette section pour le moment.</div>`;
+    items.forEach(p=>{
+      const off=(p.Disponible||'').toUpperCase()==='NON';
+      const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(p.Badge)}</span>`:'';
+      const ep=off?`<span class="tag t-epuise">Épuisé</span>`:'';
+      html+=`<div class="d${off?' off':''}">
+        <div>
+          <div class="nm">${esc(p['Nom du plat'])}${badge}${ep}</div>
+          ${p.Description?`<div class="ds">${esc(p.Description)}</div>`:''}
+        </div>
+        <div class="pr">${esc(prix(p['Prix (€)']))}</div>
+      </div>`;
+    });
+    sec.innerHTML=html;
+    main.appendChild(sec);
+  });
+
+  const dispo=PLATS.filter(p=>(p.Disponible||'').toUpperCase()!=='NON').length;
+  document.getElementById('stamp').textContent=`${dispo} plats à la carte`;
+}
+
+async function charger(){
+  let txt=DONNEES_SECOURS, live=false;
+  if(CSV_URL){
+    try{
+      const r=await fetch(CSV_URL,{cache:'no-store'});
+      if(r.ok){ txt=await r.text(); live=true; }
+    }catch(e){}
+  }
+  PLATS=parseCSV(txt);
+  render();
+  const e=document.getElementById('etat');
+  if(live){ e.style.display='none'; }
+  else{
+    e.style.display='flex';
+    e.innerHTML='<span><b>Carte hors ligne</b> — dernière version enregistrée. Les modifications récentes n\'apparaissent pas.</span><button type="button" id="retry">Réessayer</button>';
+    document.getElementById('retry').onclick=charger;
+  }
+}
+
+charger();
+if(CSV_URL) setInterval(charger,120000);
+</script>
+</body>
+</html>
