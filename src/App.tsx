@@ -165,6 +165,7 @@ const navLinks = [
   { label: 'Chambres', href: '#chambres' },
   { label: 'Restaurant', href: '#restaurant' },
   { label: 'Galerie', href: '#galerie' },
+  { label: 'Journal', href: '#journal' },
   { label: 'Contact', href: '#devis' },
 ]
 
@@ -545,7 +546,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
             className="h-8 sm:h-9 w-auto"
           />
           <p className={`font-chewy text-2xl sm:text-3xl leading-none transition-colors ${scrolled ? 'text-deep' : 'text-white drop-shadow-sm'}`}>
-            Le <span className="text-forest">Rayon Vert</span>
+            Le Rayon Vert
           </p>
         </a>
 
