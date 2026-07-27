@@ -47,7 +47,7 @@ const FORM_ENDPOINTS = {
   contact: 'https://formspree.io/f/YOUR_FORM_ID_CONTACT',
 }
 // Carte du restaurant — à remplacer par le vrai PDF une fois fourni.
-const MENU_PDF = `${import.meta.env.BASE_URL}menu.pdf`
+const CARTE_URL = `${import.meta.env.BASE_URL}carte.html`
 
 type ModalKind = 'sejour' | 'restaurant' | 'contact' | null
 
@@ -1090,7 +1090,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
                 <UtensilsCrossed size={14} />
                 Réserver une table
               </button>
-              <a href={MENU_PDF} target="_blank" rel="noopener noreferrer" className={btnGhost}>
+              <a href={CARTE_URL} target="_blank" rel="noopener noreferrer" className={btnGhost}>
                 <FileText size={14} />
                 Voir notre carte
               </a>
