@@ -1,24 +1,30 @@
 # Identité visuelle — Hôtel Le Rayon Vert
 
-Source : logo vectoriel `lucky_copie.pdf` (Illustrator, juillet 2026).
+Source : logo vectoriel `luckyvert_bleu.pdf` (Illustrator, juillet 2026).
 Toutes les valeurs ci-dessous sont relevées directement dans le fichier.
 
 ## Couleurs
 
 | Rôle | Hex | Provenance |
 |---|---|---|
-| Vert profond | `#01452E` | extrémité sombre du dégradé du lettrage |
-| Vert médian | `#0A6041` | cœur du lettrage « LE RAYON VERT » — couleur primaire |
-| Vert clair | `#086C47` | extrémité claire du dégradé |
-| Vert éclairci | `#14855C` | dérivé, pour les survols et accents |
-| Sage pâle | `#E3EDE5` | dérivé, fonds de sections et pastilles |
+| Bleu-vert profond | `#014539` | extrémité sombre du dégradé du lettrage |
+| Bleu-vert médian | `#016B5B` | couleur primaire du site |
+| Bleu-vert clair | `#007361` | extrémité claire du dégradé |
+| Éclairci | `#0E9280` | dérivé — survols et accents |
+| Teinte pâle | `#E0EDEA` | dérivé — fonds de sections et pastilles |
 | Or | `#BF893B` | aplat plein du mot « HÔTEL » — couleur secondaire |
+| Or clair | `#E0B778` | dérivé — labels sur les fonds sombres |
+| Or foncé | `#93672A` | dérivé — texte sur fond clair |
 | Crème | `#FAF5EF` | fond du logo — fond de page |
-| Vert d'ancrage | `#04301F` | dérivé, footer et blocs CTA |
-| Encre | `#1B2E24` | texte courant |
+| Aplat sombre | `#015B4C` | dérivé — sections Avis et Réserver |
+| Ancrage | `#04302A` | dérivé — voiles et texte profond |
+| Encre | `#172C29` | texte courant |
 
-Le lettrage n'est pas d'un vert plat : il porte un dégradé vertical de
-`#01452E` à `#086C47`. L'utilitaire `.text-gradient-forest` le reproduit.
+Le lettrage porte un dégradé vertical de `#014539` à `#007361`.
+L'utilitaire `.text-gradient-forest` le reproduit.
+
+Les noms de jetons Tailwind sont restés `forest` et `gold` pour des raisons
+historiques : `forest` désigne désormais le bleu-vert, pas un vert forêt.
 
 ## Typographies
 
