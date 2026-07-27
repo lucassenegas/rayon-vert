@@ -30,8 +30,9 @@ export default {
         },
         // ancrage sombre (footer, CTA) — vert forêt poussé au plus profond
         deep: {
-          DEFAULT: '#04301F',
+          DEFAULT: '#04301F',   // texte et voiles
           light:   '#01452E',
+          panel:   '#0A5138',   // grands aplats pleine largeur (Avis, CTA) — éclairci
         },
         // texte sur fond clair — encre légèrement verdie
         ink: {
