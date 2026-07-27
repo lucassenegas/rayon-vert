@@ -7,34 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        // primaire identity #2DBFA6, décliné en famille pastel
-        teal: {
-          DEFAULT: '#2DBFA6',
-          light: '#5FD1BB',
-          dark: '#1F8F7B',
-          pale: '#DEF3EE',
+        // ── Palette extraite du logo (lucky_copie.pdf) ──────────────────
+        // primaire : le vert du lettrage « LE RAYON VERT », avec ses nuances
+        forest: {
+          DEFAULT: '#0A6041',   // vert médian du dégradé de la typo
+          light:   '#14855C',   // éclairci — hovers, accents, survols
+          dark:    '#01452E',   // vert le plus profond du dégradé
+          pale:    '#E3EDE5',   // teinte sage très claire — fonds, pastilles
         },
-        // secondaire identity #6B5640, décliné en famille pastel
-        caramel: {
-          DEFAULT: '#6B5640',
-          light: '#8A7057',
-          dark: '#4E3D2C',
+        // secondaire : l'or plein du mot « HÔTEL »
+        gold: {
+          DEFAULT: '#BF893B',   // valeur exacte du logo
+          light:   '#D4A461',
+          dark:    '#93672A',   // assombri pour rester lisible en texte / bouton
+          deep:    '#7A5522',
         },
-        // fond clair de base (remplace l'obsidian de la DA luxe)
+        // fond : le crème exact du logo
         cream: {
-          DEFAULT: '#FBF8F2',
-          soft: '#F3EEE3',
-          dark: '#E9E1D2',
+          DEFAULT: '#FAF5EF',   // valeur exacte du logo
+          soft:    '#F3EBE0',
+          dark:    '#E8DDCE',
         },
-        // ancrage sombre (footer, CTA) — vert profond dérivé du teal
+        // ancrage sombre (footer, CTA) — vert forêt poussé au plus profond
         deep: {
-          DEFAULT: '#163C33',
-          light: '#1E4A3F',
+          DEFAULT: '#04301F',
+          light:   '#01452E',
         },
-        // texte sur fond clair
+        // texte sur fond clair — encre légèrement verdie
         ink: {
-          DEFAULT: '#1C2E29',
-          soft: '#5C6F68',
+          DEFAULT: '#1B2E24',
+          soft:    '#5D6B60',
         },
       },
       fontFamily: {
