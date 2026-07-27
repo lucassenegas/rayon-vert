@@ -3,10 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --color-teal: #2DBFA6;
-  --color-caramel: #6B5640;
-  --color-cream: #FBF8F2;
-  --color-deep: #163C33;
+  /* Palette extraite du logo — voir .specs/identity.md */
+  --color-forest: #0A6041;      /* vert médian de la typo */
+  --color-forest-dark: #01452E; /* vert profond du dégradé */
+  --color-forest-light: #14855C;
+  --color-gold: #BF893B;        /* or du mot HÔTEL */
+  --color-cream: #FAF5EF;       /* crème du fond du logo */
+  --color-deep: #04301F;
 }
 
 * {
@@ -23,8 +26,8 @@ section[id] {
 }
 
 body {
-  background-color: #FBF8F2;
-  color: #1C2E29;
+  background-color: #FAF5EF;
+  color: #1B2E24;
   font-family: 'DM Sans', system-ui, sans-serif;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
@@ -37,22 +40,23 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #F3EEE3;
+  background: #F3EBE0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2DBFA6;
+  background: #0A6041;
   border-radius: 2px;
 }
 
 /* Cursor */
 ::selection {
-  background: rgba(45, 191, 166, 0.25);
-  color: #163C33;
+  background: rgba(10, 96, 65, 0.18);
+  color: #01452E;
 }
 
 @layer utilities {
-  .text-gradient-teal {
-    background: linear-gradient(135deg, #2DBFA6, #5FD1BB 50%, #6B5640);
+  .text-gradient-forest {
+    /* reproduit le dégradé du lettrage du logo, du plus profond au plus clair */
+    background: linear-gradient(180deg, #01452E, #06543A 45%, #0A6C47);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
