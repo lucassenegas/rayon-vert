@@ -35,6 +35,11 @@ export default {
           light:   '#014539',
           panel:   '#015B4C',   // grands aplats pleine largeur (Avis, CTA)
         },
+        // titres — les deux nuances exactes du logo
+        titre: {
+          DEFAULT: '#014539',   // vert profond du logo — corps du titre
+          accent:  '#007361',   // vert éclairci du dégradé — mot mis en avant
+        },
         // texte sur fond clair — encre légèrement verdie
         ink: {
           DEFAULT: '#172C29',
