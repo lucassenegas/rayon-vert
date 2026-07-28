@@ -40,13 +40,11 @@ const TODAY = new Date().toISOString().split('T')[0]
 const A = (name: string) => `${import.meta.env.BASE_URL}assets/${name}`
 
 // ─── formulaires ─────────────────────────────────────────────────────────────
-// À remplacer par vos identifiants Formspree (ou tout autre backend) avant mise en ligne.
-const FORM_ENDPOINTS = {
-  restaurant: 'https://formspree.io/f/YOUR_FORM_ID_RESTAURANT',
-  sejour: 'https://formspree.io/f/YOUR_FORM_ID_SEJOUR',
-  contact: 'https://formspree.io/f/YOUR_FORM_ID_CONTACT',
-}
-// Carte du restaurant — à remplacer par le vrai PDF une fois fourni.
+// Web3Forms : une seule clé pour les trois formulaires, à récupérer sur
+// web3forms.com en indiquant l'adresse de réception. 250 envois par mois.
+const WEB3FORMS_KEY = '09728cc2-0dca-4768-a52c-aa9acb693109'
+const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
+
 const CARTE_URL = `${import.meta.env.BASE_URL}carte.html`
 const BLOG_URL = `${import.meta.env.BASE_URL}blog.html`
 /* Même tableur que la page blog.html — laisser vide masque la section. */
@@ -54,20 +52,23 @@ const BLOG_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vScJjM41wMY7hb
 
 type ModalKind = 'sejour' | 'restaurant' | 'contact' | null
 
-function useFormspree(endpoint: string) {
+function useWeb3Form() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = e.currentTarget
     setStatus('sending')
+    const data = new FormData(form)
+    data.append('access_key', WEB3FORMS_KEY)
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetch(WEB3FORMS_URL, {
         method: 'POST',
-        body: new FormData(form),
+        body: data,
         headers: { Accept: 'application/json' },
       })
-      if (res.ok) {
+      const json = await res.json().catch(() => null)
+      if (res.ok && json?.success) {
         setStatus('success')
         form.reset()
       } else {
@@ -296,14 +297,16 @@ function ReservationDialog({ open, onOpenChange, title, icon, children }: {
 // ─── Contenus des formulaires ──────────────────────────────────────────────────
 
 function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: string; onPresetRoomChange: (v: string) => void }) {
-  const { status, handleSubmit } = useFormspree(FORM_ENDPOINTS.sejour)
+  const { status, handleSubmit } = useWeb3Form()
   const [arrivee, setArrivee] = useState('')
 
   if (status === 'success') return <SuccessNote>Demande reçue ! Réponse sous 24h.</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="_subject" value="Réservation Hôtel – Le Rayon Vert" />
+      <input type="hidden" name="subject" value="Réservation séjour — Le Rayon Vert" />
+      <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
+      <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
       <p className="font-sans text-[13px] text-ink-soft -mt-2 mb-2">Meilleur tarif garanti en direct · Réponse sous 24h</p>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
@@ -378,13 +381,15 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
 }
 
 function RestaurantFormContent() {
-  const { status, handleSubmit } = useFormspree(FORM_ENDPOINTS.restaurant)
+  const { status, handleSubmit } = useWeb3Form()
 
   if (status === 'success') return <SuccessNote>Demande envoyée ! Confirmation par téléphone sous 2h.</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="_subject" value="Réservation Restaurant – Le Rayon Vert" />
+      <input type="hidden" name="subject" value="Réservation restaurant — Le Rayon Vert" />
+      <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
+      <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
           <label className={fieldLabel}>Date *</label>
@@ -424,9 +429,15 @@ function RestaurantFormContent() {
           <input type="tel" name="telephone" required placeholder="+590 6 00 00 00 00" className={fieldInput} />
         </div>
       </div>
-      <div className={fieldWrap}>
-        <label className={fieldLabel}>Nom & prénom *</label>
-        <input type="text" name="nom" required placeholder="Marie Dupont" className={fieldInput} />
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div className={fieldWrap}>
+          <label className={fieldLabel}>Nom & prénom *</label>
+          <input type="text" name="nom" required placeholder="Marie Dupont" className={fieldInput} />
+        </div>
+        <div className={fieldWrap}>
+          <label className={fieldLabel}>Email <span className="normal-case text-ink-soft/50">(optionnel)</span></label>
+          <input type="email" name="email" placeholder="marie@exemple.com" className={fieldInput} />
+        </div>
       </div>
       <div className={fieldWrap}>
         <label className={fieldLabel}>Commentaires <span className="normal-case text-ink-soft/50">(optionnel)</span></label>
@@ -442,13 +453,15 @@ function RestaurantFormContent() {
 }
 
 function ContactFormContent() {
-  const { status, handleSubmit } = useFormspree(FORM_ENDPOINTS.contact)
+  const { status, handleSubmit } = useWeb3Form()
 
   if (status === 'success') return <SuccessNote>Merci ! Nous vous répondons sous 24h.</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="_subject" value="Demande – Le Rayon Vert" />
+      <input type="hidden" name="subject" value="Demande de devis — Le Rayon Vert" />
+      <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
+      <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
           <label className={fieldLabel}>Prénom *</label>
