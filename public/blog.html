@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le journal — Hôtel Le Rayon Vert, Deshaies</title>
-<meta name="description" content="Le journal de l'Hôtel Le Rayon Vert à Deshaies : nos actualités, nos bonnes adresses et nos conseils pour découvrir la Guadeloupe.">
+<title>Le blog — Hôtel Le Rayon Vert, Deshaies</title>
+<meta name="description" content="Le blog de l'Hôtel Le Rayon Vert à Deshaies : nos actualités, nos bonnes adresses et nos conseils pour découvrir la Guadeloupe.">
 <link rel="canonical" href="https://lucassenegas.github.io/rayon-vert/blog.html">
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
 <link rel="icon" type="image/png" sizes="96x96" href="./favicon-96.png">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Hôtel Le Rayon Vert">
 <meta property="og:locale" content="fr_FR">
-<meta property="og:title" content="Le journal — Le Rayon Vert, Deshaies">
+<meta property="og:title" content="Le blog — Le Rayon Vert, Deshaies">
 <meta property="og:description" content="Nos actualités, nos bonnes adresses et nos conseils pour découvrir la Guadeloupe.">
 <meta property="og:url" content="https://lucassenegas.github.io/rayon-vert/blog.html">
 <meta property="og:image" content="https://lucassenegas.github.io/rayon-vert/og-image.jpg">
@@ -109,7 +109,7 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
 
 <header id="entete">
   <img class="logo" src="./assets/logo.png" alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe">
-  <div class="eyebrow">Le journal</div>
+  <div class="eyebrow">Le blog</div>
   <h1>Nos actualités</h1>
   <p class="sub">Nos nouvelles, nos bonnes adresses et nos conseils pour découvrir Deshaies et la côte sous le vent.</p>
 </header>
@@ -283,7 +283,7 @@ async function charger(){
   if(live || !CSV_URL){ e.style.display='none'; }
   else{
     e.style.display='flex';
-    e.innerHTML='<span><b>Journal hors ligne</b> — les articles récents n\'apparaissent pas.</span><button type="button" id="retry">Réessayer</button>';
+    e.innerHTML='<span><b>Blog hors ligne</b> — les articles récents n\'apparaissent pas.</span><button type="button" id="retry">Réessayer</button>';
     document.getElementById('retry').onclick=charger;
   }
 }
