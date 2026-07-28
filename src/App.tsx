@@ -99,9 +99,9 @@ const rooms = [
     key: 'standard',
     title: 'Chambre Standard',
     subtitle: 'Sérénité & confort',
-    description: '20 m² · Chambre climatisée avec terrasse privée, nichée dans la végétation tropicale.',
+    description: '20 m² · Chambre climatisée avec terrasse privée et vue sur la mer, nichée dans la végétation tropicale.',
     image: A('chambre-standard-jardin.jpg'),
-    features: ['Clim', 'Terrasse privée'],
+    features: ['Vue mer', 'Clim', 'Terrasse privée'],
     badge: 'Standard · 20 m²',
     priceRoom: 95,
     priceHalfBoard: 179,
@@ -112,7 +112,7 @@ const rooms = [
     subtitle: "L'art de vivre caribéen",
     description: '32 m² · Bungalow avec grande terrasse privée et vue panoramique sur la mer des Caraïbes.',
     image: A('chambre-confort.jpg'),
-    features: ['Vue mer', 'Grande terrasse'],
+    features: ['Vue mer', 'Clim', 'Grande terrasse'],
     badge: 'Confort · 32 m²',
     priceRoom: 120,
     priceHalfBoard: 204,
@@ -121,9 +121,9 @@ const rooms = [
     key: 'famille',
     title: 'Suite Familiale',
     subtitle: 'Espace & générosité',
-    description: '50 m² · Chambres communicantes avec grande terrasse partagée, idéal en famille.',
+    description: '50 m² · Chambres communicantes climatisées, grande terrasse partagée et vue panoramique sur la mer, idéal en famille.',
     image: A('chambre-familiale-terrasse.jpg'),
-    features: ['Famille', 'Vue panoramique'],
+    features: ['Vue mer', 'Clim', 'Famille'],
     badge: 'Familiale · 50 m²',
     priceRoom: 150,
     priceHalfBoard: 234,
@@ -166,7 +166,7 @@ const navLinks = [
   { label: 'Chambres', href: '#chambres' },
   { label: 'Restaurant', href: '#restaurant' },
   { label: 'Galerie', href: '#galerie' },
-  { label: 'Journal', href: '#journal' },
+  { label: 'Blog', href: '#blog' },
   { label: 'Contact', href: '#devis' },
 ]
 
@@ -773,13 +773,13 @@ function Intro({ onReserve }: { onReserve: () => void }) {
         </motion.div>
 
         <motion.h1
-          className="font-chewy text-4xl sm:text-5xl lg:text-6xl text-deep leading-[1.1] mt-4"
+          className="font-chewy text-4xl sm:text-5xl lg:text-6xl text-titre leading-[1.1] mt-4"
           variants={fadeUp}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.1}
         >
-          Une promesse entre <span className="text-forest">mer et montagne</span>
+          Une promesse entre <span className="text-titre-accent">mer et montagne</span>
         </motion.h1>
 
         <motion.p
@@ -853,9 +853,9 @@ function About() {
         <div>
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
             <SectionLabel>Bienvenue</SectionLabel>
-            <h2 className="font-chewy text-4xl lg:text-5xl text-deep leading-tight mb-6">
+            <h2 className="font-chewy text-4xl lg:text-5xl text-titre leading-tight mb-6">
               Un hôtel à taille humaine,<br />
-              face à la <span className="text-forest">mer des Caraïbes</span>
+              face à la <span className="text-titre-accent">mer des Caraïbes</span>
             </h2>
           </motion.div>
 
@@ -944,7 +944,10 @@ function Rooms({ onSelectRoom }: { onSelectRoom: (key: string) => void }) {
         <div className="flex flex-wrap items-end justify-between gap-6 mb-14" ref={ref}>
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <SectionLabel>Hébergement</SectionLabel>
-            <h2 className="font-chewy text-4xl lg:text-5xl text-deep">Nos chambres</h2>
+            <h2 className="font-chewy text-4xl lg:text-5xl text-titre">Nos chambres</h2>
+            <p className="font-sans text-sm text-ink-soft mt-3 max-w-md">
+              Toutes nos chambres sont climatisées et donnent sur la mer des Caraïbes.
+            </p>
           </motion.div>
           <motion.a
             href="https://www.hotels-deshaies.com/tarifs-reservation-hotel-deshaies-guadeloupe"
@@ -1003,7 +1006,7 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
 
       <div className="p-6 sm:p-7 flex flex-col flex-1">
         <p className="font-sans text-[11px] tracking-wide uppercase text-forest-dark mb-1">{room.subtitle}</p>
-        <h3 className="font-chewy text-2xl text-deep mb-3 leading-tight">{room.title}</h3>
+        <h3 className="font-chewy text-2xl text-titre mb-3 leading-tight">{room.title}</h3>
         <p className="font-sans text-sm text-ink-soft leading-relaxed mb-4 flex-1">{room.description}</p>
 
         <div className="flex gap-2 flex-wrap mb-5">
@@ -1071,8 +1074,8 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
           <div ref={ref}>
             <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
               <SectionLabel>Cuisine créole</SectionLabel>
-              <h2 className="font-chewy text-4xl lg:text-5xl text-deep leading-tight mb-6">
-                Une table qui regarde<br /><span className="text-forest">l'horizon</span>
+              <h2 className="font-chewy text-4xl lg:text-5xl text-titre leading-tight mb-6">
+                Une table qui regarde<br /><span className="text-titre-accent">l'horizon</span>
               </h2>
             </motion.div>
 
@@ -1096,7 +1099,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
               <Waves size={18} className="text-forest-dark flex-shrink-0 mt-0.5" />
               <p className="font-sans text-sm text-forest-dark leading-relaxed">
                 <span className="font-medium">Piscine offerte.</span> L'accès à la piscine à débordement
-                est inclus pour tous les clients du restaurant, midi comme soir.
+                est inclus pour tous les clients du restaurant, jusqu'à 17h.
               </p>
             </motion.div>
 
@@ -1178,7 +1181,7 @@ function Activities() {
       <div className="text-center max-w-xl mx-auto mb-14" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
           <SectionLabel>À proximité</SectionLabel>
-          <h2 className="font-chewy text-4xl lg:text-5xl text-deep mb-4">Activités & découvertes</h2>
+          <h2 className="font-chewy text-4xl lg:text-5xl text-titre mb-4">Activités & découvertes</h2>
           <p className="font-sans text-sm text-ink-soft leading-relaxed">
             Entre mer et montagne, Deshaies est le point de départ idéal pour explorer les merveilles naturelles de la Guadeloupe.
           </p>
@@ -1198,7 +1201,7 @@ function Activities() {
             <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center">
               <Icon size={18} className="text-forest-dark" />
             </div>
-            <h3 className="font-chewy text-lg text-deep">{name}</h3>
+            <h3 className="font-chewy text-lg text-titre">{name}</h3>
             <p className="font-sans text-[12px] text-ink-soft leading-relaxed">{desc}</p>
           </motion.div>
         ))}
@@ -1271,7 +1274,7 @@ function Blog() {
   const src = (v: string) => (/^https?:\/\//.test(v) ? v : A(v))
 
   return (
-    <section id="journal" className="py-24 lg:py-32 overflow-hidden">
+    <section id="blog" className="py-24 lg:py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="flex items-end justify-between gap-6 mb-10"
@@ -1280,9 +1283,9 @@ function Blog() {
           animate="visible"
         >
           <div>
-            <SectionLabel>Le journal</SectionLabel>
-            <h2 className="font-chewy text-3xl lg:text-4xl text-deep leading-tight">
-              Nos <span className="text-forest">actualités</span>
+            <SectionLabel>Le blog</SectionLabel>
+            <h2 className="font-chewy text-3xl lg:text-4xl text-titre leading-tight">
+              Nos <span className="text-titre-accent">actualités</span>
             </h2>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -1380,7 +1383,7 @@ function Gallery() {
     <section id="galerie" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" ref={ref}>
       <motion.div className="text-center mb-14" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
         <SectionLabel>Galerie photos</SectionLabel>
-        <h2 className="font-chewy text-4xl lg:text-5xl text-deep">L'hôtel en images</h2>
+        <h2 className="font-chewy text-4xl lg:text-5xl text-titre">L'hôtel en images</h2>
       </motion.div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[160px] sm:auto-rows-[180px]">
@@ -1557,8 +1560,8 @@ function ContactSection({ onContact }: { onContact: () => void }) {
       <div className="max-w-2xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
           <SectionLabel>Événements privés</SectionLabel>
-          <h2 className="font-chewy text-3xl lg:text-4xl text-deep leading-tight mb-4">
-            Célébrez face à la <span className="text-forest">mer des Caraïbes</span>
+          <h2 className="font-chewy text-3xl lg:text-4xl text-titre leading-tight mb-4">
+            Célébrez face à la <span className="text-titre-accent">mer des Caraïbes</span>
           </h2>
           <p className="font-sans text-sm text-ink-soft leading-relaxed mb-8 max-w-lg mx-auto">
             Mariage les pieds dans le jardin tropical, baptême en famille, anniversaire au
