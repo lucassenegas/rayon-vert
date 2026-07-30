@@ -99,6 +99,21 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 .cta .s{border:2px solid var(--gold);color:var(--deep)}
 .cta .s:hover{background:var(--gold)}
 
+.avis{max-width:760px;margin:34px auto 0;padding:0 24px}
+.avis-in{display:flex;align-items:center;gap:30px;background:var(--cream-soft);border:1px solid var(--cream-dark);border-radius:1.75rem;padding:28px 32px}
+.avis-txt{flex:1}
+.avis-etoiles{color:var(--gold);font-size:15px;letter-spacing:.22em;margin-bottom:8px}
+.avis-txt h3{font-family:'Chewy',cursive;font-weight:400;font-size:25px;line-height:1.15;color:var(--forest-dark)}
+.avis-txt p{font-size:13.5px;font-weight:300;color:var(--ink-soft);line-height:1.6;margin-top:8px;max-width:44ch}
+.avis-txt .creole{color:var(--gold-dark);font-weight:500}
+.avis-btn{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--gold);color:var(--deep);border-radius:999px;padding:15px 30px;box-shadow:0 8px 22px rgba(191,137,59,.28);transition:all .3s}
+.avis-btn:hover{background:var(--gold-dark);color:#fff;transform:translateY(-2px)}
+@media (max-width:560px){
+  .avis-in{flex-direction:column;text-align:center;gap:20px;padding:26px 22px}
+  .avis-txt p{max-width:none}
+  .avis-btn{width:100%}
+}
+
 footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px;padding:42px 26px 46px}
 .f-in{max-width:760px;margin:0 auto}
 .f-title{font-family:'Chewy',cursive;font-size:22px;color:#fff;margin-bottom:10px}
@@ -151,6 +166,17 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
   <a class="p" href="tel:+590590284323">Réserver une table</a>
   <a class="s" href="./">Découvrir l'hôtel</a>
 </div>
+
+<section class="avis">
+  <div class="avis-in">
+    <div class="avis-txt">
+      <div class="avis-etoiles">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+      <h3>Vous avez passé un bon moment&nbsp;?</h3>
+      <p>Un avis sur Google, c'est deux minutes pour vous et beaucoup pour nous. <span class="creole">Mèsi anpil&nbsp;!</span></p>
+    </div>
+    <a class="avis-btn" href="https://search.google.com/local/writereview?placeid=ChIJAQAAQIZrE4wRRaE8a_ih1s0" target="_blank" rel="noopener">Laisser un avis</a>
+  </div>
+</section>
 
 <footer>
   <div class="f-in">
