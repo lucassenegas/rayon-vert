@@ -292,7 +292,11 @@ function render(){
       main.querySelectorAll('.sec').forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
       document.getElementById('sec-'+idx).classList.add('on');
-      window.scrollTo({top:0,behavior:'smooth'});
+      /* on ne remonte pas en haut de page : on cale juste la barre d'onglets
+         en haut de l'écran, et seulement si on est déjà descendu plus bas */
+      const barre=document.querySelector('nav');
+      const ancre=main.offsetTop-barre.offsetHeight;
+      if(window.scrollY>ancre) window.scrollTo({top:ancre,behavior:'instant'});
     };
     nav.appendChild(b);
 
