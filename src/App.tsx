@@ -45,6 +45,9 @@ const A = (name: string) => `${import.meta.env.BASE_URL}assets/${name}`
 const WEB3FORMS_KEY = '09728cc2-0dca-4768-a52c-aa9acb693109'
 const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
 
+// Moteur de réservation externe (SmartBooking / Hotelnet)
+const BOOKING_URL = 'https://smartbooking.hotelnet.biz/home/main?hotel=5613&channel=0000&lingua=FR'
+
 const CARTE_URL = `${import.meta.env.BASE_URL}carte.html`
 const BLOG_URL = `${import.meta.env.BASE_URL}blog.html`
 /* Même tableur que la page blog.html — laisser vide masque la section. */
@@ -553,7 +556,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
         {/* Logo */}
         <a href="#" className="group flex-shrink-0 flex items-center gap-2.5">
           <img
-            src={A('logo-mark.png')}
+            src={A(scrolled ? 'logo-mark.png' : 'logo white single.png')}
             alt=""
             aria-hidden="true"
             className="h-8 sm:h-9 w-auto"
@@ -637,15 +640,17 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
             <Instagram size={16} />
           </a>
 
-          <button
-            onClick={onReserve}
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`inline-flex items-center gap-2 font-sans text-[11px] font-medium tracking-wider uppercase px-6 py-2.5 rounded-full shadow-md transition-all duration-300 ${
               scrolled ? 'bg-gold text-deep shadow-gold/30 hover:bg-gold-dark hover:text-white' : 'bg-gold text-deep shadow-ink/20 hover:bg-gold-dark hover:text-white'
             }`}
           >
             <CalendarDays size={13} />
             Réserver
-          </button>
+          </a>
         </div>
 
         {/* Mobile menu button */}
@@ -682,12 +687,15 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
                   {link.label}
                 </motion.a>
               ))}
-              <button
-                onClick={() => { setMenuOpen(false); onReserve() }}
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
                 className={btnPrimary + ' mt-4 self-start'}
               >
                 Réserver maintenant
-              </button>
+              </a>
             </div>
           </motion.div>
         )}
@@ -722,12 +730,12 @@ function Hero() {
       <motion.div className="absolute inset-0 bg-deep" style={{ opacity: overlayOpacity }} />
       <div className="absolute inset-0 bg-gradient-to-b from-deep/60 via-transparent to-deep/45" />
 
-      {/* Logo seul, centré dans la partie haute */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-start pt-24 sm:pt-28 px-6">
+      {/* Logo seul, centré verticalement dans le viewport */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center px-6">
         <motion.img
-          src={A('logo.png')}
+          src={A('logo white full.png')}
           alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe"
-          className="w-[260px] sm:w-[320px] lg:w-[380px] h-auto"
+          className="w-[340px] sm:w-[440px] lg:w-[560px] max-h-[80vh] h-auto object-contain"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
@@ -816,10 +824,10 @@ function Intro({ onReserve }: { onReserve: () => void }) {
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.4}
         >
-          <button onClick={onReserve} className={btnPrimary}>
+          <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className={btnPrimary}>
             <CalendarDays size={14} />
             Réserver votre séjour
-          </button>
+          </a>
           <a href="#chambres" className={btnGhost}>
             Voir les chambres
           </a>
@@ -1037,12 +1045,14 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
               dès {halfBoard ? room.priceHalfBoard : room.priceRoom}€ <span className="font-sans text-[11px] text-ink-soft font-normal">/nuit</span>
             </p>
           </div>
-          <button
-            onClick={() => onSelectRoom(room.key)}
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-sans text-[11px] font-medium tracking-wide uppercase text-gold-dark border-b border-gold-dark/50 hover:border-gold-dark pb-0.5 transition-colors flex-shrink-0"
           >
             Réserver
-          </button>
+          </a>
         </div>
       </div>
     </motion.div>
@@ -1538,10 +1548,10 @@ function ReserveCTA({ onReserve }: { onReserve: () => void }) {
         </motion.div>
 
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.15}>
-          <button onClick={onReserve} className={btnPrimary + ' !px-12 !py-4'}>
+          <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className={btnPrimary + ' !px-12 !py-4'}>
             <CalendarDays size={16} />
             Vérifier les disponibilités
-          </button>
+          </a>
         </motion.div>
 
         <p className="font-sans text-[11px] text-cream/35 mt-8">Paiement sécurisé · CB, Virement · Chèques vacances acceptés</p>
