@@ -713,15 +713,20 @@ function Hero() {
 
   return (
     <section className="relative h-screen min-h-[620px] overflow-hidden">
-      {/* Fond parallax — remplacer <img> par <video> quand le drone sera monté :
-          <video src={A('drone.mp4')} autoPlay muted loop playsInline
-                 className="w-full h-full object-cover scale-110" /> */}
+      {/* Fond parallax — vidéo drone en boucle, muette.
+          L'image « poster » s'affiche pendant le téléchargement de la vidéo et
+          sert de repli si le navigateur refuse la lecture automatique. */}
       <motion.div className="absolute inset-0" style={{ y: imgY }}>
-        <img
-          src={A('DJI_0148-scaled.jpg')}
-          alt="Vue aérienne de l'hôtel Le Rayon Vert à Deshaies"
+        <video
+          src={A('hero.mp4')}
+          poster={A('DJI_0148-scaled.jpg')}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="Vue aérienne de l'hôtel Le Rayon Vert à Deshaies"
           className="w-full h-full object-cover scale-110"
-          loading="eager"
         />
       </motion.div>
 
