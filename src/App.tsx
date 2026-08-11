@@ -142,6 +142,11 @@ const gallery = [
   { src: A('IMG_0406-scaled.jpg'), alt: 'Moules frites, cuisine créole' },
   { src: A('extension.jpg'), alt: 'Faune locale' },
   { src: A('IMG_0094-scaled.jpg'), alt: 'Jardin et vue sur mer' },
+  { src: A('brochettes-de-fruits.jpg'), alt: 'Brochettes de fruits frais' },
+  { src: A('buffet-fruits-frais.jpg'), alt: 'Buffet de fruits tropicaux' },
+  { src: A('gateau-ananas.jpg'), alt: "Gâteau à l'ananas maison" },
+  { src: A('buffet-viennoiseries.jpg'), alt: 'Mini-muffins et roses aux pommes' },
+  { src: A('buffet-desserts-fruits.jpg'), alt: 'Buffet de desserts et corbeille de fruits' },
 ]
 
 const amenities = [
