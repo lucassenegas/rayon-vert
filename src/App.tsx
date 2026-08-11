@@ -740,7 +740,7 @@ function Hero() {
         <motion.img
           src={A('logo white full.png')}
           alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe"
-          className="w-[260px] sm:w-[330px] lg:w-[420px] max-h-[80vh] h-auto object-contain"
+          className="w-[130px] sm:w-[165px] lg:w-[210px] max-h-[80vh] h-auto object-contain"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
