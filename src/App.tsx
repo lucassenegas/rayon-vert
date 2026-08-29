@@ -730,8 +730,8 @@ function useIsMobile() {
 function Hero() {
   const { scrollY } = useScroll()
   const isMobile = useIsMobile()
-  const heroVideo = isMobile ? 'hero-mobile.mp4' : 'hero-desktop.mp4'
-  const heroPoster = isMobile ? 'hero-poster-mobile.jpg' : 'hero-poster.jpg'
+  const heroVideo = isMobile ? 'hero-mobile-v2.mp4' : 'hero-desktop-v2.mp4'
+  const heroPoster = isMobile ? 'hero-poster-mobile-v2.jpg' : 'hero-poster-v2.jpg'
   const imgY = useTransform(scrollY, [0, 600], [0, 100])
   const overlayOpacity = useTransform(scrollY, [0, 400], [0.22, 0.55])
 
@@ -751,7 +751,9 @@ function Hero() {
           playsInline
           preload="auto"
           aria-label="Vue aérienne de l'hôtel Le Rayon Vert à Deshaies"
-          className="w-full h-full object-cover scale-110"
+          className={
+            'w-full h-full object-cover ' + (isMobile ? '' : 'scale-110')
+          }
         />
       </motion.div>
 
