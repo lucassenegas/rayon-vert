@@ -711,8 +711,27 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
+/* Détecte les petits écrans pour servir une vidéo plus légère (4,6 Mo au lieu
+   de 9,5 Mo) et éviter de faire télécharger du 1080p sur un forfait mobile. */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mql.matches)
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
+  }, [])
+
+  return isMobile
+}
+
 function Hero() {
   const { scrollY } = useScroll()
+  const isMobile = useIsMobile()
+  const heroVideo = isMobile ? 'hero-mobile.mp4' : 'hero-desktop.mp4'
+  const heroPoster = isMobile ? 'hero-poster-mobile.jpg' : 'hero-poster.jpg'
   const imgY = useTransform(scrollY, [0, 600], [0, 100])
   const overlayOpacity = useTransform(scrollY, [0, 400], [0.22, 0.55])
 
@@ -723,8 +742,9 @@ function Hero() {
           sert de repli si le navigateur refuse la lecture automatique. */}
       <motion.div className="absolute inset-0" style={{ y: imgY }}>
         <video
-          src={A('hero.mp4')}
-          poster={A('DJI_0148-scaled.jpg')}
+          key={heroVideo}
+          src={A(heroVideo)}
+          poster={A(heroPoster)}
           autoPlay
           muted
           loop
