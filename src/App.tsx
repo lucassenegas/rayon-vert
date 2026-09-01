@@ -730,8 +730,8 @@ function useIsMobile() {
 function Hero() {
   const { scrollY } = useScroll()
   const isMobile = useIsMobile()
-  const heroVideo = isMobile ? 'hero-mobile-v2.mp4' : 'hero-desktop-v2.mp4'
-  const heroPoster = isMobile ? 'hero-poster-mobile-v2.jpg' : 'hero-poster-v2.jpg'
+  const heroVideo = isMobile ? 'hero-mobile-v3.mp4' : 'hero-desktop-v3.mp4'
+  const heroPoster = isMobile ? 'hero-poster-mobile-v3.jpg' : 'hero-poster-v3.jpg'
   const imgY = useTransform(scrollY, [0, 600], [0, 100])
   const overlayOpacity = useTransform(scrollY, [0, 400], [0.22, 0.55])
 
