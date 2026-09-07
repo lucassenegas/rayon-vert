@@ -885,7 +885,7 @@ function About() {
         <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
           <BlobCluster
             main={{ src: A('about-principale-v2.jpg'), alt: "Piscine à débordement face à la mer des Caraïbes" }}
-            secondary={{ src: A('about-secondaire-v1.jpg'), alt: 'Jardin tropical et bungalows sur les hauteurs de Deshaies' }}
+            secondary={{ src: A('about-secondaire-v2.jpg'), alt: 'Arbre du voyageur dans le jardin de l\u2019hôtel' }}
             mainShape="blob-1"
             secondaryShape="blob-2"
             accentBg="bg-forest"
@@ -1107,7 +1107,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
           <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <BlobCluster
               main={{ src: A('dinerdegroupe1-scaled.jpg'), alt: 'Restaurant panoramique Le Rayon Vert' }}
-              secondary={{ src: A('restaurant-secondaire-v1.jpg'), alt: 'Salade créole au poisson fumé' }}
+              secondary={{ src: A('restaurant-secondaire-v2.jpg'), alt: 'Salade créole au poisson fumé' }}
               mainShape="blob-2"
               secondaryShape="blob-1"
               accentBg="bg-gold"
