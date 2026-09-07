@@ -114,7 +114,7 @@ const rooms = [
     title: 'Bungalow Confort',
     subtitle: "L'art de vivre caribéen",
     description: '32 m² · Bungalow avec grande terrasse privée et vue panoramique sur la mer des Caraïbes.',
-    image: A('chambre-confort.jpg'),
+    image: A('chambre-confort-v2.jpg'),
     features: ['Vue mer', 'Clim', 'Grande terrasse'],
     badge: 'Confort · 32 m²',
     priceRoom: 120,
@@ -137,16 +137,20 @@ const gallery = [
   { src: A('dsc_0194_2.jpg'), alt: 'Plage de Deshaies', span: 'col-span-2 row-span-2' },
   { src: A('terrasse-hotel-rayon-vert-guadeloupe.jpg'), alt: 'Terrasse avec vue mer' },
   { src: A('IMG_0074-scaled.jpg'), alt: 'Jardin tropical' },
-  { src: A('restaurant-hotel-rayon-vert-guadeloupe.jpg'), alt: 'Restaurant panoramique', span: 'col-span-2' },
-  { src: A('pdj-low.jpg'), alt: 'Petit-déjeuner' },
-  { src: A('IMG_0406-scaled.jpg'), alt: 'Moules frites, cuisine créole' },
-  { src: A('extension.jpg'), alt: 'Faune locale' },
-  { src: A('IMG_0094-scaled.jpg'), alt: 'Jardin et vue sur mer' },
-  { src: A('brochettes-de-fruits.jpg'), alt: 'Brochettes de fruits frais' },
-  { src: A('buffet-fruits-frais.jpg'), alt: 'Buffet de fruits tropicaux' },
-  { src: A('gateau-ananas.jpg'), alt: "Gâteau à l'ananas maison" },
-  { src: A('buffet-viennoiseries.jpg'), alt: 'Mini-muffins et roses aux pommes' },
-  { src: A('buffet-desserts-fruits.jpg'), alt: 'Buffet de desserts et corbeille de fruits' },
+  { src: A('galerie-g04-v1.jpg'), alt: 'Piscine à débordement au coucher du soleil' },
+  { src: A('galerie-g05-v1.jpg'), alt: 'Assiette de poisson mariné, riz et avocat' },
+  { src: A('galerie-g06-v1.jpg'), alt: 'Piscine et terrasse en bois face aux collines' },
+  { src: A('galerie-g07-v1.jpg'), alt: 'Reflets du ciel sur la piscine à débordement' },
+  { src: A('galerie-g08-v1.jpg'), alt: 'Viande grillée, oignons marinés et frites maison' },
+  { src: A('galerie-g09-v1.jpg'), alt: 'Salade au poisson fumé et crudités' },
+  { src: A('galerie-g10-v1.jpg'), alt: 'Salade créole au poisson fumé' },
+  { src: A('galerie-g11-v1.jpg'), alt: 'Jardin fleuri et vue sur la baie' },
+  { src: A('galerie-g12-v1.jpg'), alt: 'Transats au bord de la piscine' },
+  { src: A('galerie-g13-v1.jpg'), alt: 'Salle du restaurant ouverte sur la mer' },
+  { src: A('galerie-g14-v1.jpg'), alt: 'Buffet de viennoiseries et gâteaux maison' },
+  { src: A('galerie-g15-v1.jpg'), alt: 'Buffet de fruits frais et gâteau au chocolat' },
+  { src: A('galerie-g16-v1.jpg'), alt: 'Stand de desserts et douceurs créoles' },
+  { src: A('galerie-g17-v1.jpg'), alt: 'Vue plongeante sur la piscine et la baie' },
 ]
 
 const amenities = [
@@ -880,8 +884,8 @@ function About() {
       <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center" ref={ref}>
         <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
           <BlobCluster
-            main={{ src: A('20220120_133026-scaled.jpg'), alt: "Vue de l'hôtel Le Rayon Vert" }}
-            secondary={{ src: A('flamboyants-scaled.jpg'), alt: 'Jardin tropical en fleurs' }}
+            main={{ src: A('about-principale-v2.jpg'), alt: "Piscine à débordement face à la mer des Caraïbes" }}
+            secondary={{ src: A('about-secondaire-v1.jpg'), alt: 'Jardin tropical et bungalows sur les hauteurs de Deshaies' }}
             mainShape="blob-1"
             secondaryShape="blob-2"
             accentBg="bg-forest"
@@ -1103,7 +1107,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
           <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <BlobCluster
               main={{ src: A('dinerdegroupe1-scaled.jpg'), alt: 'Restaurant panoramique Le Rayon Vert' }}
-              secondary={{ src: A('IMG_0406-scaled.jpg'), alt: 'Moules frites, cuisine créole' }}
+              secondary={{ src: A('restaurant-secondaire-v1.jpg'), alt: 'Salade créole au poisson fumé' }}
               mainShape="blob-2"
               secondaryShape="blob-1"
               accentBg="bg-gold"
@@ -1198,7 +1202,7 @@ function PoolFeature() {
   return (
     <section className="relative h-[60vh] min-h-[420px] flex items-center justify-center overflow-hidden" ref={containerRef}>
       <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
-        <img src={A('IMG_8507.jpg')} alt="Piscine et vue sur la mer" className="w-full h-full object-cover" loading="lazy" />
+        <img src={A('piscine-bandeau-v2.jpg')} alt="Piscine à débordement et vue sur la baie de Deshaies" className="w-full h-full object-cover" loading="lazy" />
       </motion.div>
       <div className="absolute inset-0 bg-deep/55" />
       <div className="absolute inset-0 bg-gradient-to-b from-deep via-transparent to-deep" />
