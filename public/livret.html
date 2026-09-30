@@ -127,7 +127,7 @@ footer a{color:var(--gold-soft);text-decoration:none}
    Colle ici l'adresse obtenue. Tant qu'elle est vide, la page affiche la
    version enregistrée ci-dessous (DONNEES_SECOURS).
    ────────────────────────────────────────────────────────────────────────── */
-const CSV_URL = "";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNJYxGmaG4UpNd2A3chTWYniB9LFlfIFK8PCYxTGsoH9KvK0WmQ0lg3RWCpqQwFgqgznSKWMObe6zS/pub?gid=884911935&single=true&output=csv";
 
 /* Langue : même choix que le reste du site (?lang=, choix mémorisé, navigateur). */
 const LANG=(()=>{
@@ -318,6 +318,7 @@ async function charger(){
   }
 }
 charger();
+if(CSV_URL) setInterval(charger,300000);
 </script>
 </body>
 </html>
