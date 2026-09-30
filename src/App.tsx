@@ -35,6 +35,40 @@ const fadeIn = {
 
 const TODAY = new Date().toISOString().split('T')[0]
 
+// ─── langue ──────────────────────────────────────────────────────────────────
+// Ordre de priorité : ?lang= dans l'adresse, puis choix mémorisé, puis langue
+// du navigateur (français → FR, tout le reste → EN). Changer de langue recharge
+// la page ; carte.html et blog.html lisent le même choix mémorisé.
+
+type Lang = 'fr' | 'en'
+const LANG: Lang = (() => {
+  try {
+    const p = new URLSearchParams(window.location.search).get('lang')
+    if (p === 'fr' || p === 'en') { localStorage.setItem('lang', p); return p }
+    const m = localStorage.getItem('lang')
+    if (m === 'fr' || m === 'en') return m
+  } catch { /* stockage indisponible */ }
+  return (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en'
+})()
+const EN = LANG === 'en'
+const t = (fr: string, en: string) => (EN ? en : fr)
+
+document.documentElement.lang = LANG
+if (EN) document.title = 'Hotel Le Rayon Vert — 3-star hotel in Deshaies, Guadeloupe'
+
+function changerLangue(l: Lang) {
+  if (l === LANG) return
+  try { localStorage.setItem('lang', l) } catch { /* ignoré */ }
+  const u = new URL(window.location.href)
+  u.searchParams.set('lang', l)
+  window.location.href = u.toString()
+}
+
+// Champ caché ajouté aux formulaires en anglais, pour savoir dans quelle langue répondre.
+function LangueField() {
+  return EN ? <input type="hidden" name="langue" value="ANGLAIS — répondre en anglais" /> : null
+}
+
 // ─── asset map ───────────────────────────────────────────────────────────────
 
 const A = (name: string) => `${import.meta.env.BASE_URL}assets/${name}`
@@ -49,6 +83,9 @@ const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
 const BOOKING_URL = 'https://book.octorate.com/octobook/site/reservation/index.xhtml?codice=213778'
 
 const CARTE_URL = `${import.meta.env.BASE_URL}carte.html`
+const TRIPADVISOR_URL = EN
+  ? 'https://www.tripadvisor.com/Hotel_Review-g580415-d2366289-Reviews-Hotel_Restaurant_Le_Rayon_Vert-Deshaies_Basse_Terre_Island_Guadeloupe.html'
+  : 'https://www.tripadvisor.fr/Hotel_Review-g580415-d2366289-Reviews-Hotel_Restaurant_Le_Rayon_Vert-Deshaies_Basse_Terre_Island_Guadeloupe.html'
 const BLOG_URL = `${import.meta.env.BASE_URL}blog.html`
 /* Même tableur que la page blog.html — laisser vide masque la section. */
 const BLOG_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vScJjM41wMY7hbxLg3DvSJNvmPRNkzhrvZ2ZwXp2HvLLlNqXAD9qaye_ukYuJbpx1qwAGO1Jsa1LiPW/pub?output=csv'
@@ -100,84 +137,84 @@ const fieldInput = 'w-full bg-cream-soft border border-transparent rounded-2xl p
 const rooms = [
   {
     key: 'standard',
-    title: 'Chambre Standard',
-    subtitle: 'Sérénité & confort',
-    description: '20 m² · Chambre climatisée avec terrasse privée et vue sur la mer, nichée dans la végétation tropicale.',
+    title: t("Chambre Standard", "Standard Room"),
+    subtitle: t("Sérénité & confort", "Serenity & comfort"),
+    description: t("20 m² · Chambre climatisée avec terrasse privée et vue sur la mer, nichée dans la végétation tropicale.", "20 m² · Air-conditioned room with a private terrace and sea view, nestled in tropical greenery."),
     image: A('chambre-standard-jardin.jpg'),
-    features: ['Vue mer', 'Clim', 'Terrasse privée'],
+    features: EN ? ['Sea view', 'A/C', 'Private terrace'] : ['Vue mer', 'Clim', 'Terrasse privée'],
     badge: 'Standard · 20 m²',
     priceRoom: 95,
     priceHalfBoard: 179,
   },
   {
     key: 'confort',
-    title: 'Bungalow Confort',
-    subtitle: "L'art de vivre caribéen",
-    description: '32 m² · Bungalow avec grande terrasse privée et vue panoramique sur la mer des Caraïbes.',
+    title: t("Bungalow Confort", "Comfort Bungalow"),
+    subtitle: t("L'art de vivre caribéen", "The Caribbean way of life"),
+    description: t("32 m² · Bungalow avec grande terrasse privée et vue panoramique sur la mer des Caraïbes.", "32 m² · Bungalow with a large private terrace and panoramic views over the Caribbean Sea."),
     image: A('chambre-confort-v2.jpg'),
-    features: ['Vue mer', 'Clim', 'Grande terrasse'],
-    badge: 'Confort · 32 m²',
+    features: EN ? ['Sea view', 'A/C', 'Large terrace'] : ['Vue mer', 'Clim', 'Grande terrasse'],
+    badge: t("Confort · 32 m²", "Comfort · 32 m²"),
     priceRoom: 120,
     priceHalfBoard: 204,
   },
   {
     key: 'famille',
-    title: 'Suite Familiale',
-    subtitle: 'Espace & générosité',
-    description: '50 m² · Chambres communicantes climatisées, grande terrasse partagée et vue panoramique sur la mer, idéal en famille.',
+    title: t("Suite Familiale", "Family Suite"),
+    subtitle: t("Espace & générosité", "Space & generosity"),
+    description: t("50 m² · Chambres communicantes climatisées, grande terrasse partagée et vue panoramique sur la mer, idéal en famille.", "50 m² · Air-conditioned connecting rooms, a large shared terrace and panoramic sea views, ideal for families."),
     image: A('chambre-familiale-terrasse.jpg'),
-    features: ['Vue mer', 'Clim', 'Famille'],
-    badge: 'Familiale · 50 m²',
+    features: EN ? ['Sea view', 'A/C', 'Family'] : ['Vue mer', 'Clim', 'Famille'],
+    badge: t("Familiale · 50 m²", "Family · 50 m²"),
     priceRoom: 150,
     priceHalfBoard: 234,
   },
 ]
 
 const gallery = [
-  { src: A('dsc_0194_2.jpg'), alt: 'Plage de Deshaies', span: 'col-span-2 row-span-2' },
-  { src: A('terrasse-hotel-rayon-vert-guadeloupe.jpg'), alt: 'Terrasse avec vue mer' },
-  { src: A('IMG_0074-scaled.jpg'), alt: 'Jardin tropical' },
-  { src: A('galerie-g04-v1.jpg'), alt: 'Piscine à débordement au coucher du soleil' },
-  { src: A('galerie-g05-v1.jpg'), alt: 'Assiette de poisson mariné, riz et avocat' },
-  { src: A('galerie-g06-v1.jpg'), alt: 'Piscine et terrasse en bois face aux collines' },
-  { src: A('galerie-g07-v1.jpg'), alt: 'Reflets du ciel sur la piscine à débordement' },
-  { src: A('galerie-g08-v1.jpg'), alt: 'Viande grillée, oignons marinés et frites maison' },
-  { src: A('galerie-g09-v1.jpg'), alt: 'Salade au poisson fumé et crudités' },
-  { src: A('galerie-g10-v1.jpg'), alt: 'Salade créole au poisson fumé' },
-  { src: A('galerie-g11-v1.jpg'), alt: 'Jardin fleuri et vue sur la baie' },
-  { src: A('galerie-g12-v1.jpg'), alt: 'Transats au bord de la piscine' },
-  { src: A('galerie-g13-v1.jpg'), alt: 'Salle du restaurant ouverte sur la mer' },
-  { src: A('galerie-g14-v1.jpg'), alt: 'Buffet de viennoiseries et gâteaux maison' },
-  { src: A('galerie-g15-v1.jpg'), alt: 'Buffet de fruits frais et gâteau au chocolat' },
-  { src: A('galerie-g16-v1.jpg'), alt: 'Stand de desserts et douceurs créoles' },
-  { src: A('galerie-g17-v1.jpg'), alt: 'Vue plongeante sur la piscine et la baie' },
+  { src: A('dsc_0194_2.jpg'), alt: t("Plage de Deshaies", "Deshaies beach"), span: 'col-span-2 row-span-2' },
+  { src: A('terrasse-hotel-rayon-vert-guadeloupe.jpg'), alt: t("Terrasse avec vue mer", "Terrace with sea view") },
+  { src: A('IMG_0074-scaled.jpg'), alt: t("Jardin tropical", "Tropical garden") },
+  { src: A('galerie-g04-v1.jpg'), alt: t("Piscine à débordement au coucher du soleil", "Infinity pool at sunset") },
+  { src: A('galerie-g05-v1.jpg'), alt: t("Assiette de poisson mariné, riz et avocat", "Marinated fish, rice and avocado") },
+  { src: A('galerie-g06-v1.jpg'), alt: t("Piscine et terrasse en bois face aux collines", "Pool and wooden deck facing the hills") },
+  { src: A('galerie-g07-v1.jpg'), alt: t("Reflets du ciel sur la piscine à débordement", "Sky reflected in the infinity pool") },
+  { src: A('galerie-g08-v1.jpg'), alt: t("Viande grillée, oignons marinés et frites maison", "Grilled meat, pickled onions and homemade fries") },
+  { src: A('galerie-g09-v1.jpg'), alt: t("Salade au poisson fumé et crudités", "Smoked fish salad with fresh vegetables") },
+  { src: A('galerie-g10-v1.jpg'), alt: t("Salade créole au poisson fumé", "Creole salad with smoked fish") },
+  { src: A('galerie-g11-v1.jpg'), alt: t("Jardin fleuri et vue sur la baie", "Flowering garden overlooking the bay") },
+  { src: A('galerie-g12-v1.jpg'), alt: t("Transats au bord de la piscine", "Sun loungers by the pool") },
+  { src: A('galerie-g13-v1.jpg'), alt: t("Salle du restaurant ouverte sur la mer", "Restaurant dining room open to the sea") },
+  { src: A('galerie-g14-v1.jpg'), alt: t("Buffet de viennoiseries et gâteaux maison", "Pastries and homemade cakes buffet") },
+  { src: A('galerie-g15-v1.jpg'), alt: t("Buffet de fruits frais et gâteau au chocolat", "Fresh fruit buffet and chocolate cake") },
+  { src: A('galerie-g16-v1.jpg'), alt: t("Stand de desserts et douceurs créoles", "Dessert stand with Creole sweets") },
+  { src: A('galerie-g17-v1.jpg'), alt: t("Vue plongeante sur la piscine et la baie", "Looking down on the pool and the bay") },
 ]
 
 const amenities = [
-  { icon: Waves, label: 'Piscine à débordement', desc: 'Vue imprenable sur la mer des Caraïbes' },
-  { icon: Coffee, label: 'Restaurant panoramique', desc: 'Cuisine créole locale, fruits de mer' },
-  { icon: Wind, label: 'Climatisation', desc: 'Toutes les chambres climatisées' },
-  { icon: Wifi, label: 'Wi-Fi inclus', desc: 'Connexion haut débit dans tout l\'hôtel' },
+  { icon: Waves, label: t("Piscine à débordement", "Infinity pool"), desc: t("Vue imprenable sur la mer des Caraïbes", "Breathtaking view of the Caribbean Sea") },
+  { icon: Coffee, label: t("Restaurant panoramique", "Panoramic restaurant"), desc: t("Cuisine créole locale, fruits de mer", "Local Creole cuisine and seafood") },
+  { icon: Wind, label: t("Climatisation", "Air conditioning"), desc: t("Toutes les chambres climatisées", "All rooms air-conditioned") },
+  { icon: Wifi, label: t("Wi-Fi inclus", "Free Wi-Fi"), desc: t("Connexion haut débit dans tout l'hôtel", "High-speed connection throughout the hotel") },
 ]
 
 const activities = [
-  { icon: Umbrella, name: 'Plages', desc: "La Grande Anse, l'une des plus belles plages de Guadeloupe, à 10 min." },
-  { icon: Fish, name: 'Plongée', desc: "Explorez la Réserve Cousteau, l'une des plus belles au monde." },
-  { icon: TreePine, name: 'Jardin Botanique', desc: 'Flamants roses, perroquets et végétation luxuriante à 25 min.' },
-  { icon: Anchor, name: 'Nautisme', desc: 'Kayak, voile, snorkeling en eaux turquoise. Embarcadère à proximité.' },
+  { icon: Umbrella, name: t("Plages", "Beaches"), desc: t("La Grande Anse, l'une des plus belles plages de Guadeloupe, à 10 min.", "Grande Anse, one of the most beautiful beaches in Guadeloupe, 10 minutes away.") },
+  { icon: Fish, name: t("Plongée", "Diving"), desc: t("Explorez la Réserve Cousteau, l'une des plus belles au monde.", "Explore the Cousteau Reserve, one of the finest dive sites in the world.") },
+  { icon: TreePine, name: t("Jardin Botanique", "Botanical Garden"), desc: t("Flamants roses, perroquets et végétation luxuriante à 25 min.", "Flamingos, parrots and lush vegetation, 25 minutes away.") },
+  { icon: Anchor, name: t("Nautisme", "Water sports"), desc: t("Kayak, voile, snorkeling en eaux turquoise. Embarcadère à proximité.", "Kayaking, sailing and snorkeling in turquoise waters. Jetty nearby.") },
 ]
 
 const testimonials = [
-  { text: 'Vue spectaculaire, personnel adorable et cuisine créole délicieuse. Nous reviendrons certainement.', author: 'Marie-Hélène D. — Paris', source: 'TripAdvisor · 2024' },
-  { text: 'La piscine à débordement avec vue sur la mer est magique. On ne se lasse pas du coucher de soleil.', author: 'Jean-Claude & Sylvie — Lyon', source: 'Booking.com · 2024' },
-  { text: 'Séjour parfait au paradis ! Équipe accueillante, vue à couper le souffle et restaurant exceptionnel.', author: 'Sarah & Tom W. — London', source: 'TripAdvisor · 2024' },
+  { text: t("Vue spectaculaire, personnel adorable et cuisine créole délicieuse. Nous reviendrons certainement.", "Spectacular view, lovely staff and delicious Creole food. We will definitely be back."), author: 'Marie-Hélène D. — Paris', source: 'TripAdvisor · 2024' },
+  { text: t("La piscine à débordement avec vue sur la mer est magique. On ne se lasse pas du coucher de soleil.", "The infinity pool overlooking the sea is magical. We never tired of the sunsets."), author: 'Jean-Claude & Sylvie — Lyon', source: 'Booking.com · 2024' },
+  { text: t("Séjour parfait au paradis ! Équipe accueillante, vue à couper le souffle et restaurant exceptionnel.", "A perfect stay in paradise! Welcoming team, breathtaking view and an outstanding restaurant."), author: 'Sarah & Tom W. — London', source: 'TripAdvisor · 2024' },
 ]
 
 const navLinks = [
-  { label: "L'Hôtel", href: '#hotel' },
-  { label: 'Chambres', href: '#chambres' },
+  { label: t("L'Hôtel", 'The Hotel'), href: '#hotel' },
+  { label: t('Chambres', 'Rooms'), href: '#chambres' },
   { label: 'Restaurant', href: '#restaurant' },
-  { label: 'Galerie', href: '#galerie' },
+  { label: t('Galerie', 'Gallery'), href: '#galerie' },
   { label: 'Blog', href: '#blog' },
   { label: 'Contact', href: '#devis' },
 ]
@@ -290,11 +327,11 @@ function ReservationDialog({ open, onOpenChange, title, icon, children }: {
                       {icon}
                       {title}
                     </Dialog.Title>
-                    <Dialog.Close className="w-9 h-9 rounded-full bg-cream-soft hover:bg-forest-pale flex items-center justify-center transition-colors flex-shrink-0" aria-label="Fermer">
+                    <Dialog.Close className="w-9 h-9 rounded-full bg-cream-soft hover:bg-forest-pale flex items-center justify-center transition-colors flex-shrink-0" aria-label={t("Fermer", "Close")}>
                       <X size={18} className="text-ink" />
                     </Dialog.Close>
                   </div>
-                  <Dialog.Description className="sr-only">Formulaire de {title.toLowerCase()}</Dialog.Description>
+                  <Dialog.Description className="sr-only">{t("Formulaire : ", "Form: ")}{title}</Dialog.Description>
                   <div className="px-6 sm:px-8 pb-8">{children}</div>
                 </motion.div>
               </div>
@@ -312,37 +349,38 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
   const { status, handleSubmit } = useWeb3Form()
   const [arrivee, setArrivee] = useState('')
 
-  if (status === 'success') return <SuccessNote>Demande reçue ! Réponse sous 24h.</SuccessNote>
+  if (status === 'success') return <SuccessNote>{t("Demande reçue ! Réponse sous 24h.", "Request received! We will reply within 24 hours.")}</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="subject" value="Réservation séjour — Le Rayon Vert" />
+      <input type="hidden" name="subject" value={t("Réservation séjour — Le Rayon Vert", "Réservation séjour — Le Rayon Vert [EN]")} />
+      <LangueField />
       <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
       <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
-      <p className="font-sans text-[13px] text-ink-soft -mt-2 mb-2">Meilleur tarif garanti en direct · Réponse sous 24h</p>
+      <p className="font-sans text-[13px] text-ink-soft -mt-2 mb-2">{t("Meilleur tarif garanti en direct · Réponse sous 24h", "Best rate guaranteed when booking direct · Reply within 24 hours")}</p>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Prénom *</label>
-          <input type="text" name="prenom" required placeholder="Marie" className={fieldInput} />
+          <label className={fieldLabel}>{t("Prénom *", "First name *")}</label>
+          <input type="text" name="prenom" required placeholder={t("Marie", "Mary")} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Nom *</label>
-          <input type="text" name="nom" required placeholder="Dupont" className={fieldInput} />
+          <label className={fieldLabel}>{t("Nom *", "Last name *")}</label>
+          <input type="text" name="nom" required placeholder={t("Dupont", "Smith")} className={fieldInput} />
         </div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
           <label className={fieldLabel}>Email *</label>
-          <input type="email" name="email" required placeholder="marie@exemple.com" className={fieldInput} />
+          <input type="email" name="email" required placeholder={t("marie@exemple.com", "mary@example.com")} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Téléphone</label>
-          <input type="tel" name="telephone" placeholder="+33 6 00 00 00 00" className={fieldInput} />
+          <label className={fieldLabel}>{t("Téléphone", "Phone")}</label>
+          <input type="tel" name="telephone" placeholder={t("+33 6 00 00 00 00", "+1 555 000 0000")} className={fieldInput} />
         </div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Arrivée *</label>
+          <label className={fieldLabel}>{t("Arrivée *", "Check-in *")}</label>
           <input
             type="date" name="arrivee" required min={TODAY} className={fieldInput}
             value={arrivee}
@@ -350,44 +388,44 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
           />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Départ *</label>
+          <label className={fieldLabel}>{t("Départ *", "Check-out *")}</label>
           <input type="date" name="depart" required min={arrivee || TODAY} className={fieldInput} />
         </div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}><BedDouble size={11} className="inline mr-1" />Chambre</label>
+          <label className={fieldLabel}><BedDouble size={11} className="inline mr-1" />{t("Chambre", "Room")}</label>
           <select name="chambre" value={presetRoom} onChange={(e) => onPresetRoomChange(e.target.value)} className={fieldInput}>
-            <option value="indifferent">Sans préférence</option>
-            <option value="standard">Standard (~95€/nuit)</option>
-            <option value="confort">Confort (~120€/nuit)</option>
-            <option value="famille">Familiale (~150€/nuit)</option>
+            <option value="indifferent">{t("Sans préférence", "No preference")}</option>
+            <option value="standard">{t("Standard (~95€/nuit)", "Standard (~€95/night)")}</option>
+            <option value="confort">{t("Confort (~120€/nuit)", "Comfort (~€120/night)")}</option>
+            <option value="famille">{t("Familiale (~150€/nuit)", "Family (~€150/night)")}</option>
           </select>
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}><Users size={11} className="inline mr-1" />Personnes</label>
+          <label className={fieldLabel}><Users size={11} className="inline mr-1" />{t("Personnes", "Guests")}</label>
           <select name="personnes" defaultValue="2" className={fieldInput}>
             {[1, 2, 3, 4, '5+'].map((n) => <option key={n} value={n}>{n}</option>)}
           </select>
         </div>
       </div>
       <div className={fieldWrap}>
-        <label className={fieldLabel}>Option repas</label>
+        <label className={fieldLabel}>{t("Option repas", "Meal option")}</label>
         <select name="pension" defaultValue="sans" className={fieldInput}>
-          <option value="sans">Sans pension (chambre seule)</option>
-          <option value="demi">Demi-pension +42€/pers/nuit (petit-déj + dîner)</option>
+          <option value="sans">{t("Sans pension (chambre seule)", "Room only")}</option>
+          <option value="demi">{t("Demi-pension +42€/pers/nuit (petit-déj + dîner)", "Half board +€42/person/night (breakfast + dinner)")}</option>
         </select>
       </div>
       <div className={fieldWrap}>
         <label className={fieldLabel}>Message</label>
-        <textarea name="message" rows={2} placeholder="Demandes spéciales, allergie, lit bébé..." className={fieldInput + ' resize-none'} />
+        <textarea name="message" rows={2} placeholder={t("Demandes spéciales, allergie, lit bébé...", "Special requests, allergies, baby cot...")} className={fieldInput + ' resize-none'} />
       </div>
       <button type="submit" disabled={status === 'sending'} className={btnPrimary + ' w-full !py-4'}>
         {status === 'sending' ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-        Envoyer ma demande de réservation
+        {t("Envoyer ma demande de réservation", "Send my booking request")}
       </button>
-      {status === 'error' && <p className="font-sans text-xs text-center text-red-500">Une erreur est survenue, merci de réessayer.</p>}
-      <p className="font-sans text-[11px] text-ink-soft/70 text-center">Paiement sécurisé · CB, Virement · Chèques vacances acceptés</p>
+      {status === 'error' && <p className="font-sans text-xs text-center text-red-500">{t("Une erreur est survenue, merci de réessayer.", "Something went wrong, please try again.")}</p>}
+      <p className="font-sans text-[11px] text-ink-soft/70 text-center">{t("Paiement sécurisé · CB, Virement · Chèques vacances acceptés", "Secure payment · Card or bank transfer")}</p>
     </form>
   )
 }
@@ -395,11 +433,12 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
 function RestaurantFormContent() {
   const { status, handleSubmit } = useWeb3Form()
 
-  if (status === 'success') return <SuccessNote>Demande envoyée ! Confirmation par téléphone ou email sous 24h.</SuccessNote>
+  if (status === 'success') return <SuccessNote>{t("Demande envoyée ! Confirmation par téléphone ou email sous 24h.", "Request sent! We will confirm by phone or email within 24 hours.")}</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="subject" value="Réservation restaurant — Le Rayon Vert" />
+      <input type="hidden" name="subject" value={t("Réservation restaurant — Le Rayon Vert", "Réservation restaurant — Le Rayon Vert [EN]")} />
+      <LangueField />
       <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
       <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
       <div className="grid sm:grid-cols-2 gap-4">
@@ -408,58 +447,58 @@ function RestaurantFormContent() {
           <input type="date" name="date" required min={TODAY} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Heure *</label>
+          <label className={fieldLabel}>{t("Heure *", "Time *")}</label>
           <select name="heure" required className={fieldInput}>
             <option value="">--</option>
-            <optgroup label="Déjeuner · vendredi, samedi & dimanche">
-              <option value="11:30">11h30</option>
-              <option value="12:00">12h00</option>
-              <option value="12:30">12h30</option>
-              <option value="13:00">13h00</option>
-              <option value="13:30">13h30</option>
+            <optgroup label={t("Déjeuner · vendredi, samedi & dimanche", "Lunch · Friday, Saturday & Sunday")}>
+              <option value="11:30">{t("11h30", "11:30 am")}</option>
+              <option value="12:00">{t("12h00", "12:00 pm")}</option>
+              <option value="12:30">{t("12h30", "12:30 pm")}</option>
+              <option value="13:00">{t("13h00", "1:00 pm")}</option>
+              <option value="13:30">{t("13h30", "1:30 pm")}</option>
             </optgroup>
-            <optgroup label="Dîner · tous les soirs">
-              <option value="18:00">18h00</option>
-              <option value="18:30">18h30</option>
-              <option value="19:00">19h00</option>
-              <option value="19:30">19h30</option>
-              <option value="20:00">20h00</option>
-              <option value="20:30">20h30</option>
+            <optgroup label={t("Dîner · tous les soirs", "Dinner · every evening")}>
+              <option value="18:00">{t("18h00", "6:00 pm")}</option>
+              <option value="18:30">{t("18h30", "6:30 pm")}</option>
+              <option value="19:00">{t("19h00", "7:00 pm")}</option>
+              <option value="19:30">{t("19h30", "7:30 pm")}</option>
+              <option value="20:00">{t("20h00", "8:00 pm")}</option>
+              <option value="20:30">{t("20h30", "8:30 pm")}</option>
             </optgroup>
           </select>
         </div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}><Users size={11} className="inline mr-1" />Personnes *</label>
+          <label className={fieldLabel}><Users size={11} className="inline mr-1" />{t("Personnes *", "Guests *")}</label>
           <select name="personnes" required defaultValue="2" className={fieldInput}>
             {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option key={n} value={n}>{n}</option>)}
           </select>
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Téléphone *</label>
-          <input type="tel" name="telephone" required placeholder="+590 6 00 00 00 00" className={fieldInput} />
+          <label className={fieldLabel}>{t("Téléphone *", "Phone *")}</label>
+          <input type="tel" name="telephone" required placeholder={t("+590 6 00 00 00 00", "+1 555 000 0000")} className={fieldInput} />
         </div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Nom & prénom *</label>
-          <input type="text" name="nom" required placeholder="Marie Dupont" className={fieldInput} />
+          <label className={fieldLabel}>{t("Nom & prénom *", "Full name *")}</label>
+          <input type="text" name="nom" required placeholder={t("Marie Dupont", "Mary Smith")} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Email <span className="normal-case text-ink-soft/50">(optionnel)</span></label>
-          <input type="email" name="email" placeholder="marie@exemple.com" className={fieldInput} />
+          <label className={fieldLabel}>Email <span className="normal-case text-ink-soft/50">{t("(optionnel)", "(optional)")}</span></label>
+          <input type="email" name="email" placeholder={t("marie@exemple.com", "mary@example.com")} className={fieldInput} />
         </div>
       </div>
       <div className={fieldWrap}>
-        <label className={fieldLabel}>Commentaires <span className="normal-case text-ink-soft/50">(optionnel)</span></label>
-        <textarea name="commentaires" rows={2} placeholder="Allergie, chaise haute, anniversaire..." className={fieldInput + ' resize-none'} />
+        <label className={fieldLabel}>{t("Commentaires", "Comments")} <span className="normal-case text-ink-soft/50">{t("(optionnel)", "(optional)")}</span></label>
+        <textarea name="commentaires" rows={2} placeholder={t("Allergie, chaise haute, anniversaire...", "Allergies, high chair, birthday...")} className={fieldInput + ' resize-none'} />
       </div>
       <button type="submit" disabled={status === 'sending'} className={btnDark + ' w-full !py-4'}>
         {status === 'sending' ? <Loader2 size={14} className="animate-spin" /> : <CalendarDays size={14} />}
-        Demande de réservation
+        {t("Demande de réservation", "Request a table")}
       </button>
-      {status === 'error' && <p className="font-sans text-xs text-center text-red-500">Une erreur est survenue, merci de réessayer.</p>}
+      {status === 'error' && <p className="font-sans text-xs text-center text-red-500">{t("Une erreur est survenue, merci de réessayer.", "Something went wrong, please try again.")}</p>}
     </form>
   )
 }
@@ -467,63 +506,64 @@ function RestaurantFormContent() {
 function ContactFormContent() {
   const { status, handleSubmit } = useWeb3Form()
 
-  if (status === 'success') return <SuccessNote>Merci ! Nous vous répondons sous 24h.</SuccessNote>
+  if (status === 'success') return <SuccessNote>{t("Merci ! Nous vous répondons sous 24h.", "Thank you! We will reply within 24 hours.")}</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="subject" value="Demande de devis — Le Rayon Vert" />
+      <input type="hidden" name="subject" value={t("Demande de devis — Le Rayon Vert", "Demande de devis — Le Rayon Vert [EN]")} />
+      <LangueField />
       <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
       <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Prénom *</label>
-          <input type="text" name="prenom" required placeholder="Marie" className={fieldInput} />
+          <label className={fieldLabel}>{t("Prénom *", "First name *")}</label>
+          <input type="text" name="prenom" required placeholder={t("Marie", "Mary")} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Nom *</label>
-          <input type="text" name="nom" required placeholder="Dupont" className={fieldInput} />
+          <label className={fieldLabel}>{t("Nom *", "Last name *")}</label>
+          <input type="text" name="nom" required placeholder={t("Dupont", "Smith")} className={fieldInput} />
         </div>
       </div>
       <div className={fieldWrap}>
         <label className={fieldLabel}>Email *</label>
-        <input type="email" name="email" required placeholder="marie@exemple.com" className={fieldInput} />
+        <input type="email" name="email" required placeholder={t("marie@exemple.com", "mary@example.com")} className={fieldInput} />
       </div>
       <div className={fieldWrap}>
-        <label className={fieldLabel}>Téléphone</label>
-        <input type="tel" name="telephone" placeholder="+33 6 00 00 00 00" className={fieldInput} />
+        <label className={fieldLabel}>{t("Téléphone", "Phone")}</label>
+        <input type="tel" name="telephone" placeholder={t("+33 6 00 00 00 00", "+1 555 000 0000")} className={fieldInput} />
       </div>
       <div className={fieldWrap}>
-        <label className={fieldLabel}>Motif de la demande</label>
+        <label className={fieldLabel}>{t("Motif de la demande", "Type of request")}</label>
         <select name="motif" className={fieldInput} defaultValue="">
           <option value="">--</option>
-          <option value="Mariage">Mariage</option>
-          <option value="Baptême">Baptême</option>
-          <option value="Anniversaire">Anniversaire</option>
-          <option value="Séminaire / entreprise">Séminaire ou entreprise</option>
-          <option value="Réservation de groupe">Réservation de groupe</option>
-          <option value="Autre">Autre demande</option>
+          <option value="Mariage">{t("Mariage", "Wedding")}</option>
+          <option value="Baptême">{t("Baptême", "Christening")}</option>
+          <option value="Anniversaire">{t("Anniversaire", "Birthday")}</option>
+          <option value="Séminaire / entreprise">{t("Séminaire ou entreprise", "Seminar or corporate event")}</option>
+          <option value="Réservation de groupe">{t("Réservation de groupe", "Group booking")}</option>
+          <option value="Autre">{t("Autre demande", "Other request")}</option>
         </select>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Date envisagée</label>
+          <label className={fieldLabel}>{t("Date envisagée", "Preferred date")}</label>
           <input type="date" name="date_evenement" min={TODAY} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Nombre de personnes</label>
+          <label className={fieldLabel}>{t("Nombre de personnes", "Number of guests")}</label>
           <input type="number" name="personnes" min={1} placeholder="40" className={fieldInput} />
         </div>
       </div>
       <div className={fieldWrap}>
-        <label className={fieldLabel}>Votre projet</label>
-        <textarea name="message" rows={4} placeholder="Décrivez-nous votre événement : ambiance souhaitée, repas, hébergement des invités..." className={fieldInput + ' resize-none'} />
+        <label className={fieldLabel}>{t("Votre projet", "Your event")}</label>
+        <textarea name="message" rows={4} placeholder={t("Décrivez-nous votre événement : ambiance souhaitée, repas, hébergement des invités...", "Tell us about your event: the atmosphere you have in mind, meals, accommodation for guests...")} className={fieldInput + ' resize-none'} />
       </div>
       <button type="submit" disabled={status === 'sending'} className={btnDark + ' w-full !py-4'}>
         {status === 'sending' ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-        Envoyer ma demande
+        {t("Envoyer ma demande", "Send my request")}
       </button>
-      {status === 'error' && <p className="font-sans text-xs text-center text-red-500">Une erreur est survenue, merci de réessayer.</p>}
-      <p className="font-sans text-[11px] text-ink-soft/70 text-center pt-1">Vos données sont utilisées uniquement pour répondre à votre demande.</p>
+      {status === 'error' && <p className="font-sans text-xs text-center text-red-500">{t("Une erreur est survenue, merci de réessayer.", "Something went wrong, please try again.")}</p>}
+      <p className="font-sans text-[11px] text-ink-soft/70 text-center pt-1">{t("Vos données sont utilisées uniquement pour répondre à votre demande.", "Your details are only used to reply to your request.")}</p>
     </form>
   )
 }
@@ -602,7 +642,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
               }`}
             >
               <Globe size={14} />
-              FR
+              {LANG.toUpperCase()}
               <ChevronDown size={11} className={`transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
             </button>
             <AnimatePresence>
@@ -615,23 +655,18 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
                   className="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-xl shadow-ink/10 overflow-hidden py-1"
                   role="listbox"
                 >
-                  <button
-                    role="option"
-                    aria-selected="true"
-                    className="w-full flex items-center justify-between px-4 py-2.5 font-sans text-[12px] text-ink hover:bg-forest-pale/60 transition-colors"
-                  >
-                    Français
-                    <CircleCheck size={14} className="text-forest" />
-                  </button>
-                  <button
-                    role="option"
-                    aria-selected="false"
-                    disabled
-                    className="w-full flex items-center justify-between px-4 py-2.5 font-sans text-[12px] text-ink-soft/50 cursor-not-allowed"
-                  >
-                    English
-                    <span className="text-[9px] font-medium uppercase tracking-wide">Bientôt</span>
-                  </button>
+                  {([['fr', 'Français'], ['en', 'English']] as [Lang, string][]).map(([code, nom]) => (
+                    <button
+                      key={code}
+                      role="option"
+                      aria-selected={code === LANG}
+                      onClick={() => { setLangOpen(false); changerLangue(code) }}
+                      className="w-full flex items-center justify-between px-4 py-2.5 font-sans text-[12px] text-ink hover:bg-forest-pale/60 transition-colors"
+                    >
+                      {nom}
+                      {code === LANG && <CircleCheck size={14} className="text-forest" />}
+                    </button>
+                  ))}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -658,7 +693,7 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
             }`}
           >
             <CalendarDays size={13} />
-            Réserver
+            {t('Réserver', 'Book')}
           </a>
         </div>
 
@@ -703,8 +738,22 @@ function Navbar({ onReserve }: { onReserve: () => void }) {
                 onClick={() => setMenuOpen(false)}
                 className={btnPrimary + ' mt-4 self-start'}
               >
-                Réserver maintenant
+                {t('Réserver maintenant', 'Book now')}
               </a>
+              <div className="flex items-center gap-2 mt-2">
+                <Globe size={16} className="text-ink-soft" />
+                {([['fr', 'Français'], ['en', 'English']] as [Lang, string][]).map(([code, nom]) => (
+                  <button
+                    key={code}
+                    onClick={() => changerLangue(code)}
+                    className={`font-sans text-[12px] font-medium px-3.5 py-1.5 rounded-full transition-colors ${
+                      code === LANG ? 'bg-forest text-white' : 'text-ink-soft hover:bg-forest-pale'
+                    }`}
+                  >
+                    {nom}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
@@ -754,7 +803,7 @@ function Hero() {
           loop
           playsInline
           preload="auto"
-          aria-label="Vue aérienne de l'hôtel Le Rayon Vert à Deshaies"
+          aria-label={t("Vue aérienne de l'hôtel Le Rayon Vert à Deshaies", "Aerial view of Hotel Le Rayon Vert in Deshaies")}
           className={
             'w-full h-full object-cover ' + (isMobile ? '' : 'scale-110')
           }
@@ -770,7 +819,7 @@ function Hero() {
       <div className="relative z-10 h-full flex flex-col items-center justify-center px-6">
         <motion.img
           src={A('logo white full.png')}
-          alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe"
+          alt={t("Hôtel Le Rayon Vert — Deshaies, Guadeloupe", "Hotel Le Rayon Vert — Deshaies, Guadeloupe")}
           className="w-[130px] sm:w-[165px] lg:w-[210px] max-h-[80vh] h-auto object-contain"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -811,7 +860,7 @@ function Intro({ onReserve }: { onReserve: () => void }) {
           <p className="font-sans text-[15px] sm:text-[17px] tracking-widest-xl uppercase font-medium text-forest-dark mb-1">
             Deshaies · Guadeloupe
           </p>
-          <p className="text-gold text-2xl sm:text-3xl tracking-[0.25em] leading-none mb-4" aria-label="Hôtel 3 étoiles">
+          <p className="text-gold text-2xl sm:text-3xl tracking-[0.25em] leading-none mb-4" aria-label={t("Hôtel 3 étoiles", "3-star hotel")}>
             ★★★
           </p>
         </motion.div>
@@ -823,7 +872,7 @@ function Intro({ onReserve }: { onReserve: () => void }) {
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.1}
         >
-          Une promesse entre <span className="text-titre-accent">mer et montagne</span>
+          {t('Une promesse entre ', 'A promise between ')}<span className="text-titre-accent">{t('mer et montagne', 'sea and mountains')}</span>
         </motion.h1>
 
         <motion.p
@@ -833,9 +882,10 @@ function Intro({ onReserve }: { onReserve: () => void }) {
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.2}
         >
-          Vingt-deux chambres posées à flanc de morne, face à la mer des Caraïbes.
-          Un hôtel familial de charme où l'on vient pour la piscine à débordement,
-          la table créole et ces couchers de soleil que l'on regarde sans rien dire.
+          {t(
+            "Vingt-deux chambres posées à flanc de morne, face à la mer des Caraïbes. Un hôtel familial de charme où l'on vient pour la piscine à débordement, la table créole et ces couchers de soleil que l'on regarde sans rien dire.",
+            'Twenty-two rooms set on the hillside, facing the Caribbean Sea. A charming family-run hotel that people come to for the infinity pool, the Creole cooking and those sunsets you watch in silence.',
+          )}
         </motion.p>
 
         <motion.div
@@ -845,7 +895,7 @@ function Intro({ onReserve }: { onReserve: () => void }) {
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.3}
         >
-          {[['22', 'Chambres'], ['4.4', 'Google'], ['4.3', 'TripAdvisor']].map(([num, label]) => (
+          {[['22', t('Chambres', 'Rooms')], ['4.4', 'Google'], ['4.3', 'TripAdvisor']].map(([num, label]) => (
             <div key={label} className="text-center">
               <p className="font-chewy text-3xl text-forest-dark leading-none">{num}</p>
               <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft/70 mt-1.5">{label}</p>
@@ -862,10 +912,10 @@ function Intro({ onReserve }: { onReserve: () => void }) {
         >
           <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className={btnPrimary}>
             <CalendarDays size={14} />
-            Réserver votre séjour
+            {t('Réserver votre séjour', 'Book your stay')}
           </a>
           <a href="#chambres" className={btnGhost}>
-            Voir les chambres
+            {t('Voir les chambres', 'See the rooms')}
           </a>
         </motion.div>
       </div>
@@ -884,8 +934,8 @@ function About() {
       <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center" ref={ref}>
         <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
           <BlobCluster
-            main={{ src: A('about-principale-v2.jpg'), alt: "Piscine à débordement face à la mer des Caraïbes" }}
-            secondary={{ src: A('about-secondaire-v2.jpg'), alt: 'Arbre du voyageur dans le jardin de l\u2019hôtel' }}
+            main={{ src: A('about-principale-v2.jpg'), alt: t("Piscine à débordement face à la mer des Caraïbes", "Infinity pool facing the Caribbean Sea") }}
+            secondary={{ src: A('about-secondaire-v2.jpg'), alt: t('Arbre du voyageur dans le jardin de l\u2019hôtel', "Traveller's palm in the hotel garden") }}
             mainShape="blob-1"
             secondaryShape="blob-2"
             accentBg="bg-forest"
@@ -896,10 +946,10 @@ function About() {
         {/* Text */}
         <div>
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
-            <SectionLabel>Bienvenue</SectionLabel>
+            <SectionLabel>{t("Bienvenue", "Welcome")}</SectionLabel>
             <h2 className="font-chewy text-4xl lg:text-5xl text-titre leading-tight mb-6">
-              Un hôtel à taille humaine,<br />
-              face à la <span className="text-titre-accent">mer des Caraïbes</span>
+              {t('Un hôtel à taille humaine,', 'A small, personal hotel')}<br />
+              {t('face à la ', 'facing the ')}<span className="text-titre-accent">{t('mer des Caraïbes', 'Caribbean Sea')}</span>
             </h2>
           </motion.div>
 
@@ -914,7 +964,7 @@ function About() {
             animate={isInView ? 'visible' : 'hidden'}
             custom={0.25}
           >
-            22 chambres, pas une de plus : sur les hauteurs de Deshaies, on connaît nos clients par leur prénom. C'est le format qu'on a choisi pour garder un accueil vraiment personnel, terrasse après terrasse.
+            {t("22 chambres, pas une de plus : sur les hauteurs de Deshaies, on connaît nos clients par leur prénom. C'est le format qu'on a choisi pour garder un accueil vraiment personnel, terrasse après terrasse.", "22 rooms and not one more: up in the hills of Deshaies, we know our guests by their first names. We chose this size to keep our welcome truly personal, terrace after terrace.")}
           </motion.p>
           <motion.p
             className="font-sans text-base text-ink-soft leading-loose mb-10"
@@ -923,7 +973,7 @@ function About() {
             animate={isInView ? 'visible' : 'hidden'}
             custom={0.35}
           >
-            Piscine à débordement, restaurant tourné vers l'horizon, jardin tropical où nichent les oiseaux : tout ici est pensé pour que vous n'ayez qu'une chose à faire, ralentir.
+            {t("Piscine à débordement, restaurant tourné vers l'horizon, jardin tropical où nichent les oiseaux : tout ici est pensé pour que vous n'ayez qu'une chose à faire, ralentir.", "An infinity pool, a restaurant facing the horizon, a tropical garden full of birds: everything here is designed so that you have only one thing to do, slow down.")}
           </motion.p>
 
           <motion.div
@@ -933,7 +983,7 @@ function About() {
             animate={isInView ? 'visible' : 'hidden'}
             custom={0.45}
           >
-            {[['22', 'Chambres'], ['★★★', 'Classé'], ['∞', 'Vue mer']].map(([num, label]) => (
+            {[['22', t('Chambres', 'Rooms')], ['★★★', t('Classé', 'Rated')], ['∞', t('Vue mer', 'Sea view')]].map(([num, label]) => (
               <div key={label} className="flex items-center gap-3 bg-white rounded-full pl-4 pr-5 py-2.5 shadow-md shadow-ink/5">
                 <p className="font-chewy text-xl text-forest-dark">{num}</p>
                 <p className="font-sans text-[10px] text-ink-soft leading-tight max-w-[4.5rem]">{label}</p>
@@ -987,10 +1037,10 @@ function Rooms({ onSelectRoom }: { onSelectRoom: (key: string) => void }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6 mb-14" ref={ref}>
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-            <SectionLabel>Hébergement</SectionLabel>
-            <h2 className="font-chewy text-4xl lg:text-5xl text-titre">Nos chambres</h2>
+            <SectionLabel>{t("Hébergement", "Accommodation")}</SectionLabel>
+            <h2 className="font-chewy text-4xl lg:text-5xl text-titre">{t("Nos chambres", "Our rooms")}</h2>
             <p className="font-sans text-sm text-ink-soft mt-3 max-w-md">
-              Toutes nos chambres sont climatisées et donnent sur la mer des Caraïbes.
+              {t("Toutes nos chambres sont climatisées et donnent sur la mer des Caraïbes.", "All our rooms are air-conditioned and look out over the Caribbean Sea.")}
             </p>
           </motion.div>
           <motion.a
@@ -1002,7 +1052,7 @@ function Rooms({ onSelectRoom }: { onSelectRoom: (key: string) => void }) {
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
           >
-            Disponibilités en temps réel
+            {t("Disponibilités en temps réel", "Real-time availability")}
             <ExternalLink size={12} />
           </motion.a>
         </div>
@@ -1068,17 +1118,19 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
                 onClick={() => setHalfBoard(false)}
                 className={`font-sans text-[10px] px-2.5 py-1 rounded-full border transition-colors ${!halfBoard ? 'bg-forest border-forest text-white' : 'border-forest/50 text-forest-dark'}`}
               >
-                Chambre
+                {t('Chambre', 'Room only')}
               </button>
               <button
                 onClick={() => setHalfBoard(true)}
                 className={`font-sans text-[10px] px-2.5 py-1 rounded-full border transition-colors ${halfBoard ? 'bg-forest border-forest text-white' : 'border-forest/50 text-forest-dark'}`}
               >
-                Demi-pension
+                {t('Demi-pension', 'Half board')}
               </button>
             </div>
             <p className="font-chewy text-xl text-forest-dark">
-              dès {halfBoard ? room.priceHalfBoard : room.priceRoom}€ <span className="font-sans text-[11px] text-ink-soft font-normal">/nuit</span>
+              {EN
+                ? <>from €{halfBoard ? room.priceHalfBoard : room.priceRoom} <span className="font-sans text-[11px] text-ink-soft font-normal">/night</span></>
+                : <>dès {halfBoard ? room.priceHalfBoard : room.priceRoom}€ <span className="font-sans text-[11px] text-ink-soft font-normal">/nuit</span></>}
             </p>
           </div>
           <a
@@ -1087,7 +1139,7 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
             rel="noopener noreferrer"
             className="font-sans text-[11px] font-medium tracking-wide uppercase text-gold-dark border-b border-gold-dark/50 hover:border-gold-dark pb-0.5 transition-colors flex-shrink-0"
           >
-            Réserver
+            {t('Réserver', 'Book')}
           </a>
         </div>
       </div>
@@ -1106,8 +1158,8 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <BlobCluster
-              main={{ src: A('dinerdegroupe1-scaled.jpg'), alt: 'Restaurant panoramique Le Rayon Vert' }}
-              secondary={{ src: A('restaurant-secondaire-v2.jpg'), alt: 'Salade créole au poisson fumé' }}
+              main={{ src: A('dinerdegroupe1-scaled.jpg'), alt: t('Restaurant panoramique Le Rayon Vert', 'Le Rayon Vert panoramic restaurant') }}
+              secondary={{ src: A('restaurant-secondaire-v2.jpg'), alt: t("Salade créole au poisson fumé", "Creole salad with smoked fish") }}
               mainShape="blob-2"
               secondaryShape="blob-1"
               accentBg="bg-gold"
@@ -1119,9 +1171,9 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
           {/* Text */}
           <div ref={ref}>
             <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0}>
-              <SectionLabel>Cuisine créole</SectionLabel>
+              <SectionLabel>{t("Cuisine créole", "Creole cuisine")}</SectionLabel>
               <h2 className="font-chewy text-4xl lg:text-5xl text-titre leading-tight mb-6">
-                Une table qui regarde<br /><span className="text-titre-accent">l'horizon</span>
+                {t('Une table qui regarde', 'A table that looks out')}<br /><span className="text-titre-accent">{t("l'horizon", 'to the horizon')}</span>
               </h2>
             </motion.div>
 
@@ -1132,7 +1184,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
               animate={isInView ? 'visible' : 'hidden'}
               custom={0.2}
             >
-              Poissons du jour, accras dorés, colombo mijoté : notre chef cuisine local et généreux, à déguster face au coucher de soleil sur la Caraïbe.
+              {t("Poissons du jour, accras dorés, colombo mijoté : notre chef cuisine local et généreux, à déguster face au coucher de soleil sur la Caraïbe.", "Catch of the day, golden accras, slow-cooked colombo: our chef cooks local and generous food, to enjoy as the sun sets over the Caribbean.")}
             </motion.p>
 
             <motion.div
@@ -1144,8 +1196,8 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
             >
               <Waves size={18} className="text-forest-dark flex-shrink-0 mt-0.5" />
               <p className="font-sans text-sm text-forest-dark leading-relaxed">
-                <span className="font-medium">Piscine offerte.</span> L'accès à la piscine à débordement
-                est inclus pour tous les clients du restaurant, jusqu'à 17h.
+                <span className="font-medium">{t('Piscine offerte.', 'Pool included.')}</span>{' '}
+                {t("L'accès à la piscine à débordement est inclus pour tous les clients du restaurant, jusqu'à 17h.", 'Access to the infinity pool is free for all restaurant guests, until 5 pm.')}
               </p>
             </motion.div>
 
@@ -1157,8 +1209,8 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
               custom={0.3}
             >
               {[
-                { label: 'Déjeuner · vendredi, samedi & dimanche', hours: '11h30 – 14h15' },
-                { label: 'Dîner · tous les soirs', hours: '18h00 – 21h00' },
+                { label: t('Déjeuner · vendredi, samedi & dimanche', 'Lunch · Friday, Saturday & Sunday'), hours: t('11h30 – 14h15', '11:30 am – 2:15 pm') },
+                { label: t('Dîner · tous les soirs', 'Dinner · every evening'), hours: t('18h00 – 21h00', '6:00 pm – 9:00 pm') },
               ].map(({ label, hours }) => (
                 <div key={label} className="flex justify-between items-center py-2.5 border-b border-cream-dark last:border-0">
                   <p className="font-sans text-sm text-ink-soft">{label}</p>
@@ -1176,11 +1228,11 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
             >
               <button onClick={onReserveTable} className={btnDark}>
                 <UtensilsCrossed size={14} />
-                Réserver une table
+                {t('Réserver une table', 'Book a table')}
               </button>
               <a href={CARTE_URL} target="_blank" rel="noopener noreferrer" className={btnGhost}>
                 <FileText size={14} />
-                Voir notre carte
+                {t('Voir notre carte', 'See our menu')}
               </a>
             </motion.div>
           </div>
@@ -1202,15 +1254,15 @@ function PoolFeature() {
   return (
     <section className="relative h-[60vh] min-h-[420px] flex items-center justify-center overflow-hidden" ref={containerRef}>
       <motion.div className="absolute inset-0" style={{ scale: imgScale }}>
-        <img src={A('piscine-bandeau-v2.jpg')} alt="Piscine à débordement et vue sur la baie de Deshaies" className="w-full h-full object-cover" loading="lazy" />
+        <img src={A('piscine-bandeau-v2.jpg')} alt={t("Piscine à débordement et vue sur la baie de Deshaies", "Infinity pool overlooking the bay of Deshaies")} className="w-full h-full object-cover" loading="lazy" />
       </motion.div>
       <div className="absolute inset-0 bg-deep/55" />
       <div className="absolute inset-0 bg-gradient-to-b from-deep via-transparent to-deep" />
 
       <motion.div className="relative z-10 text-center px-6" style={{ y: textY, opacity }}>
-        <p className="font-sans text-[13px] tracking-widest-xl uppercase text-gold-soft font-medium mb-4">Piscine à débordement</p>
+        <p className="font-sans text-[13px] tracking-widest-xl uppercase text-gold-soft font-medium mb-4">{t("Piscine à débordement", "Infinity pool")}</p>
         <p className="font-chewy text-3xl sm:text-4xl lg:text-5xl text-white leading-tight max-w-2xl mx-auto">
-          Là où l'horizon<br /><span className="text-gold-soft">se fond dans la mer</span>
+          {t("Là où l'horizon", 'Where the horizon')}<br /><span className="text-gold-soft">{t('se fond dans la mer', 'melts into the sea')}</span>
         </p>
       </motion.div>
     </section>
@@ -1226,10 +1278,10 @@ function Activities() {
     <section id="activites" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center max-w-xl mx-auto mb-14" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          <SectionLabel>À proximité</SectionLabel>
-          <h2 className="font-chewy text-4xl lg:text-5xl text-titre mb-4">Activités & découvertes</h2>
+          <SectionLabel>{t("À proximité", "Nearby")}</SectionLabel>
+          <h2 className="font-chewy text-4xl lg:text-5xl text-titre mb-4">{t("Activités & découvertes", "Things to see & do")}</h2>
           <p className="font-sans text-sm text-ink-soft leading-relaxed">
-            Entre mer et montagne, Deshaies est le point de départ idéal pour explorer les merveilles naturelles de la Guadeloupe.
+            {t("Entre mer et montagne, Deshaies est le point de départ idéal pour explorer les merveilles naturelles de la Guadeloupe.", "Between sea and mountains, Deshaies is the perfect base for exploring the natural wonders of Guadeloupe.")}
           </p>
         </motion.div>
       </div>
@@ -1258,7 +1310,11 @@ function Activities() {
 
 // ─── Blog ─────────────────────────────────────────────────────────────────────
 
-type Article = { Slug: string; Titre: string; Date: string; Image: string; 'Résumé': string; 'Publié': string }
+/* Colonnes du tableur : Slug, Titre, Date, Image, Résumé, Contenu, Publié.
+   Colonnes facultatives pour l'anglais : « Titre EN », « Résumé EN », « Contenu EN »
+   — vides, c'est la version française qui s'affiche. */
+type Article = Record<string, string>
+const champ = (a: Article, k: string) => (EN && a[k + ' EN']) || a[k] || ''
 
 function parseCSVSimple(txt: string): Record<string, string>[] {
   const rows: string[][] = []
@@ -1315,7 +1371,7 @@ function Blog() {
 
   const dateFr = (v: string) => {
     const d = new Date(v)
-    return isNaN(+d) ? v : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    return isNaN(+d) ? v : d.toLocaleDateString(EN ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
   }
   const src = (v: string) => (/^https?:\/\//.test(v) ? v : A(v))
 
@@ -1329,22 +1385,22 @@ function Blog() {
           animate="visible"
         >
           <div>
-            <SectionLabel>Le blog</SectionLabel>
+            <SectionLabel>{t("Le blog", "Our blog")}</SectionLabel>
             <h2 className="font-chewy text-3xl lg:text-4xl text-titre leading-tight">
-              Nos <span className="text-titre-accent">actualités</span>
+              {t('Nos ', 'Latest ')}<span className="text-titre-accent">{t('actualités', 'news')}</span>
             </h2>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={() => glisser(-1)}
-              aria-label="Articles précédents"
+              aria-label={t("Articles précédents", "Previous articles")}
               className="hidden sm:flex w-10 h-10 rounded-full border border-cream-dark items-center justify-center text-ink-soft hover:bg-forest-pale hover:text-forest-dark transition-colors"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={() => glisser(1)}
-              aria-label="Articles suivants"
+              aria-label={t("Articles suivants", "Next articles")}
               className="hidden sm:flex w-10 h-10 rounded-full border border-cream-dark items-center justify-center text-ink-soft hover:bg-forest-pale hover:text-forest-dark transition-colors"
             >
               <ChevronRight size={16} />
@@ -1370,7 +1426,7 @@ function Blog() {
                 {a.Image && (
                   <img
                     src={src(a.Image)}
-                    alt={a.Titre}
+                    alt={champ(a, 'Titre')}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
@@ -1378,8 +1434,8 @@ function Blog() {
               </div>
               <div className="p-5">
                 <p className="font-sans text-[10px] tracking-widest uppercase text-gold-dark mb-2">{dateFr(a.Date)}</p>
-                <h3 className="font-sans text-base font-medium text-forest-dark leading-snug mb-2">{a.Titre}</h3>
-                <p className="font-sans text-[13px] text-ink-soft leading-relaxed line-clamp-3">{a['Résumé']}</p>
+                <h3 className="font-sans text-base font-medium text-forest-dark leading-snug mb-2">{champ(a, 'Titre')}</h3>
+                <p className="font-sans text-[13px] text-ink-soft leading-relaxed line-clamp-3">{champ(a, 'Résumé')}</p>
               </div>
             </a>
           ))}
@@ -1394,7 +1450,7 @@ function Blog() {
         >
           <a href={BLOG_URL} className={btnGhost}>
             <FileText size={14} />
-            Tous les articles
+            {t('Tous les articles', 'All articles')}
           </a>
         </motion.div>
       </div>
@@ -1428,8 +1484,8 @@ function Gallery() {
   return (
     <section id="galerie" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" ref={ref}>
       <motion.div className="text-center mb-14" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-        <SectionLabel>Galerie photos</SectionLabel>
-        <h2 className="font-chewy text-4xl lg:text-5xl text-titre">L'hôtel en images</h2>
+        <SectionLabel>{t("Galerie photos", "Photo gallery")}</SectionLabel>
+        <h2 className="font-chewy text-4xl lg:text-5xl text-titre">{t("L'hôtel en images", "The hotel in pictures")}</h2>
       </motion.div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-[160px] sm:auto-rows-[180px]">
@@ -1490,21 +1546,21 @@ function Gallery() {
             <button
               className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 text-white/80 hover:text-forest hover:bg-white/20 transition-colors flex items-center justify-center"
               onClick={() => setSelected(null)}
-              aria-label="Fermer"
+              aria-label={t("Fermer", "Close")}
             >
               <X size={22} />
             </button>
             <button
               className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 text-white/80 hover:text-forest hover:bg-white/20 transition-colors flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); goPrev() }}
-              aria-label="Photo précédente"
+              aria-label={t("Photo précédente", "Previous photo")}
             >
               <ChevronLeft size={24} />
             </button>
             <button
               className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 text-white/80 hover:text-forest hover:bg-white/20 transition-colors flex items-center justify-center"
               onClick={(e) => { e.stopPropagation(); goNext() }}
-              aria-label="Photo suivante"
+              aria-label={t("Photo suivante", "Next photo")}
             >
               <ChevronRight size={24} />
             </button>
@@ -1524,8 +1580,8 @@ function Avis() {
     <section id="avis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep-panel">
       <div className="max-w-7xl mx-auto">
         <motion.div className="text-center mb-14" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} ref={ref}>
-          <SectionLabel onDark>Avis voyageurs</SectionLabel>
-          <h2 className="font-chewy text-4xl lg:text-5xl text-cream">Ce que disent nos clients</h2>
+          <SectionLabel onDark>{t("Avis voyageurs", "Guest reviews")}</SectionLabel>
+          <h2 className="font-chewy text-4xl lg:text-5xl text-cream">{t("Ce que disent nos clients", "What our guests say")}</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -1551,13 +1607,13 @@ function Avis() {
 
         <div className="text-center mt-10">
           <a
-            href="https://www.tripadvisor.fr/Hotel_Review-g580415-d2366289-Reviews-Hotel_Restaurant_Le_Rayon_Vert-Deshaies_Basse_Terre_Island_Guadeloupe.html"
+            href={TRIPADVISOR_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md shadow-ink/5 font-sans text-sm font-medium text-forest-dark hover:shadow-lg transition-shadow"
           >
             <Star size={14} className="fill-gold text-gold" />
-            Voir tous les avis sur TripAdvisor
+            {t('Voir tous les avis sur TripAdvisor', 'Read all reviews on TripAdvisor')}
           </a>
         </div>
       </div>
@@ -1574,23 +1630,23 @@ function ReserveCTA({ onReserve }: { onReserve: () => void }) {
     <section id="reserver" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-deep-panel">
       <div className="max-w-xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          <SectionLabel onDark>Réservation directe</SectionLabel>
+          <SectionLabel onDark>{t("Réservation directe", "Book direct")}</SectionLabel>
           <h2 className="font-chewy text-4xl lg:text-5xl text-cream mb-4">
-            Réservez votre <span className="text-gold-soft">séjour</span>
+            {t('Réservez votre ', 'Book your ')}<span className="text-gold-soft">{t('séjour', 'stay')}</span>
           </h2>
           <p className="font-sans text-sm text-cream/60 mb-10 max-w-md mx-auto">
-            Meilleur tarif garanti en réservation directe · Réponse sous 24h · Sans frais de dossier
+            {t("Meilleur tarif garanti en réservation directe · Réponse sous 24h · Sans frais de dossier", "Best rate guaranteed when booking direct · Reply within 24 hours · No booking fees")}
           </p>
         </motion.div>
 
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.15}>
           <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className={btnPrimary + ' !px-12 !py-4'}>
             <CalendarDays size={16} />
-            Vérifier les disponibilités
+            {t('Vérifier les disponibilités', 'Check availability')}
           </a>
         </motion.div>
 
-        <p className="font-sans text-[11px] text-cream/35 mt-8">Paiement sécurisé · CB, Virement · Chèques vacances acceptés</p>
+        <p className="font-sans text-[11px] text-cream/35 mt-8">{t("Paiement sécurisé · CB, Virement · Chèques vacances acceptés", "Secure payment · Card or bank transfer")}</p>
       </div>
     </section>
   )
@@ -1605,15 +1661,15 @@ function ContactSection({ onContact }: { onContact: () => void }) {
     <section id="devis" className="py-24 lg:py-32 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto text-center" ref={ref}>
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          <SectionLabel>Événements privés</SectionLabel>
+          <SectionLabel>{t("Événements privés", "Private events")}</SectionLabel>
           <h2 className="font-chewy text-3xl lg:text-4xl text-titre leading-tight mb-4">
-            Célébrez face à la <span className="text-titre-accent">mer des Caraïbes</span>
+            {t('Célébrez face à la ', 'Celebrate facing the ')}<span className="text-titre-accent">{t('mer des Caraïbes', 'Caribbean Sea')}</span>
           </h2>
           <p className="font-sans text-sm text-ink-soft leading-relaxed mb-8 max-w-lg mx-auto">
-            Mariage les pieds dans le jardin tropical, baptême en famille, anniversaire au
-            coucher du soleil, séminaire au calme : nous privatisons le restaurant, la terrasse
-            panoramique et les chambres pour votre événement. Dites-nous ce que vous imaginez,
-            nous vous répondons sous 24h avec une proposition sur mesure.
+            {t(
+              'Mariage les pieds dans le jardin tropical, baptême en famille, anniversaire au coucher du soleil, séminaire au calme : nous privatisons le restaurant, la terrasse panoramique et les chambres pour votre événement. Dites-nous ce que vous imaginez, nous vous répondons sous 24h avec une proposition sur mesure.',
+              'A wedding in the tropical garden, a family christening, a birthday at sunset, a quiet seminar: we can reserve the restaurant, the panoramic terrace and the rooms exclusively for your event. Tell us what you have in mind and we will reply within 24 hours with a tailored proposal.',
+            )}
           </p>
         </motion.div>
 
@@ -1625,10 +1681,10 @@ function ContactSection({ onContact }: { onContact: () => void }) {
           custom={0.05}
         >
           {[
-            { icon: Heart, label: 'Mariages' },
-            { icon: Cake, label: 'Baptêmes' },
-            { icon: PartyPopper, label: 'Anniversaires' },
-            { icon: Briefcase, label: 'Séminaires' },
+            { icon: Heart, label: t('Mariages', 'Weddings') },
+            { icon: Cake, label: t('Baptêmes', 'Christenings') },
+            { icon: PartyPopper, label: t('Anniversaires', 'Birthdays') },
+            { icon: Briefcase, label: t('Séminaires', 'Seminars') },
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="bg-forest-pale rounded-3xl px-4 py-5 flex flex-col items-center gap-2">
               <Icon size={20} className="text-forest-dark" />
@@ -1663,7 +1719,7 @@ function ContactSection({ onContact }: { onContact: () => void }) {
         <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
           <button onClick={onContact} className={btnDark}>
             <Send size={14} />
-            Demander un devis
+            {t('Demander un devis', 'Request a quote')}
           </button>
         </motion.div>
       </div>
@@ -1679,7 +1735,7 @@ function Footer() {
   const socials = [
     { label: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/hotelrestaurantlerayonvert' },
     { label: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/hotelrestaurantlerayonvert/' },
-    { label: 'TripAdvisor', icon: Star, href: 'https://www.tripadvisor.fr/Hotel_Review-g580415-d2366289-Reviews-Hotel_Restaurant_Le_Rayon_Vert-Deshaies_Basse_Terre_Island_Guadeloupe.html' },
+    { label: 'TripAdvisor', icon: Star, href: TRIPADVISOR_URL },
   ]
 
   return (
@@ -1689,7 +1745,7 @@ function Footer() {
           <motion.div className="sm:col-span-2 lg:col-span-1" variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <p className="font-chewy text-2xl text-deep mb-2">Le <span className="text-forest">Rayon Vert</span></p>
             <p className="font-sans text-sm text-ink-soft leading-relaxed mb-5">
-              Hôtel de charme familial à Deshaies, Guadeloupe. Vue imprenable sur la mer des Caraïbes, piscine à débordement, restaurant créole.
+              {t("Hôtel de charme familial à Deshaies, Guadeloupe. Vue imprenable sur la mer des Caraïbes, piscine à débordement, restaurant créole.", "Charming family-run hotel in Deshaies, Guadeloupe. Breathtaking view of the Caribbean Sea, infinity pool, Creole restaurant.")}
             </p>
             <div className="flex gap-2">
               {socials.map(({ label, icon: Icon, href }) => (
@@ -1702,7 +1758,7 @@ function Footer() {
           </motion.div>
 
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.1}>
-            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">L'hôtel</h4>
+            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">{t("L'hôtel", "The hotel")}</h4>
             <ul className="space-y-2.5">
               {navLinks.map((link) => (
                 <li key={link.label}><a href={link.href} className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">{link.label}</a></li>
@@ -1711,11 +1767,11 @@ function Footer() {
           </motion.div>
 
           <motion.div variants={fadeUp} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.15}>
-            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">Réservation</h4>
+            <h4 className="font-sans text-[11px] tracking-widest uppercase text-forest-dark font-medium mb-4">{t("Réservation", "Booking")}</h4>
             <ul className="space-y-2.5">
-              <li><a href="#reserver" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">Réserver en direct</a></li>
-              <li><a href="https://www.hotels-deshaies.com/tarifs-reservation-hotel-deshaies-guadeloupe" target="_blank" rel="noopener noreferrer" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">Tarifs</a></li>
-              <li><a href="#devis" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">Devis groupe</a></li>
+              <li><a href="#reserver" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">{t("Réserver en direct", "Book direct")}</a></li>
+              <li><a href="https://www.hotels-deshaies.com/tarifs-reservation-hotel-deshaies-guadeloupe" target="_blank" rel="noopener noreferrer" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">{t("Tarifs", "Rates")}</a></li>
+              <li><a href="#devis" className="font-sans text-sm text-ink-soft hover:text-forest-dark transition-colors">{t("Devis groupe", "Group quote")}</a></li>
             </ul>
           </motion.div>
 
@@ -1745,7 +1801,7 @@ function Footer() {
           animate={isInView ? 'visible' : 'hidden'}
           custom={0.3}
         >
-          <p className="font-sans text-[11px] text-ink-soft/60">© {new Date().getFullYear()} Hôtel Le Rayon Vert · Deshaies, Guadeloupe</p>
+          <p className="font-sans text-[11px] text-ink-soft/60">© {new Date().getFullYear()} {t("Hôtel", "Hotel")} Le Rayon Vert · Deshaies, Guadeloupe</p>
         </motion.div>
       </div>
     </footer>
@@ -1779,7 +1835,7 @@ export default function App() {
       <ReservationDialog
         open={modal === 'sejour'}
         onOpenChange={(v) => setModal(v ? 'sejour' : null)}
-        title="Réserver votre séjour"
+        title={t("Réserver votre séjour", "Book your stay")}
         icon={<CalendarDays size={20} className="text-forest" />}
       >
         <SejourFormContent presetRoom={presetRoom} onPresetRoomChange={setPresetRoom} />
@@ -1788,7 +1844,7 @@ export default function App() {
       <ReservationDialog
         open={modal === 'restaurant'}
         onOpenChange={(v) => setModal(v ? 'restaurant' : null)}
-        title="Réserver une table"
+        title={t("Réserver une table", "Book a table")}
         icon={<UtensilsCrossed size={20} className="text-forest" />}
       >
         <RestaurantFormContent />
@@ -1797,7 +1853,7 @@ export default function App() {
       <ReservationDialog
         open={modal === 'contact'}
         onOpenChange={(v) => setModal(v ? 'contact' : null)}
-        title="Nous contacter"
+        title={t("Nous contacter", "Contact us")}
         icon={<Mail size={20} className="text-forest" />}
       >
         <ContactFormContent />
