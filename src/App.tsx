@@ -45,8 +45,8 @@ const A = (name: string) => `${import.meta.env.BASE_URL}assets/${name}`
 const WEB3FORMS_KEY = '09728cc2-0dca-4768-a52c-aa9acb693109'
 const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
 
-// Moteur de réservation externe (SmartBooking / Hotelnet)
-const BOOKING_URL = 'https://smartbooking.hotelnet.biz/home/main?hotel=5613&channel=0000&lingua=FR'
+// Moteur de réservation externe (Octorate)
+const BOOKING_URL = 'https://book.octorate.com/octobook/site/reservation/index.xhtml?codice=213778'
 
 const CARTE_URL = `${import.meta.env.BASE_URL}carte.html`
 const BLOG_URL = `${import.meta.env.BASE_URL}blog.html`
