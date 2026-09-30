@@ -136,19 +136,19 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
 
 <div class="etat" id="etat"></div>
 
-<div class="retour"><a href="./">&larr; Retour au site</a></div>
+<div class="retour"><a href="./" data-en="&larr; Back to the website">&larr; Retour au site</a></div>
 
 <header>
   <img class="logo" src="./assets/logo.png" alt="Hôtel Le Rayon Vert — Deshaies, Guadeloupe">
-  <div class="eyebrow">Restaurant · Cuisine créole</div>
-  <h1>La carte</h1>
+  <div class="eyebrow" data-en="Restaurant · Creole cuisine">Restaurant · Cuisine créole</div>
+  <h1 data-en="Our menu">La carte</h1>
   <div class="place">Deshaies · Guadeloupe</div>
 </header>
 
 <div class="infos">
   <div class="info">
-    <div class="lb">Piscine offerte</div>
-    <div class="vl">Accès inclus à la piscine à débordement pour tous les clients du restaurant, <b>jusqu'à 17h</b>.</div>
+    <div class="lb" data-en="Pool included">Piscine offerte</div>
+    <div class="vl" data-en="Free access to the infinity pool for all restaurant guests, &lt;b&gt;until 5 pm&lt;/b&gt;.">Accès inclus à la piscine à débordement pour tous les clients du restaurant, <b>jusqu'à 17h</b>.</div>
   </div>
 </div>
 
@@ -156,25 +156,25 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
 <main id="main"></main>
 
 <div class="cta">
-  <a class="p" href="tel:+590590284323">Réserver une table</a>
-  <a class="s" href="./">Découvrir l'hôtel</a>
+  <a class="p" href="tel:+590590284323" data-en="Book a table">Réserver une table</a>
+  <a class="s" href="./" data-en="Discover the hotel">Découvrir l'hôtel</a>
 </div>
 
 <section class="avis">
   <div class="avis-in">
     <div class="avis-txt">
       <div class="avis-etoiles">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
-      <h3>Vous avez passé un bon moment&nbsp;?</h3>
-      <p>Un avis sur Google, c'est deux minutes pour vous et beaucoup pour nous. <span class="creole">Mèsi anpil&nbsp;!</span></p>
+      <h3 data-en="Did you have a good time?">Vous avez passé un bon moment&nbsp;?</h3>
+      <p data-en="A Google review takes you two minutes and means a lot to us. &lt;span class=&quot;creole&quot;&gt;Mèsi anpil!&lt;/span&gt;">Un avis sur Google, c'est deux minutes pour vous et beaucoup pour nous. <span class="creole">Mèsi anpil&nbsp;!</span></p>
     </div>
-    <a class="avis-btn" href="https://search.google.com/local/writereview?placeid=ChIJAQAAQIZrE4wRRaE8a_ih1s0" target="_blank" rel="noopener">Laisser un avis</a>
+    <a class="avis-btn" href="https://search.google.com/local/writereview?placeid=ChIJAQAAQIZrE4wRRaE8a_ih1s0" target="_blank" rel="noopener" data-en="Leave a review">Laisser un avis</a>
   </div>
 </section>
 
 <footer>
   <div class="f-in">
-    <div class="f-title">Allergènes</div>
-    <p>Nos plats sont susceptibles de contenir tous genres d'allergènes. Le tableau d'origine des viandes est disponible sur demande auprès de votre serveur.</p>
+    <div class="f-title" data-en="Allergens">Allergènes</div>
+    <p data-en="Our dishes may contain any kind of allergen. Details of the origin of our meat are available on request from your server.">Nos plats sont susceptibles de contenir tous genres d'allergènes. Le tableau d'origine des viandes est disponible sur demande auprès de votre serveur.</p>
     <div class="stamp">
       <span id="stamp"></span>
       <span>436 Allée Lacoque · 97126 Deshaies</span>
@@ -183,6 +183,94 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
 </footer>
 
 <script>
+/* Langue : même choix que le site (?lang=, puis choix mémorisé, puis navigateur). */
+const LANG=(()=>{
+  try{
+    const p=new URLSearchParams(location.search).get('lang');
+    if(p==='fr'||p==='en'){ localStorage.setItem('lang',p); return p; }
+    const m=localStorage.getItem('lang');
+    if(m==='fr'||m==='en') return m;
+  }catch(e){}
+  return (navigator.language||'fr').toLowerCase().startsWith('fr')?'fr':'en';
+})();
+const EN=LANG==='en';
+if(EN){
+  document.documentElement.lang='en';
+  document.title='Restaurant menu — Hotel Le Rayon Vert, Deshaies';
+  document.querySelectorAll('[data-en]').forEach(el=>{ el.innerHTML=el.dataset.en; });
+}
+
+/* Traductions anglaises des plats, par nom français.
+   — Le nom anglais s'affiche dès que le nom du tableur correspond.
+   — La description anglaise ne s'affiche que si la description française
+     n'a pas changé ; sinon on garde la version française, pour ne jamais
+     afficher une traduction périmée.
+   — Pour un nouveau plat : ajouter dans le tableur les colonnes facultatives
+     « Nom EN » et « Description EN », elles passent devant ce dictionnaire. */
+const SECTIONS_EN={"Tapas & finger food":"Tapas & finger food","Entrées":"Starters","Spécialités créoles":"Creole specialities","Viandes":"Meat","Poissons & fruits de mer":"Fish & seafood","Desserts":"Desserts","Coupes de glaces":"Ice cream sundaes","Glaces alcoolisées":"Ice creams with spirits"};
+const BADGES_EN={"végé":"Veggie","nouveau":"New","suggestion":"Chef's pick","spécialité":"Speciality"};
+const PLATS_EN={
+"Accras de morue":["Salt cod accras","Beignets croustillants, sauce chien maison","Crispy fritters, homemade sauce chien (Creole herb sauce)"],
+"Rillettes de la mer":["Seafood rillettes","Mix thon, dorade, marlin · toasts grillés","Tuna, sea bream and marlin · toasted bread"],
+"Poissons fumés & toasts":["Smoked fish & toast","Thon, marlin, espadon, thazard · beurre citronné","Tuna, marlin, swordfish, king mackerel · lemon butter"],
+"Toasts de boudin":["Creole blood sausage toasts","Boudin antillais poêlé · oignon rouge mariné au citron vert · coriandre","Pan-fried West Indian boudin · red onion pickled in lime · coriander"],
+"Guacamole créole":["Creole guacamole","Avocat, piment végétarien, coriandre, citron vert · chips de plantain maison","Avocado, mild seasoning pepper, coriander, lime · homemade plantain chips"],
+"Frites de manioc":["Cassava fries","Manioc frit croustillant, fleur de sel · sauce créole ou mayo citron-coriandre","Crispy fried cassava, sea salt · Creole sauce or lime-coriander mayo"],
+"Tartare de bœuf à la créole":["Creole-style beef tartare","Bœuf haché au couteau, piment végétarien, câpres, citron vert, coriandre fraîche, jaune d'œuf","Hand-chopped beef, mild seasoning pepper, capers, lime, fresh coriander, egg yolk"],
+"Poisson à la tahitienne":["Tahitian-style raw fish","Poisson cru mariné au lait de coco, citron vert, coriandre et légumes croquants","Raw fish marinated in coconut milk, lime, coriander and crunchy vegetables"],
+"Tartare de thon aux agrumes":["Citrus tuna tartare","Thon rouge, orange, citron vert, gingembre frais, huile de sésame, graines de sésame torréfiées","Bluefin tuna, orange, lime, fresh ginger, sesame oil, toasted sesame seeds"],
+"Salade Ti-Créole":["Ti-Créole salad","Jeunes pousses, cœur de palmiste, mangue verte, tomates cerises, poulet fumé émincé, vinaigrette fruit de la passion, coco grillé","Baby greens, heart of palm, green mango, cherry tomatoes, sliced smoked chicken, passion fruit dressing, toasted coconut"],
+"Salade crevette & avocat":["Shrimp & avocado salad","Crevettes poêlées à l'ail, avocat tranché, pamplemousse rose, roquette, vinaigrette coriandre-gingembre","Garlic pan-fried shrimp, sliced avocado, pink grapefruit, rocket, coriander-ginger dressing"],
+"Méli-mélo du maraîcher":["Market garden medley","Assortiment de légumes cuisinés et crudités","Selection of cooked vegetables and fresh crudités"],
+"Assiette créole":["Creole platter","Poisson fumé, rillettes de la mer, thon à la tahitienne, accras, boudin antillais et crudités","Smoked fish, seafood rillettes, Tahitian-style tuna, accras, West Indian boudin and crudités"],
+"Colombo de poulet":["Chicken colombo","Poulet mijoté au colombo, pommes de terre, riz créole","Chicken slow-cooked in colombo (Creole curry), potatoes, Creole rice"],
+"Ouassou et aiguillettes de poulet au lait de coco":["Ouassou & chicken in coconut milk","Ouassou et aiguillettes de poulet, sauce au lait de coco, riz créole","Ouassou (freshwater prawns) and chicken strips, coconut milk sauce, Creole rice"],
+"Poulet fumé":["Smoked chicken","",""],
+"Pluma de cochon":["Pork pluma","",""],
+"Magret de canard":["Duck breast","",""],
+"Brochette d'agneau":["Lamb skewer","",""],
+"Entrecôte":["Rib-eye steak","",""],
+"Burger Rayon Vert":["Rayon Vert burger","Steak haché, cheddar, oignons caramélisés, tomate, salade, sauce créole maison, pain brioché","Beef patty, cheddar, caramelised onions, tomato, lettuce, homemade Creole sauce, brioche bun"],
+"Burger Thazard":["King mackerel burger","Filet de thazard grillé, avocat, tomate, salade, mayo citron-coriandre, pain brioché","Grilled king mackerel fillet, avocado, tomato, lettuce, lime-coriander mayo, brioche bun"],
+"Dorade en croûte de sel":["Salt-crusted sea bream","Dorade entière cuite en croûte de gros sel · beurre citronné aux herbes","Whole sea bream baked in coarse salt · lemon and herb butter"],
+"Thon mi-cuit en croûte de sésame":["Seared tuna in a sesame crust","Pavé de thon saisi, croûte de sésame dorée, sauce soja-gingembre, salade de concombre au citron vert","Seared tuna steak, golden sesame crust, soy-ginger sauce, cucumber and lime salad"],
+"Millefeuille de thon aubergine":["Tuna & aubergine millefeuille","",""],
+"Mi-cuit de thazard":["Seared king mackerel","Thazard à cœur rosé, sauce vierge créole, légumes du marché","King mackerel, pink in the middle, Creole sauce vierge, market vegetables"],
+"Chatrou grillé":["Grilled octopus (chatrou)","Marinade créole, citron vert, légumes du marché, sauce vierge aux herbes","Creole marinade, lime, market vegetables, herb sauce vierge"],
+"Moules frites à la crème":["Mussels in cream with fries","Moules fraîches, crème, échalotes, persil","Fresh mussels, cream, shallots, parsley"],
+"Langouste grillée à la créole":["Creole grilled spiny lobster","Riz et légumes · selon arrivage","Rice and vegetables · subject to availability"],
+"Salade de fruits de saison":["Seasonal fruit salad","Mangue, ananas, banane, maracuja, citron vert, menthe fraîche, sucre de canne","Mango, pineapple, banana, passion fruit, lime, fresh mint, cane sugar"],
+"Fruits de saison au rhum":["Seasonal fruit with rum","Mangue, ananas, banane flambée, sucre de canne, rhum vieux, zeste de citron vert","Mango, pineapple, flambéed banana, cane sugar, aged rum, lime zest"],
+"Moelleux au chocolat":["Chocolate fondant","Sauce chocolat, 1 boule vanille","Chocolate sauce, 1 scoop of vanilla"],
+"Profiteroles au chocolat":["Chocolate profiteroles","Glace vanille et sauce chocolat chaude","Vanilla ice cream and hot chocolate sauce"],
+"Café ou thé gourmand":["Coffee or tea with mini desserts","4 mini-desserts et boisson chaude","4 mini desserts and a hot drink"],
+"Gaufre":["Waffle","Sauce chocolat, caramel beurre salé ou chantilly","Chocolate sauce, salted caramel or whipped cream"],
+"Passion des îles":["Island passion","Mangue, passion, acerola, fruits rouges, chantilly","Mango, passion fruit, acerola, red berries, whipped cream"],
+"Chocolat liégeois":["Chocolate liégeois","Rhum raisin, sauce chocolat, chantilly","Rum and raisin, chocolate sauce, whipped cream"],
+"Coco Kiss":["Coco Kiss","Vanille pacane, coco, sauce chocolat, chantilly","Vanilla pecan, coconut, chocolate sauce, whipped cream"],
+"Dame blanche":["Dame blanche","3 boules vanille, sauce chocolat, chantilly","3 scoops of vanilla, chocolate sauce, whipped cream"],
+"Banana split créole":["Creole banana split","Coco, vanille pacane, rhum raisin, banane, sauce chocolat","Coconut, vanilla pecan, rum and raisin, banana, chocolate sauce"],
+"Piste verte":["Piste verte","Menthe-choco, chocolat, sauce chocolat, chantilly","Mint choc chip, chocolate, chocolate sauce, whipped cream"],
+"Ice Green":["Ice Green","Menthe choco, chocolat, 2 cl Get 27","Mint choc chip, chocolate, 2 cl Get 27"],
+"Amiral":["Amiral","Mangue, passion, 2 cl rhum blanc","Mango, passion fruit, 2 cl white rum"],
+"Pirate":["Pirate","Rhum raisin, vanille pacane, 2 cl rhum vieux","Rum and raisin, vanilla pecan, 2 cl aged rum"]
+};
+const norm=v=>String(v||'').trim().toLowerCase();
+function nomPlat(p){
+  if(!EN) return p['Nom du plat'];
+  if(p['Nom EN']) return p['Nom EN'];
+  const d=PLATS_EN[(p['Nom du plat']||'').trim()];
+  return d?d[0]:p['Nom du plat'];
+}
+function descPlat(p){
+  if(!EN) return p.Description;
+  if(p['Description EN']) return p['Description EN'];
+  const d=PLATS_EN[(p['Nom du plat']||'').trim()];
+  return (d && d[2] && norm(d[1])===norm(p.Description)) ? d[2] : p.Description;
+}
+const nomSection=s=>EN?(SECTIONS_EN[s]||s):s;
+const nomBadge=b=>EN?(BADGES_EN[norm(b)]||b):b;
+
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbeWNzrRtMOdtqJR-EUO7fk1XJeJeOvGiKLNmOR1IhT1lCgzZP6rGEGZqDJOsGPWNAWms0WMdEczbE/pub?gid=1933963057&single=true&output=csv";
 
 const ORDRE_SECTIONS = ["Tapas & finger food","Entrées","Spécialités créoles","Viandes","Poissons & fruits de mer","Desserts","Coupes de glaces","Glaces alcoolisées"];
@@ -270,7 +358,8 @@ const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 function prix(v){
   if(!v) return '';
   const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));
-  return isNaN(n) ? v : n.toFixed(2).replace('.',',')+' €';
+  if(isNaN(n)) return (EN && norm(v)==='sur demande') ? 'On request' : v;
+  return EN ? '€'+n.toFixed(2) : n.toFixed(2).replace('.',',')+' €';
 }
 
 let PLATS=[];
@@ -285,7 +374,7 @@ function render(){
 
   sections.forEach((s,idx)=>{
     const b=document.createElement('button');
-    b.textContent=s;
+    b.textContent=nomSection(s);
     b.className=idx===0?'on':'';
     b.onclick=()=>{
       nav.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
@@ -308,16 +397,16 @@ function render(){
     const sec=document.createElement('section');
     sec.className='sec'+(idx===0?' on':'');
     sec.id='sec-'+idx;
-    let html=`<div class="sec-head"><h2>${esc(s)}</h2><div class="rule"></div></div>`;
-    if(!items.length) html+=`<div class="empty">Aucun plat dans cette section pour le moment.</div>`;
+    let html=`<div class="sec-head"><h2>${esc(nomSection(s))}</h2><div class="rule"></div></div>`;
+    if(!items.length) html+=`<div class="empty">${EN?'No dishes in this section at the moment.':'Aucun plat dans cette section pour le moment.'}</div>`;
     items.forEach(p=>{
       const off=(p.Disponible||'').toUpperCase()==='NON';
-      const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(p.Badge)}</span>`:'';
-      const ep=off?`<span class="tag t-epuise">Épuisé</span>`:'';
+      const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(nomBadge(p.Badge))}</span>`:'';
+      const ep=off?`<span class="tag t-epuise">${EN?'Sold out':'Épuisé'}</span>`:'';
       html+=`<div class="d${off?' off':''}">
         <div>
-          <div class="nm">${esc(p['Nom du plat'])}${badge}${ep}</div>
-          ${p.Description?`<div class="ds">${esc(p.Description)}</div>`:''}
+          <div class="nm">${esc(nomPlat(p))}${badge}${ep}</div>
+          ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}</div>`:''}
         </div>
         <div class="pr">${esc(prix(p['Prix (€)']))}</div>
       </div>`;
@@ -327,7 +416,7 @@ function render(){
   });
 
   const dispo=PLATS.filter(p=>(p.Disponible||'').toUpperCase()!=='NON').length;
-  document.getElementById('stamp').textContent=`${dispo} plats à la carte`;
+  document.getElementById('stamp').textContent=EN?`${dispo} dishes on the menu`:`${dispo} plats à la carte`;
 }
 
 async function charger(){
@@ -344,7 +433,9 @@ async function charger(){
   if(live){ e.style.display='none'; }
   else{
     e.style.display='flex';
-    e.innerHTML='<span><b>Carte hors ligne</b> — dernière version enregistrée. Les modifications récentes n\'apparaissent pas.</span><button type="button" id="retry">Réessayer</button>';
+    e.innerHTML=EN
+      ? '<span><b>Menu offline</b> — last saved version. Recent changes may not appear.</span><button type="button" id="retry">Try again</button>'
+      : '<span><b>Carte hors ligne</b> — dernière version enregistrée. Les modifications récentes n\'apparaissent pas.</span><button type="button" id="retry">Réessayer</button>';
     document.getElementById('retry').onclick=charger;
   }
 }
