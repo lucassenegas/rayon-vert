@@ -395,7 +395,7 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
 function RestaurantFormContent() {
   const { status, handleSubmit } = useWeb3Form()
 
-  if (status === 'success') return <SuccessNote>Demande envoyée ! Confirmation par téléphone sous 2h.</SuccessNote>
+  if (status === 'success') return <SuccessNote>Demande envoyée ! Confirmation par téléphone ou email sous 24h.</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
