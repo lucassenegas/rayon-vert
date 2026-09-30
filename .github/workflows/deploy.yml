@@ -27,9 +27,9 @@ jobs:
 
       - run: npm ci
 
+      # Pas de VITE_BASE : vite.config.ts retombe sur '/'. Le site est servi
+      # a la racine du domaine personnalise hotels-deshaies.com.
       - run: npm run build
-        env:
-          VITE_BASE: /rayon-vert/
 
       - uses: actions/upload-pages-artifact@v3
         with:
