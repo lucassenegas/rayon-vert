@@ -396,13 +396,10 @@ function initCarte(liste){
   if(typeof L==='undefined'){ const c=document.getElementById('carte'); if(c) c.innerHTML=`<p style="padding:24px;text-align:center;font-size:14px;color:var(--ink-soft)">${TXT('La carte n\'a pas pu se charger. Vérifiez votre connexion puis rechargez la page.','The map could not load. Check your connection and reload the page.')}</p>`; return; }
   if(!MAP){
     MAP=L.map('carte',{scrollWheelZoom:false}).setView(HOTEL,10);
-    const fond=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-      maxZoom:18,subdomains:'abcd',
-      attribution:'&copy; OpenStreetMap &copy; CARTO'
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom:19,
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
     }).addTo(MAP);
-    let erreurs=0;
-    fond.on('tileerror',()=>{ if(++erreurs===4){ MAP.removeLayer(fond);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(MAP); } });
     L.marker(HOTEL,{icon:L.divIcon({className:'',html:'<div class="pin hotel">🏨</div>',iconSize:[46,46],iconAnchor:[23,23]}),zIndexOffset:1000})
       .addTo(MAP).bindPopup(`<div class="pop"><b>Le Rayon Vert</b><span>${TXT('Votre hôtel','Your hotel')}</span></div>`);
     COUCHE=L.layerGroup().addTo(MAP);
