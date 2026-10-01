@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chewy&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <style>
 :root{
   --forest:#016B5B; --forest-light:#0E9280; --forest-dark:#014539; --forest-pale:#E0EDEA;
@@ -80,6 +82,28 @@ main{max-width:760px;margin:0 auto;padding:0 20px 40px}
 .avis-in p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:8px auto 16px;max-width:44ch}
 .avis-in .creole{color:var(--gold-dark);font-weight:500}
 .avis-in a{display:inline-flex;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:var(--gold);color:var(--deep);border-radius:999px;padding:14px 28px}
+
+.emo{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:none;border-radius:50%;background:var(--forest-pale);font-size:20px;line-height:1}
+.fiche .tete{display:flex;align-items:center;gap:12px}
+.fiche .tete .lieu{margin-top:3px}
+.num .gauche{display:flex;align-items:center;gap:12px}
+.num .emo{width:34px;height:34px;font-size:18px}
+nav button .e{margin-right:6px;font-size:14px}
+.sec-head h2 .e{margin-right:8px}
+
+#carte{height:62vh;min-height:380px;border-radius:1.5rem;overflow:hidden;box-shadow:0 4px 18px rgba(23,44,41,.08);z-index:1}
+.filtres{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.filtres button{font:inherit;font-size:12px;font-weight:500;border:0;border-radius:999px;padding:8px 13px;background:var(--cream-soft);color:var(--ink-soft);cursor:pointer}
+.filtres button.on{background:var(--forest);color:#fff}
+.carte-note{font-size:12px;color:var(--ink-soft);margin-top:10px;line-height:1.5}
+.pin{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#fff;border:2px solid var(--forest);font-size:19px;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.pin.hotel{width:46px;height:46px;font-size:24px;border-color:var(--gold);background:var(--gold)}
+.leaflet-popup-content{font-family:'DM Sans',system-ui,sans-serif;margin:12px 14px}
+.pop b{display:block;font-size:14px;font-weight:500;color:var(--forest-dark);margin-bottom:2px}
+.pop span{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dark)}
+.pop .liens{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.pop .liens a{font-size:11.5px;font-weight:500;text-decoration:none;border-radius:999px;padding:6px 11px;background:var(--forest-pale);color:var(--forest-dark)}
+.pop .liens a.go{background:var(--forest);color:#fff}
 
 footer{background:var(--panel);border-radius:2.5rem 2.5rem 0 0;margin-top:40px;padding:34px 26px 40px;text-align:center;color:rgba(255,255,255,.7);font-size:12.5px;line-height:1.7}
 footer b{display:block;font-family:'Chewy',cursive;font-weight:400;font-size:22px;color:#fff;margin-bottom:6px}
@@ -155,16 +179,72 @@ if(EN){
 /* Rubriques connues : ordre d'affichage et traduction. Une rubrique écrite
    dans le tableur mais absente d'ici s'affiche quand même, à la fin. */
 const RUBRIQUES=[
-  ["Bienvenue","Welcome"],
-  ["Infos pratiques","Practical info"],
-  ["Numéros utiles","Useful numbers"],
-  ["En mer","At sea"],
-  ["Randonnées","Hiking"],
-  ["Balades & visites","Walks & visits"],
-  ["Les îles","The islands"],
-  ["Aventure","Adventure"],
-  ["Bien-être","Wellness"]
+  ["Bienvenue","Welcome","👋"],
+  ["Infos pratiques","Practical info","🛎️"],
+  ["Numéros utiles","Useful numbers","📞"],
+  ["Carte","Map","🗺️"],
+  ["En mer","At sea","🌊"],
+  ["Randonnées","Hiking","🥾"],
+  ["Balades & visites","Walks & visits","🌺"],
+  ["Les îles","The islands","🏝️"],
+  ["Aventure","Adventure","🪂"],
+  ["Bien-être","Wellness","💆"]
 ];
+const CARTE='Carte';
+
+/* Emoji de chaque fiche, retrouvé par le début du titre français.
+   Pour une nouvelle fiche : ajouter une colonne « Emoji » dans le tableur
+   (facultatif). Sans emoji, la fiche prend celui de sa rubrique. */
+const EMOJIS={
+  "Une promesse de bonheur":"🌅","L'île aux belles eaux":"💧","Nos coups de cœur":"❤️",
+  "Arrivée et départ":"🔑","Réception":"🛎️","Petit-déjeuner":"🥐","Restaurant":"🍽️","Wi-Fi":"📶",
+  "Panier pique-nique":"🧺","Parking":"🚗","Réveil":"⏰","Ménage et linge":"🛏️","J'aime ma planète":"🌍",
+  "Réception de l'hôtel":"🏨","Urgences":"🚨","SAMU":"🚑","Pompiers":"🚒","Gendarmerie":"👮",
+  "Pharmacie":"💊","Médecin":"🩺","Taxi":"🚕",
+  "Talamanca":"⛵","Aquatique Aventure":"🤿","Tropicalsub":"🐠","Les Amis de la Mer":"🚤",
+  "Gwadaventure":"🐢","Blue Lagoon":"🌴","Kaona":"⛵",
+  "Le volcan de la Soufrière":"🌋","Randonnée guidée":"🧭","Attention en rivière":"⚠️","Saut d'Acomat":"💦",
+  "Cascade aux Écrevisses":"🦞","Les Chutes du Carbet":"🏞️","Saut de la Lézarde":"💦","Saut de Matouba":"🍌",
+  "Et bien d'autres":"📱",
+  "De la Pointe Madame":"🌅","Grande Anse":"🏃","Plage de la Perle":"🏖️","Trace du Petit Malendure":"🐢",
+  "Jardin botanique":"🌺","Zoo de Guadeloupe":"🐆","La Maison du Cacao":"🍫","Les distilleries":"🥃",
+  "Habitation Côte sous le Vent":"🦋",
+  "Les Saintes":"⛴️","Marie-Galante":"🏝️","Petite-Terre":"🦎","El Rancho":"🚐",
+  "Caraïbes Parachutisme":"🪂","Pelican Safari":"🚙","Gwada Expérience":"🧗","Canopée":"🧗",
+  "Douceur des Îles":"💆","Massage des 5 continents":"💆"
+};
+
+/* Position sur la carte (latitude, longitude), retrouvée de la même façon.
+   Positions approximatives. Pour corriger ou ajouter un lieu : colonne « GPS »
+   dans le tableur, au format « 16.2835, -61.8010 » (clic droit sur Google Maps
+   → copier les coordonnées). Une fiche sans position n'apparaît pas sur la carte. */
+const HOTEL=[16.2835,-61.8010];
+const POSITIONS={
+  "Talamanca":[16.3053,-61.7957],"Aquatique Aventure":[16.1717,-61.7812],"Tropicalsub":[16.3062,-61.7948],
+  "Les Amis de la Mer":[16.3335,-61.6978],"Gwadaventure":[16.3333,-61.6972],"Blue Lagoon":[16.3331,-61.6982],
+  "Kaona":[16.3050,-61.7962],
+  "Le volcan de la Soufrière":[16.0446,-61.6636],"Saut d'Acomat":[16.2153,-61.7738],
+  "Cascade aux Écrevisses":[16.1768,-61.6650],"Les Chutes du Carbet":[16.0440,-61.6215],
+  "Saut de la Lézarde":[16.1950,-61.6385],"Saut de Matouba":[16.0470,-61.6895],
+  "De la Pointe Madame":[16.3300,-61.7905],"Grande Anse":[16.3200,-61.7880],"Plage de la Perle":[16.3375,-61.7765],
+  "Trace du Petit Malendure":[16.1790,-61.7800],"Jardin botanique":[16.2985,-61.7880],
+  "Zoo de Guadeloupe":[16.1745,-61.6950],"La Maison du Cacao":[16.2405,-61.7790],
+  "Habitation Côte sous le Vent":[16.2300,-61.7850],
+  "Les Saintes":[15.9690,-61.6450],"Marie-Galante":[16.2370,-61.5360],"Petite-Terre":[16.2510,-61.2735],
+  "El Rancho":[15.8840,-61.3120],"Caraïbes Parachutisme":[16.2575,-61.2625],
+  "Gwada Expérience":[16.2280,-61.7800],"Canopée":[16.1720,-61.7815]
+};
+function cle(dico,titre){
+  const t=String(titre||'');
+  const k=Object.keys(dico).filter(k=>t.startsWith(k)).sort((a,b)=>b.length-a.length)[0];
+  return k?dico[k]:null;
+}
+const emojiRubrique=r=>(RUBRIQUES.find(x=>x[0]===r)||[])[2]||'📍';
+const emojiDe=f=>f.Emoji||cle(EMOJIS,f.Titre)||emojiRubrique(f.Rubrique);
+function positionDe(f){
+  const g=String(f.GPS||'').match(/(-?\d+(?:\.\d+)?)\s*[,;]\s*(-?\d+(?:\.\d+)?)/);
+  return g?[parseFloat(g[1]),parseFloat(g[2])]:cle(POSITIONS,f.Titre);
+}
 const URGENCES=['15','17','18','112'];
 
 const DONNEES_SECOURS = `Rubrique,Ordre,Titre,Titre EN,Lieu,Texte,Texte EN,Téléphone,Site web,Email,Afficher
@@ -259,17 +339,20 @@ function render(){
   const connues=noms.filter(n=>FICHES.some(f=>f.Rubrique===n));
   const autres=[...new Set(FICHES.map(f=>f.Rubrique))].filter(n=>n&&!noms.includes(n));
   const sections=[...connues,...autres];
+  const surCarte=FICHES.filter(f=>!['Bienvenue','Infos pratiques','Numéros utiles','Bien-être'].includes(f.Rubrique) && positionDe(f));
+  if(surCarte.length){ const i=sections.indexOf('Numéros utiles'); sections.splice(i>=0?i+1:sections.length,0,CARTE); }
   const voulue=decodeURIComponent((location.hash||'').slice(1));
   let actif=Math.max(0,sections.findIndex(s=>s===voulue));
 
   sections.forEach((s,idx)=>{
     const libelle=EN?((RUBRIQUES.find(r=>r[0]===s)||[])[1]||s):s;
     const b=document.createElement('button');
-    b.type='button'; b.textContent=libelle; if(idx===actif) b.className='on';
+    b.type='button'; b.innerHTML=`<span class="e">${emojiRubrique(s)}</span>${esc(libelle)}`; if(idx===actif) b.className='on';
     b.onclick=()=>{
       nav.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
       main.querySelectorAll('.sec').forEach(x=>x.classList.remove('on'));
       b.classList.add('on'); document.getElementById('sec-'+idx).classList.add('on');
+      if(s===CARTE) initCarte(surCarte);
       b.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
       history.replaceState(null,'','#'+encodeURIComponent(s));
       const barre=document.querySelector('nav'); const ancre=main.offsetTop-barre.offsetHeight;
@@ -280,12 +363,17 @@ function render(){
     const items=FICHES.filter(f=>f.Rubrique===s).sort((a,c)=>(parseInt(a.Ordre)||999)-(parseInt(c.Ordre)||999));
     const sec=document.createElement('section');
     sec.className='sec'+(idx===actif?' on':''); sec.id='sec-'+idx;
-    let html=`<div class="sec-head"><h2>${esc(libelle)}</h2><div class="rule"></div></div>`;
+    let html=`<div class="sec-head"><h2><span class="e">${emojiRubrique(s)}</span>${esc(libelle)}</h2><div class="rule"></div></div>`;
+    if(s===CARTE){
+      const rubs=[...new Set(surCarte.map(f=>f.Rubrique))];
+      html+=`<div class="filtres" id="filtres"><button type="button" class="on" data-r="">${TXT('Tout','All')}</button>${rubs.map(r=>`<button type="button" data-r="${esc(r)}">${emojiRubrique(r)} ${esc(EN?((RUBRIQUES.find(x=>x[0]===r)||[])[1]||r):r)}</button>`).join('')}</div><div id="carte"></div><p class="carte-note">${TXT('🏨 = l\'hôtel. Touchez un point pour voir l\'itinéraire.','🏨 = the hotel. Tap a pin for directions.')}</p>`;
+      sec.innerHTML=html; main.appendChild(sec); return;
+    }
     items.forEach(f=>{
       const titre=champ(f,'Titre'), texte=champ(f,'Texte'), tel=f['Téléphone'], site=f['Site web'], mail=f.Email, lieu=f.Lieu;
       if(s==='Numéros utiles'){
         const urg=URGENCES.includes(String(tel).trim());
-        html+=`<div class="num${urg?' urgent':''}"><div><div class="nm">${esc(titre)}</div>${lieu?`<div class="lieu">${esc(lieu)}</div>`:''}${texte?`<p style="font-size:13px;color:var(--ink-soft);margin-top:4px">${esc(texte)}</p>`:''}</div>${tel?`<a href="${esc(telHref(tel))}">${IC.tel}${esc(tel)}</a>`:''}</div>`;
+        html+=`<div class="num${urg?' urgent':''}"><div class="gauche"><span class="emo">${emojiDe(f)}</span><div><div class="nm">${esc(titre)}</div>${lieu?`<div class="lieu">${esc(lieu)}</div>`:''}${texte?`<p style="font-size:13px;color:var(--ink-soft);margin-top:4px">${esc(texte)}</p>`:''}</div></div>${tel?`<a href="${esc(telHref(tel))}">${IC.tel}${esc(tel)}</a>`:''}</div>`;
         return;
       }
       let act='';
@@ -293,12 +381,56 @@ function render(){
       if(site) act+=`<a href="${esc(siteHref(site))}" target="_blank" rel="noopener">${IC.web}${esc(TXT('Site web','Website'))}</a>`;
       if(mail) act+=`<a href="mailto:${esc(mail)}">${IC.mail}Email</a>`;
       if(lieu) act+=`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(titre.split(' – ')[0]+' '+lieu+' Guadeloupe')}" target="_blank" rel="noopener">${IC.map}${esc(TXT('Itinéraire','Directions'))}</a>`;
-      html+=`<div class="fiche"><h3>${esc(titre)}</h3>${lieu?`<div class="lieu">${esc(lieu)}</div>`:''}${texte?`<p>${esc(texte)}</p>`:''}${act?`<div class="actions">${act}</div>`:''}</div>`;
+      html+=`<div class="fiche" id="f-${esc(f.Rubrique)}-${esc(f.Ordre)}"><div class="tete"><span class="emo">${emojiDe(f)}</span><div><h3>${esc(titre)}</h3>${lieu?`<div class="lieu">${esc(lieu)}</div>`:''}</div></div>${texte?`<p>${esc(texte)}</p>`:''}${act?`<div class="actions">${act}</div>`:''}</div>`;
     });
     sec.innerHTML=html;
     main.appendChild(sec);
   });
+  if(sections[actif]===CARTE) initCarte(surCarte);
 }
+
+/* ── Carte ── */
+let MAP=null, COUCHE=null;
+function initCarte(liste){
+  if(typeof L==='undefined') return;
+  if(!MAP){
+    MAP=L.map('carte',{scrollWheelZoom:false,tap:true}).setView(HOTEL,10);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+      maxZoom:18,subdomains:'abcd',
+      attribution:'&copy; OpenStreetMap &copy; CARTO'
+    }).addTo(MAP);
+    L.marker(HOTEL,{icon:L.divIcon({className:'',html:'<div class="pin hotel">🏨</div>',iconSize:[46,46],iconAnchor:[23,23]}),zIndexOffset:1000})
+      .addTo(MAP).bindPopup(`<div class="pop"><b>Le Rayon Vert</b><span>${TXT('Votre hôtel','Your hotel')}</span></div>`);
+    COUCHE=L.layerGroup().addTo(MAP);
+    document.querySelectorAll('#filtres button').forEach(b=>b.onclick=()=>{
+      document.querySelectorAll('#filtres button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      placer(liste,b.dataset.r);
+    });
+    placer(liste,'');
+  }
+  setTimeout(()=>MAP.invalidateSize(),60);
+}
+function placer(liste,filtre){
+  COUCHE.clearLayers();
+  const pts=[HOTEL];
+  liste.filter(f=>!filtre||f.Rubrique===filtre).forEach(f=>{
+    const pos=positionDe(f); pts.push(pos);
+    const titre=champ(f,'Titre');
+    const maps=`https://www.google.com/maps/dir/?api=1&destination=${pos[0]},${pos[1]}`;
+    L.marker(pos,{icon:L.divIcon({className:'',html:`<div class="pin">${emojiDe(f)}</div>`,iconSize:[36,36],iconAnchor:[18,18]})})
+      .addTo(COUCHE)
+      .bindPopup(`<div class="pop"><b>${esc(titre)}</b>${f.Lieu?`<span>${esc(f.Lieu)}</span>`:''}<div class="liens"><a class="go" href="${maps}" target="_blank" rel="noopener">${TXT('Itinéraire','Directions')}</a><a href="#" data-voir="${esc(f.Rubrique)}|${esc(f.Ordre)}">${TXT('Voir la fiche','See details')}</a></div></div>`);
+  });
+  MAP.fitBounds(L.latLngBounds(pts),{padding:[30,30],maxZoom:12});
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-voir]'); if(!a) return;
+  e.preventDefault();
+  const [r,o]=a.dataset.voir.split('|');
+  const btn=[...document.querySelectorAll('nav button')].find(b=>b.textContent.endsWith(EN?((RUBRIQUES.find(x=>x[0]===r)||[])[1]||r):r));
+  if(btn) btn.click();
+  setTimeout(()=>{ const el=document.getElementById(`f-${r}-${o}`); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+});
 
 async function charger(){
   let txt=DONNEES_SECOURS, live=false;
