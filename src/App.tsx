@@ -441,6 +441,22 @@ const dateEcrite = (v: string, lang: 'fr-FR' | 'en-GB') => {
 function RestaurantFormContent() {
   const { status, handleSubmit } = useWeb3Form()
   const [dateResa, setDateResa] = useState('')
+  const [heure, setHeure] = useState('')
+
+  // Déjeuner uniquement vendredi (5), samedi (6) et dimanche (0)
+  const jour = (() => {
+    const [y, m, d] = dateResa.split('-').map(Number)
+    return y && m && d ? new Date(y, m - 1, d).getDay() : null
+  })()
+  const dejeunerOuvert = jour === null || jour === 0 || jour === 5 || jour === 6
+  const estDejeuner = (h: string) => h !== '' && h < '15:00'
+
+  const changerDate = (v: string) => {
+    setDateResa(v)
+    const [y, m, d] = v.split('-').map(Number)
+    const j = y && m && d ? new Date(y, m - 1, d).getDay() : null
+    if (j !== null && j >= 1 && j <= 4 && estDejeuner(heure)) setHeure('')
+  }
 
   if (status === 'success') return <SuccessNote>{t("Demande envoyée ! Confirmation par téléphone ou email sous 24h.", "Request sent! We will confirm by phone or email within 24 hours.")}</SuccessNote>
 
@@ -453,7 +469,7 @@ function RestaurantFormContent() {
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
           <label className={fieldLabel}>Date *</label>
-          <input type="date" required min={TODAY} value={dateResa} onChange={(e) => setDateResa(e.target.value)} className={fieldInput} />
+          <input type="date" required min={TODAY} value={dateResa} onChange={(e) => changerDate(e.target.value)} className={fieldInput} />
           <input type="hidden" name="date" value={dateEcrite(dateResa, 'fr-FR')} />
           {dateResa && (
             <p className="font-sans text-[11px] text-ink-soft mt-1">{dateEcrite(dateResa, EN ? 'en-GB' : 'fr-FR')}</p>
@@ -461,15 +477,15 @@ function RestaurantFormContent() {
         </div>
         <div className={fieldWrap}>
           <label className={fieldLabel}>{t("Heure *", "Time *")}</label>
-          <select name="heure" required className={fieldInput}>
+          <select name="heure" required value={heure} onChange={(e) => setHeure(e.target.value)} className={fieldInput}>
             <option value="">--</option>
-            <optgroup label={t("Déjeuner · vendredi, samedi & dimanche", "Lunch · Friday, Saturday & Sunday")}>
+            {dejeunerOuvert && <optgroup label={t("Déjeuner · vendredi, samedi & dimanche", "Lunch · Friday, Saturday & Sunday")}>
               <option value="11:30">{t("11h30", "11:30 am")}</option>
               <option value="12:00">{t("12h00", "12:00 pm")}</option>
               <option value="12:30">{t("12h30", "12:30 pm")}</option>
               <option value="13:00">{t("13h00", "1:00 pm")}</option>
               <option value="13:30">{t("13h30", "1:30 pm")}</option>
-            </optgroup>
+            </optgroup>}
             <optgroup label={t("Dîner · tous les soirs", "Dinner · every evening")}>
               <option value="18:00">{t("18h00", "6:00 pm")}</option>
               <option value="18:30">{t("18h30", "6:30 pm")}</option>
@@ -479,6 +495,9 @@ function RestaurantFormContent() {
               <option value="20:30">{t("20h30", "8:30 pm")}</option>
             </optgroup>
           </select>
+          {!dejeunerOuvert && (
+            <p className="font-sans text-[11px] text-ink-soft mt-1">{t("Ce jour-là : dîner uniquement", "Dinner only on this day")}</p>
+          )}
         </div>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
