@@ -143,8 +143,8 @@ const rooms = [
     image: A('chambre-standard-jardin.jpg'),
     features: EN ? ['Sea view', 'A/C', 'Private terrace'] : ['Vue mer', 'Clim', 'Terrasse privée'],
     badge: 'Standard · 20 m²',
-    priceRoom: 95,
-    priceHalfBoard: 179,
+    priceRoom: 167,
+    priceHalfBoard: 251,
   },
   {
     key: 'confort',
@@ -154,8 +154,8 @@ const rooms = [
     image: A('chambre-confort-v2.jpg'),
     features: EN ? ['Sea view', 'A/C', 'Large terrace'] : ['Vue mer', 'Clim', 'Grande terrasse'],
     badge: t("Confort · 32 m²", "Comfort · 32 m²"),
-    priceRoom: 120,
-    priceHalfBoard: 204,
+    priceRoom: 187,
+    priceHalfBoard: 271,
   },
   {
     key: 'famille',
@@ -165,8 +165,9 @@ const rooms = [
     image: A('chambre-familiale-terrasse.jpg'),
     features: EN ? ['Sea view', 'A/C', 'Family'] : ['Vue mer', 'Clim', 'Famille'],
     badge: t("Familiale · 50 m²", "Family · 50 m²"),
-    priceRoom: 150,
-    priceHalfBoard: 234,
+    priceRoom: 299,
+    priceHalfBoard: 467,
+    priceNote: t("pour 4 personnes", "for 4 guests"),
   },
 ]
 
@@ -397,9 +398,9 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
           <label className={fieldLabel}><BedDouble size={11} className="inline mr-1" />{t("Chambre", "Room")}</label>
           <select name="chambre" value={presetRoom} onChange={(e) => onPresetRoomChange(e.target.value)} className={fieldInput}>
             <option value="indifferent">{t("Sans préférence", "No preference")}</option>
-            <option value="standard">{t("Standard (~95€/nuit)", "Standard (~€95/night)")}</option>
-            <option value="confort">{t("Confort (~120€/nuit)", "Comfort (~€120/night)")}</option>
-            <option value="famille">{t("Familiale (~150€/nuit)", "Family (~€150/night)")}</option>
+            <option value="standard">{t("Standard (dès 167€/nuit)", "Standard (from €167/night)")}</option>
+            <option value="confort">{t("Confort (dès 187€/nuit)", "Comfort (from €187/night)")}</option>
+            <option value="famille">{t("Familiale (dès 299€/nuit, 4 pers.)", "Family (from €299/night, 4 guests)")}</option>
           </select>
         </div>
         <div className={fieldWrap}>
@@ -430,8 +431,16 @@ function SejourFormContent({ presetRoom, onPresetRoomChange }: { presetRoom: str
   )
 }
 
+// "2026-09-19" → "19 septembre 2026" (sans décalage de fuseau horaire)
+const dateEcrite = (v: string, lang: 'fr-FR' | 'en-GB') => {
+  const [y, m, d] = v.split('-').map(Number)
+  if (!y || !m || !d) return ''
+  return new Date(y, m - 1, d).toLocaleDateString(lang, { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
 function RestaurantFormContent() {
   const { status, handleSubmit } = useWeb3Form()
+  const [dateResa, setDateResa] = useState('')
 
   if (status === 'success') return <SuccessNote>{t("Demande envoyée ! Confirmation par téléphone ou email sous 24h.", "Request sent! We will confirm by phone or email within 24 hours.")}</SuccessNote>
 
@@ -444,7 +453,11 @@ function RestaurantFormContent() {
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
           <label className={fieldLabel}>Date *</label>
-          <input type="date" name="date" required min={TODAY} className={fieldInput} />
+          <input type="date" required min={TODAY} value={dateResa} onChange={(e) => setDateResa(e.target.value)} className={fieldInput} />
+          <input type="hidden" name="date" value={dateEcrite(dateResa, 'fr-FR')} />
+          {dateResa && (
+            <p className="font-sans text-[11px] text-ink-soft mt-1">{dateEcrite(dateResa, EN ? 'en-GB' : 'fr-FR')}</p>
+          )}
         </div>
         <div className={fieldWrap}>
           <label className={fieldLabel}>{t("Heure *", "Time *")}</label>
@@ -1132,6 +1145,9 @@ function RoomCard({ room, index, onSelectRoom }: { room: typeof rooms[number]; i
                 ? <>from €{halfBoard ? room.priceHalfBoard : room.priceRoom} <span className="font-sans text-[11px] text-ink-soft font-normal">/night</span></>
                 : <>dès {halfBoard ? room.priceHalfBoard : room.priceRoom}€ <span className="font-sans text-[11px] text-ink-soft font-normal">/nuit</span></>}
             </p>
+            {room.priceNote && (
+              <p className="font-sans text-[11px] text-ink-soft">{room.priceNote}</p>
+            )}
           </div>
           <a
             href={BOOKING_URL}
