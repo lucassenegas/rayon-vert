@@ -99,6 +99,9 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 .d:last-child{border-bottom:none}
 .d .nm{font-size:16px;font-weight:500;color:var(--ink);line-height:1.3}
 .d .ds{font-size:13.5px;font-weight:300;color:var(--ink-soft);line-height:1.55;margin-top:5px;max-width:52ch}
+.d .acc{font-size:12.5px;font-weight:400;color:var(--gold-dark);line-height:1.5;margin-top:6px;max-width:52ch}
+.d .acc b{font-weight:500}
+.d.off .acc{color:#B6BDBA}
 .d .pr{font-size:16px;font-weight:500;color:var(--forest);white-space:nowrap}
 
 .tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:3px 9px;margin-left:8px;vertical-align:2px}
@@ -436,6 +439,16 @@ let PLATS=[];
 let MODE='manger', ONGLET={manger:null, boire:null}, ONGLET_VIN=null;
 try{ if(/^#(boissons|drinks|boire)$/i.test(location.hash)) MODE='boire'; }catch(e){}
 
+/* Colonne facultative « Accord » (tout à droite du tableur) : plats conseillés,
+   séparés par des virgules. Les noms de plats connus sont traduits en anglais. */
+function accord(p){
+  const cle=Object.keys(p).find(k=>/^accords?\b/i.test(k.trim()));
+  const v=cle?String(p[cle]||'').trim():'';
+  if(!v) return '';
+  const plats=v.split(/[,;]/).map(x=>x.trim()).filter(Boolean)
+    .map(x=>{ if(!EN) return x; const d=PLATS_EN[x]; return d?d[0]:x; });
+  return `<div class="acc">🍽️ <b>${EN?'Pairs with:':'Avec :'}</b> ${esc(plats.join(', '))}</div>`;
+}
 function ligne(p){
   const off=(p.Disponible||'').toUpperCase()==='NON';
   const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(nomBadge(p.Badge))}</span>`:'';
@@ -444,6 +457,7 @@ function ligne(p){
     <div>
       <div class="nm">${esc(nomPlat(p))}${badge}${ep}</div>
       ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}</div>`:''}
+      ${accord(p)}
     </div>
     <div class="pr">${esc(prix(p['Prix (€)']))}</div>
   </div>`;
@@ -558,7 +572,7 @@ function panneauFamille(f,boissons){
   parSection.forEach(x=>{
     html+='<div>';
     if(titres) html+=`<div class="sub-h">${esc(nomSousRubrique(x.s))}</div>`;
-    else if(x.items.some(deuxPrix)) html+=`<p class="note">${EN?'Prices: glass / bottle':'Prix : au verre / à la bouteille'}</p>`;
+    else if(f.id==='vins' && x.items.some(deuxPrix)) html+=`<p class="note">${EN?'Prices: glass / bottle':'Prix : au verre / à la bouteille'}</p>`;
     html+=x.items.map(ligne).join('')+'</div>';
   });
   return html;
@@ -583,7 +597,7 @@ async function charger(){
       if(r.ok){ txt=await r.text(); live=true; }
     }catch(e){}
   }
-  PLATS=fusionner(parseCSV(txt));
+  PLATS=fusionner(parseCSV(txt)).filter(p=>(p['Nom du plat']||'').trim());
   render();
   const e=document.getElementById('etat');
   if(live){ e.style.display='none'; }
