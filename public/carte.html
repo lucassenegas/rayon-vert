@@ -59,6 +59,15 @@ h1{font-family:'Chewy',cursive;font-weight:400;font-size:50px;line-height:1.05;c
 .info .vl{font-size:14px;color:var(--forest-dark);line-height:1.5}
 .info .vl b{font-weight:500}
 
+/* Bascule À manger / À boire */
+.mode{display:none;justify-content:center;margin-top:30px;padding:0 20px}
+.mode.on{display:flex}
+.mode-in{display:inline-flex;background:var(--cream-soft);border:1px solid var(--cream-dark);border-radius:999px;padding:5px;gap:4px}
+.mode button{font-family:'Chewy',cursive;font-weight:400;font-size:21px;letter-spacing:.01em;background:transparent;color:var(--ink-soft);border:0;border-radius:999px;padding:10px 30px;cursor:pointer;transition:all .3s}
+.mode button:hover{color:var(--forest-dark)}
+.mode button.on{background:var(--forest-dark);color:#fff;box-shadow:0 6px 16px rgba(1,69,57,.26)}
+.mode.on + nav{margin-top:18px}
+
 nav{position:sticky;top:0;z-index:30;background:rgba(250,245,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--cream-dark);padding:12px 0;margin-top:30px}
 .nav-in{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0 20px;max-width:820px;margin:0 auto}
 nav button{font:inherit;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;background:var(--cream-soft);color:var(--ink-soft);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;transition:all .3s}
@@ -74,6 +83,17 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 .sec-head{padding:38px 0 6px}
 .sec-head h2{font-family:'Chewy',cursive;font-weight:400;font-size:34px;line-height:1.15;color:var(--forest-dark)}
 .sec-head .rule{width:56px;height:3px;background:var(--gold);border-radius:999px;margin-top:14px}
+
+/* Boissons : sous-rubriques d'une famille et sous-onglets des vins */
+.sub-h{font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);padding:30px 0 4px;border-bottom:1px solid var(--cream-dark)}
+.sub-h:first-child{padding-top:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 4px}
+.chips button{font:inherit;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;background:transparent;color:var(--ink-soft);border:1px solid var(--cream-dark);border-radius:999px;padding:8px 16px;cursor:pointer;transition:all .3s}
+.chips button:hover{border-color:var(--gold);color:var(--forest-dark)}
+.chips button.on{background:rgba(191,137,59,.16);border-color:var(--gold);color:var(--gold-dark)}
+.note{font-size:12px;color:var(--ink-soft);padding-top:12px}
+.sub{display:none}
+.sub.on{display:block}
 
 .d{display:flex;align-items:baseline;justify-content:space-between;gap:18px;padding:17px 0;border-bottom:1px solid var(--cream-dark)}
 .d:last-child{border-bottom:none}
@@ -129,6 +149,9 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
   .d{gap:12px}
   .d .nm{font-size:15px}
   .d .pr{font-size:15px}
+  .mode button{font-size:18px;padding:9px 22px}
+  .chips{gap:6px}
+  .chips button{font-size:10px;letter-spacing:.06em;padding:7px 11px}
 }
 </style>
 </head>
@@ -152,6 +175,10 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
   </div>
 </div>
 
+<div class="mode" id="mode"><div class="mode-in">
+  <button type="button" data-mode="manger" class="on" data-en="To eat">À manger</button>
+  <button type="button" data-mode="boire" data-en="To drink">À boire</button>
+</div></div>
 <nav><div class="nav-in" id="nav"></div></nav>
 <main id="main"></main>
 
@@ -268,6 +295,40 @@ function descPlat(p){
   const d=PLATS_EN[(p['Nom du plat']||'').trim()];
   return (d && d[2] && norm(d[1])===norm(p.Description)) ? d[2] : p.Description;
 }
+/* ── Boissons ─────────────────────────────────────────────────────────
+   Les boissons vivent dans le même onglet du tableur que les plats.
+   Leur colonne Section prend l'une des sous-rubriques ci-dessous ; la page
+   les range d'elle-même dans 4 familles. La correspondance ignore majuscules,
+   accents, pluriels et « Nos » : « Vins rosé », « vins rosés » ou « Rosés »
+   ne sont pas confondus avec autre chose et tombent bien dans Vins rosés. */
+const FAMILLES_BOISSONS=[
+  {id:'cocktails', fr:'Cocktails',            en:'Cocktails',           sections:['Nos cocktails signatures','Les intemporels','Mocktails']},
+  {id:'rhums',     fr:'Rhums & spiritueux',   en:'Rum & spirits',       sections:['Nos rhums','Alcools & digestifs']},
+  {id:'vins',      fr:'Vins',                 en:'Wines',               sections:['Vins rouges','Vins blancs','Vins rosés','Nos bulles'], onglets:true},
+  {id:'frais',     fr:'Bières & sans alcool', en:'Beers & soft drinks', sections:['Bières','Nos softs','Boissons chaudes']}
+];
+const SOUS_RUBRIQUES_EN={"Nos cocktails signatures":"Our signature cocktails","Les intemporels":"The timeless classics","Mocktails":"Mocktails · alcohol-free","Nos rhums":"Our rums","Alcools & digestifs":"Spirits & digestifs","Vins rouges":"Red wines","Vins blancs":"White wines","Vins rosés":"Rosé wines","Nos bulles":"Sparkling","Bières":"Beers","Nos softs":"Soft drinks","Boissons chaudes":"Hot drinks"};
+const ONGLETS_VINS={"Vins rouges":["Rouges","Red"],"Vins blancs":["Blancs","White"],"Vins rosés":["Rosés","Rosé"],"Nos bulles":["Bulles","Sparkling"]};
+const cleSection=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
+  .replace(/&/g,' et ').replace(/^\s*(nos|les)\s+/,'').split(/\s+/).filter(Boolean)
+  .map(m=>m.replace(/(s|x)$/,'')).join(' ');
+const SECTION_BOISSON={};   /* clé normalisée → {famille, nom officiel} */
+FAMILLES_BOISSONS.forEach(f=>f.sections.forEach(s=>{
+  SECTION_BOISSON[cleSection(s)]={famille:f.id,section:s};
+  if(ONGLETS_VINS[s]) SECTION_BOISSON[cleSection(ONGLETS_VINS[s][0])]={famille:f.id,section:s};
+}));
+SECTION_BOISSON[cleSection('Cocktails signatures')]={famille:'cocktails',section:'Nos cocktails signatures'};
+SECTION_BOISSON[cleSection('Signatures')]={famille:'cocktails',section:'Nos cocktails signatures'};
+SECTION_BOISSON[cleSection('Intemporels')]={famille:'cocktails',section:'Les intemporels'};
+SECTION_BOISSON[cleSection('Cocktails intemporels')]={famille:'cocktails',section:'Les intemporels'};
+SECTION_BOISSON[cleSection('Softs')]={famille:'frais',section:'Nos softs'};
+SECTION_BOISSON[cleSection('Bulles')]={famille:'vins',section:'Nos bulles'};
+SECTION_BOISSON[cleSection('Rhums')]={famille:'rhums',section:'Nos rhums'};
+const infoBoisson=p=>SECTION_BOISSON[cleSection(p.Section)]||null;
+const nomFamille=f=>EN?f.en:f.fr;
+const SOUS_RUBRIQUES_FR={"Mocktails":"Mocktails · sans alcool"};
+const nomSousRubrique=s=>EN?(SOUS_RUBRIQUES_EN[s]||s):(SOUS_RUBRIQUES_FR[s]||s);
+
 const nomSection=s=>EN?(SECTIONS_EN[s]||s):s;
 const nomBadge=b=>EN?(BADGES_EN[norm(b)]||b):b;
 
@@ -355,69 +416,162 @@ function parseCSV(txt){
 
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-function prix(v){
-  if(!v) return '';
-  const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));
-  if(isNaN(n)) return (EN && norm(v)==='sur demande') ? 'On request' : v;
+function prixSimple(v){
+  const n=parseFloat(String(v).replace(/\s/g,'').replace('€','').replace(',','.'));
+  if(isNaN(n)) return (EN && norm(v)==='sur demande') ? 'On request' : String(v).trim();
   return EN ? '€'+n.toFixed(2) : n.toFixed(2).replace('.',',')+' €';
 }
+/* « 6 / 28 » = deux prix (verre / bouteille), chacun mis en forme */
+function prix(v){
+  if(!v) return '';
+  const parts=String(v).split('/').map(x=>x.trim()).filter(Boolean);
+  return parts.length>1 ? parts.map(prixSimple).join(' / ') : prixSimple(v);
+}
+const deuxPrix=p=>String(p['Prix (€)']||'').includes('/');
 
 let PLATS=[];
+/* État de l'affichage, conservé quand la carte se recharge toute seule */
+let MODE='manger', ONGLET={manger:null, boire:null}, ONGLET_VIN=null;
+try{ if(/^#(boissons|drinks|boire)$/i.test(location.hash)) MODE='boire'; }catch(e){}
+
+function ligne(p){
+  const off=(p.Disponible||'').toUpperCase()==='NON';
+  const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(nomBadge(p.Badge))}</span>`:'';
+  const ep=off?`<span class="tag t-epuise">${EN?'Sold out':'Épuisé'}</span>`:'';
+  return `<div class="d${off?' off':''}">
+    <div>
+      <div class="nm">${esc(nomPlat(p))}${badge}${ep}</div>
+      ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}</div>`:''}
+    </div>
+    <div class="pr">${esc(prix(p['Prix (€)']))}</div>
+  </div>`;
+}
+function trier(items){
+  return items.sort((a,c)=>{
+    const oa=parseInt(a.Ordre)||999, oc=parseInt(c.Ordre)||999;
+    return oa!==oc ? oa-oc : (a['Nom du plat']||'').localeCompare(c['Nom du plat']||'');
+  });
+}
 
 function render(){
   const nav=document.getElementById('nav'), main=document.getElementById('main');
   nav.innerHTML=''; main.innerHTML='';
 
-  const connues=ORDRE_SECTIONS.filter(s=>PLATS.some(p=>p.Section===s));
-  const autres=[...new Set(PLATS.map(p=>p.Section))].filter(s=>s&&!ORDRE_SECTIONS.includes(s));
-  const sections=[...connues,...autres];
+  const plats=PLATS.filter(p=>!infoBoisson(p));
+  const boissons=PLATS.filter(p=>infoBoisson(p));
 
-  sections.forEach((s,idx)=>{
+  /* La bascule n'apparaît que lorsqu'il y a des boissons dans le tableur */
+  const aBoissons=boissons.length>0;
+  document.getElementById('mode').classList.toggle('on',aBoissons);
+  if(!aBoissons) MODE='manger';
+  document.querySelectorAll('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.mode===MODE));
+
+  /* Onglets du mode affiché : sections de plats, ou familles de boissons */
+  let onglets=[];
+  if(MODE==='manger'){
+    const connues=ORDRE_SECTIONS.filter(s=>plats.some(p=>p.Section===s));
+    const autres=[...new Set(plats.map(p=>p.Section))].filter(s=>s&&!ORDRE_SECTIONS.includes(s));
+    onglets=[...connues,...autres].map(s=>({id:'s:'+s, nom:nomSection(s), html:panneauPlats(s,plats)}));
+  } else {
+    onglets=FAMILLES_BOISSONS
+      .filter(f=>boissons.some(p=>infoBoisson(p).famille===f.id))
+      .map(f=>({id:'f:'+f.id, nom:nomFamille(f), html:panneauFamille(f,boissons)}));
+  }
+  if(!onglets.some(o=>o.id===ONGLET[MODE])) ONGLET[MODE]=onglets[0]?onglets[0].id:null;
+
+  onglets.forEach((o,idx)=>{
+    const actif=o.id===ONGLET[MODE];
     const b=document.createElement('button');
-    b.textContent=nomSection(s);
-    b.className=idx===0?'on':'';
+    b.textContent=o.nom;
+    b.className=actif?'on':'';
     b.onclick=()=>{
+      ONGLET[MODE]=o.id;
       nav.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
       main.querySelectorAll('.sec').forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
       document.getElementById('sec-'+idx).classList.add('on');
-      /* on ne remonte pas en haut de page : on cale juste la barre d'onglets
-         en haut de l'écran, et seulement si on est déjà descendu plus bas */
-      const barre=document.querySelector('nav');
-      const ancre=main.offsetTop-barre.offsetHeight;
-      if(window.scrollY>ancre) window.scrollTo({top:ancre,behavior:'instant'});
+      caler();
     };
     nav.appendChild(b);
 
-    const items=PLATS.filter(p=>p.Section===s).sort((a,c)=>{
-      const oa=parseInt(a.Ordre)||999, oc=parseInt(c.Ordre)||999;
-      return oa!==oc ? oa-oc : (a['Nom du plat']||'').localeCompare(c['Nom du plat']||'');
-    });
-
     const sec=document.createElement('section');
-    sec.className='sec'+(idx===0?' on':'');
+    sec.className='sec'+(actif?' on':'');
     sec.id='sec-'+idx;
-    let html=`<div class="sec-head"><h2>${esc(nomSection(s))}</h2><div class="rule"></div></div>`;
-    if(!items.length) html+=`<div class="empty">${EN?'No dishes in this section at the moment.':'Aucun plat dans cette section pour le moment.'}</div>`;
-    items.forEach(p=>{
-      const off=(p.Disponible||'').toUpperCase()==='NON';
-      const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(nomBadge(p.Badge))}</span>`:'';
-      const ep=off?`<span class="tag t-epuise">${EN?'Sold out':'Épuisé'}</span>`:'';
-      html+=`<div class="d${off?' off':''}">
-        <div>
-          <div class="nm">${esc(nomPlat(p))}${badge}${ep}</div>
-          ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}</div>`:''}
-        </div>
-        <div class="pr">${esc(prix(p['Prix (€)']))}</div>
-      </div>`;
-    });
-    sec.innerHTML=html;
+    sec.innerHTML=o.html;
     main.appendChild(sec);
   });
 
-  const dispo=PLATS.filter(p=>(p.Disponible||'').toUpperCase()!=='NON').length;
+  /* Sous-onglets des vins */
+  main.querySelectorAll('.chips button').forEach(b=>{
+    b.onclick=()=>{
+      ONGLET_VIN=b.dataset.s;
+      const fam=b.closest('.sec');
+      fam.querySelectorAll('.chips button').forEach(x=>x.classList.toggle('on',x===b));
+      fam.querySelectorAll('.sub').forEach(x=>x.classList.toggle('on',x.dataset.s===b.dataset.s));
+    };
+  });
+
+  const dispo=plats.filter(p=>(p.Disponible||'').toUpperCase()!=='NON').length;
   document.getElementById('stamp').textContent=EN?`${dispo} dishes on the menu`:`${dispo} plats à la carte`;
 }
+
+/* on ne remonte pas en haut de page : on cale juste la barre d'onglets
+   en haut de l'écran, et seulement si on est déjà descendu plus bas */
+function caler(){
+  const barre=document.querySelector('nav'), main=document.getElementById('main');
+  const ancre=main.offsetTop-barre.offsetHeight;
+  if(window.scrollY>ancre) window.scrollTo({top:ancre,behavior:'instant'});
+}
+
+function panneauPlats(s,plats){
+  const items=trier(plats.filter(p=>p.Section===s));
+  let html=`<div class="sec-head"><h2>${esc(nomSection(s))}</h2><div class="rule"></div></div>`;
+  if(!items.length) html+=`<div class="empty">${EN?'No dishes in this section at the moment.':'Aucun plat dans cette section pour le moment.'}</div>`;
+  items.forEach(p=>{ html+=ligne(p); });
+  return html;
+}
+
+function panneauFamille(f,boissons){
+  const parSection=f.sections
+    .map(s=>({s, items:trier(boissons.filter(p=>infoBoisson(p).section===s))}))
+    .filter(x=>x.items.length);
+  let html=`<div class="sec-head"><h2>${esc(nomFamille(f))}</h2><div class="rule"></div></div>`;
+
+  if(f.onglets && parSection.length>1){
+    if(!parSection.some(x=>x.s===ONGLET_VIN)) ONGLET_VIN=parSection[0].s;
+    html+='<div class="chips">'+parSection.map(x=>
+      `<button type="button" data-s="${esc(x.s)}" class="${x.s===ONGLET_VIN?'on':''}">${esc(ONGLETS_VINS[x.s][EN?1:0])}</button>`
+    ).join('')+'</div>';
+    if(parSection.some(x=>x.items.some(deuxPrix)))
+      html+=`<p class="note">${EN?'Prices: glass / bottle':'Prix : au verre / à la bouteille'}</p>`;
+    parSection.forEach(x=>{
+      html+=`<div class="sub${x.s===ONGLET_VIN?' on':''}" data-s="${esc(x.s)}">`+x.items.map(ligne).join('')+'</div>';
+    });
+    return html;
+  }
+
+  /* Plusieurs sous-rubriques : un sous-titre doré pour chacune.
+     Une seule : pas de sous-titre, le titre de la famille suffit. */
+  const titres=parSection.length>1;
+  parSection.forEach(x=>{
+    html+='<div>';
+    if(titres) html+=`<div class="sub-h">${esc(nomSousRubrique(x.s))}</div>`;
+    else if(x.items.some(deuxPrix)) html+=`<p class="note">${EN?'Prices: glass / bottle':'Prix : au verre / à la bouteille'}</p>`;
+    html+=x.items.map(ligne).join('')+'</div>';
+  });
+  return html;
+}
+
+/* Bascule À manger / À boire */
+document.querySelectorAll('#mode button').forEach(b=>{
+  b.onclick=()=>{
+    if(MODE===b.dataset.mode) return;
+    MODE=b.dataset.mode;
+    try{ history.replaceState(null,'',MODE==='boire'?'#boissons':location.pathname+location.search); }catch(e){}
+    render();
+    caler();
+  };
+});
 
 async function charger(){
   let txt=DONNEES_SECOURS, live=false;
