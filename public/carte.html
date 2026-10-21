@@ -106,7 +106,7 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 
 .tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:3px 9px;margin-left:8px;vertical-align:2px}
 .t-nouveau{background:var(--forest-pale);color:var(--forest-dark)}
-.t-suggestion,.t-spécialité{background:rgba(191,137,59,.16);color:var(--gold-dark)}
+.t-suggestion,.t-spécialité,.t-coeur{background:rgba(191,137,59,.16);color:var(--gold-dark)}
 .t-végé{background:transparent;color:var(--forest-dark);box-shadow:inset 0 0 0 1px var(--forest-light)}
 .t-epuise{background:var(--cream-dark);color:var(--ink-soft)}
 
@@ -269,12 +269,14 @@ const PLATS_EN={
 "Chatrou grillé":["Grilled octopus (chatrou)","Marinade créole, citron vert, légumes du marché, sauce vierge aux herbes","Creole marinade, lime, market vegetables, herb sauce vierge"],
 "Moules frites à la crème":["Mussels in cream with fries","Moules fraîches, crème, échalotes, persil","Fresh mussels, cream, shallots, parsley"],
 "Langouste grillée à la créole":["Creole grilled spiny lobster","Riz et légumes · selon arrivage","Rice and vegetables · subject to availability"],
-"Salade de fruits de saison":["Seasonal fruit salad","Mangue, ananas, banane, maracuja, citron vert, menthe fraîche, sucre de canne","Mango, pineapple, banana, passion fruit, lime, fresh mint, cane sugar"],
+"Salade de fruits de saison":["Seasonal fruit salad","Fruits de saison","Seasonal fruit"],
+"Fruits de saison au rhum vieux":["Seasonal fruit with aged rum","Fruits de saison & 2 cl de rhum vieux","Seasonal fruit & 2 cl aged rum"],
+"Assiette créole pour 2 personnes":["Creole platter for 2","Poisson fumé, rillettes de la mer, thon à la tahitienne, accras, boudin antillais et crudités","Smoked fish, seafood rillettes, Tahitian-style tuna, accras, West Indian boudin and crudités"],
 "Fruits de saison au rhum":["Seasonal fruit with rum","Mangue, ananas, banane flambée, sucre de canne, rhum vieux, zeste de citron vert","Mango, pineapple, flambéed banana, cane sugar, aged rum, lime zest"],
 "Moelleux au chocolat":["Chocolate fondant","Sauce chocolat, 1 boule vanille","Chocolate sauce, 1 scoop of vanilla"],
 "Profiteroles au chocolat":["Chocolate profiteroles","Glace vanille et sauce chocolat chaude","Vanilla ice cream and hot chocolate sauce"],
 "Café ou thé gourmand":["Coffee or tea with mini desserts","4 mini-desserts et boisson chaude","4 mini desserts and a hot drink"],
-"Gaufre":["Waffle","Sauce chocolat, caramel beurre salé ou chantilly","Chocolate sauce, salted caramel or whipped cream"],
+"Gaufre":["Waffle","Nappage chocolat, caramel beurre salé ou chantilly","Chocolate, salted caramel or whipped cream topping"],
 "Passion des îles":["Island passion","Mangue, passion, acerola, fruits rouges, chantilly","Mango, passion fruit, acerola, red berries, whipped cream"],
 "Chocolat liégeois":["Chocolate liégeois","Rhum raisin, sauce chocolat, chantilly","Rum and raisin, chocolate sauce, whipped cream"],
 "Coco Kiss":["Coco Kiss","Vanille pacane, coco, sauce chocolat, chantilly","Vanilla pecan, coconut, chocolate sauce, whipped cream"],
@@ -286,15 +288,77 @@ const PLATS_EN={
 "Pirate":["Pirate","Rhum raisin, vanille pacane, 2 cl rhum vieux","Rum and raisin, vanilla pecan, 2 cl aged rum"]
 };
 const norm=v=>String(v||'').trim().toLowerCase();
+/* ── Traduction anglaise des boissons ────────────────────────────────
+   Par glossaire, pour suivre les modifications du tableur sans retouche :
+   1. nom exact connu (sans tenir compte des majuscules) ;
+   2. sinon, chaque morceau de texte (séparé par , / - :) est cherché dans
+      le glossaire, puis les mots courants sont traduits un à un.
+   Ce qui n'est pas reconnu (marques, domaines, appellations) reste tel quel.
+   Les colonnes « Nom EN » / « Description EN » du tableur restent prioritaires. */
+const BOISSONS_NOMS_EN={
+  "planteur":"Planteur (planter's punch)","planteur sans alcool":"Alcohol-free planteur",
+  "sodas":"Soft drinks","jus de fruits":"Fruit juice","eau plate":"Still water","eau gazeuse":"Sparkling water",
+  "sirop à l'eau":"Cordial with water","expresso":"Espresso","allongé":"Long black","petit crème":"Small white coffee",
+  "grand crème":"Large white coffee","thé / infusion":"Tea / herbal tea","chocolat chaud":"Hot chocolate",
+  "café viennois":"Viennese coffee","créole coffee":"Creole coffee","citronnade":"Homemade lemonade",
+  "délice ananas":"Pineapple delight","douceur des îles":"Island sweetness",
+  "rhum blanc sec":"White rum, neat","rhum vieux sec":"Aged rum, neat","ti-punch gingembre":"Ginger ti-punch",
+  "ti-punch vieux miel":"Aged rum & honey ti-punch","punch coco":"Coconut punch",
+  "martini rouge":"Martini Rosso","martini blanc":"Martini Bianco","bière sans alcool":"Alcohol-free beer"
+};
+const BOISSONS_MORCEAUX_EN={
+  "vin pétillant":"sparkling wine","eau gazeuse":"sparkling water","citron vert":"lime","rhum blanc":"white rum",
+  "rhum vieux":"aged rum","menthe":"mint","sucre de canne":"cane sugar","sirop de canne":"cane syrup","crème de coco":"coconut cream",
+  "jus d'ananas":"pineapple juice","jus de fruits":"fruit juice","mélange de jus de fruits":"blend of fruit juices",
+  "épices":"spices","jus de maracuja":"passion fruit juice","jus de passion":"passion fruit juice","d'orange":"orange juice",
+  "jus de citron vert":"lime juice","liqueur de vanille":"vanilla liqueur","café allongé":"long black coffee",
+  "chantilly":"whipped cream","café":"coffee","eau":"water","citron":"lemon","sucre":"sugar","banane":"banana",
+  "glace coco":"coconut ice cream","glaco coco":"coconut ice cream","ananas frais":"fresh pineapple",
+  "purée de mangue":"mango purée","purée de fraise":"strawberry purée","voir au bar":"ask at the bar",
+  "fluide":"smooth","léger et peu tannique":"light and low in tannins","rondeur et finesse":"round and elegant",
+  "sauvignon et chardonnay":"Sauvignon & Chardonnay","vallée de la loire":"Loire Valley","bière 0%":"0% beer",
+  "coca zéro":"Coke Zero"
+};
+const BOISSONS_MOTS_EN={"ananas":"pineapple","passion":"passion fruit","piment":"chilli","coco":"coconut",
+  "vanille":"vanilla","goyave":"guava","menthe":"mint","banane":"banana","café":"coffee","chantilly":"whipped cream"};
+const BOISSONS_REGEX_EN=[
+  [/vin au verre/gi,'Wine by the glass'],[/bière pression/gi,'Draught beer'],[/bière bouteille/gi,'Bottled beer'],
+  [/punch maison/gi,'Homemade punch'],[/\b[Bb]londe\s+([\wÀ-ÿ-]+)/g,'$1 lager'],[/Vallée de la Loire/g,'Loire Valley'],[/\bBourgogne\b/g,'Burgundy'],
+  [/\s+Bio\b/g,' (organic)'],[/\s+et\s+/g,' & '],[/(\d),(\d)/g,'$1.$2']
+];
+const majuscule=(src,t)=>/^[A-ZÀ-Ý]/.test(src)?t.charAt(0).toUpperCase()+t.slice(1):t;
+function trMorceau(m,premier){
+  const cle=norm(m);
+  const e=BOISSONS_MORCEAUX_EN[cle];
+  if(e) return premier ? e.charAt(0).toUpperCase()+e.slice(1) : e;
+  let t=m;
+  BOISSONS_REGEX_EN.forEach(([re,r])=>{ t=t.replace(re,r); });
+  t=t.replace(/[\p{L}'-]+/gu,w=>{ const e=BOISSONS_MOTS_EN[w.toLowerCase()]; return e?majuscule(w,e):w; });
+  return t;
+}
+function trNomBoisson(nom){
+  const n=String(nom||'').trim();
+  if(BOISSONS_NOMS_EN[norm(n)]) return BOISSONS_NOMS_EN[norm(n)];
+  let t=n; BOISSONS_REGEX_EN.forEach(([re,r])=>{ t=t.replace(re,r); });
+  return t;
+}
+function trDescBoisson(d){
+  const s=String(d||'').trim();
+  if(!s) return s;
+  return s.split(/(\s*,\s+|\s+\/\s+|\s+-\s+|\s+:\s+)/).map((m,i)=>i%2?m.replace(/\s+:\s+/,': '):trMorceau(m,i===0)).join('');
+}
+
 function nomPlat(p){
   if(!EN) return p['Nom du plat'];
   if(p['Nom EN']) return p['Nom EN'];
+  if(infoBoisson(p)) return trNomBoisson(p['Nom du plat']);
   const d=PLATS_EN[(p['Nom du plat']||'').trim()];
   return d?d[0]:p['Nom du plat'];
 }
 function descPlat(p){
   if(!EN) return p.Description;
   if(p['Description EN']) return p['Description EN'];
+  if(infoBoisson(p)) return trDescBoisson(p.Description);
   const d=PLATS_EN[(p['Nom du plat']||'').trim()];
   return (d && d[2] && norm(d[1])===norm(p.Description)) ? d[2] : p.Description;
 }
@@ -335,7 +399,9 @@ const SOUS_RUBRIQUES_FR={"Mocktails":"Mocktails · sans alcool","Eaux & softs":"
 const nomSousRubrique=s=>EN?(SOUS_RUBRIQUES_EN[s]||s):(SOUS_RUBRIQUES_FR[s]||s);
 
 const nomSection=s=>EN?(SECTIONS_EN[s]||s):s;
-const nomBadge=b=>EN?(BADGES_EN[norm(b)]||b):b;
+const estCoupDeCoeur=b=>/^coup\s*de/i.test(String(b||'').trim());
+const nomBadge=b=>estCoupDeCoeur(b)?(EN?'Our favourite ❤️':'Coup de ❤️'):(EN?(BADGES_EN[norm(b)]||b):b);
+const classeBadge=b=>estCoupDeCoeur(b)?'coeur':String(b).toLowerCase().replace(/\s+/g,'-');
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbeWNzrRtMOdtqJR-EUO7fk1XJeJeOvGiKLNmOR1IhT1lCgzZP6rGEGZqDJOsGPWNAWms0WMdEczbE/pub?gid=1933963057&single=true&output=csv";
 
@@ -445,13 +511,15 @@ function accord(p){
   const cle=Object.keys(p).find(k=>/^accords?\b/i.test(k.trim()));
   const v=cle?String(p[cle]||'').trim():'';
   if(!v) return '';
-  const plats=v.split(/[,;]/).map(x=>x.trim()).filter(Boolean)
-    .map(x=>{ if(!EN) return x; const d=PLATS_EN[x]; return d?d[0]:x; });
+  const plats=v.split(/[,;]/).map(x=>x.trim()).filter(Boolean).map(x=>{
+    const plat=PLATS.find(q=>!infoBoisson(q) && norm(q['Nom du plat'])===norm(x));
+    return plat ? nomPlat(plat) : x;
+  });
   return `<div class="acc">🍽️ <b>${EN?'Pairs with:':'Avec :'}</b> ${esc(plats.join(', '))}</div>`;
 }
 function ligne(p){
   const off=(p.Disponible||'').toUpperCase()==='NON';
-  const badge=p.Badge?`<span class="tag t-${esc(p.Badge.toLowerCase())}">${esc(nomBadge(p.Badge))}</span>`:'';
+  const badge=p.Badge?`<span class="tag t-${esc(classeBadge(p.Badge))}">${esc(nomBadge(p.Badge))}</span>`:'';
   const ep=off?`<span class="tag t-epuise">${EN?'Sold out':'Épuisé'}</span>`:'';
   return `<div class="d${off?' off':''}">
     <div>
