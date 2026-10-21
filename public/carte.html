@@ -302,12 +302,13 @@ function descPlat(p){
    accents, pluriels et « Nos » : « Vins rosé », « vins rosés » ou « Rosés »
    ne sont pas confondus avec autre chose et tombent bien dans Vins rosés. */
 const FAMILLES_BOISSONS=[
-  {id:'cocktails', fr:'Cocktails',            en:'Cocktails',           sections:['Nos cocktails signatures','Les intemporels','Mocktails']},
-  {id:'rhums',     fr:'Rhums & spiritueux',   en:'Rum & spirits',       sections:['Nos rhums','Alcools & digestifs']},
-  {id:'vins',      fr:'Vins',                 en:'Wines',               sections:['Vins rouges','Vins blancs','Vins rosés','Nos bulles'], onglets:true},
-  {id:'frais',     fr:'Bières & sans alcool', en:'Beers & soft drinks', sections:['Bières','Nos softs','Boissons chaudes']}
+  {id:'softs',     emoji:'🥤', fr:'Eaux & softs',        en:'Water & soft drinks', sections:['Eaux & softs','Boissons chaudes']},
+  {id:'cocktails', emoji:'🍹', fr:'Cocktails',           en:'Cocktails',           sections:['Nos cocktails signatures','Les intemporels','Mocktails']},
+  {id:'rhums',     emoji:'🥃', fr:'Rhums & spiritueux',  en:'Rum & spirits',       sections:['Nos rhums','Alcools & digestifs']},
+  {id:'vins',      emoji:'🍷', fr:'Vins',                en:'Wines',               sections:['Vins rouges','Vins blancs','Vins rosés','Nos bulles'], onglets:true},
+  {id:'bieres',    emoji:'🍺', fr:'Bières',              en:'Beers',               sections:['Bières']}
 ];
-const SOUS_RUBRIQUES_EN={"Nos cocktails signatures":"Our signature cocktails","Les intemporels":"The timeless classics","Mocktails":"Mocktails · alcohol-free","Nos rhums":"Our rums","Alcools & digestifs":"Spirits & digestifs","Vins rouges":"Red wines","Vins blancs":"White wines","Vins rosés":"Rosé wines","Nos bulles":"Sparkling","Bières":"Beers","Nos softs":"Soft drinks","Boissons chaudes":"Hot drinks"};
+const SOUS_RUBRIQUES_EN={"Nos cocktails signatures":"Our signature cocktails","Les intemporels":"The timeless classics","Mocktails":"Mocktails · alcohol-free","Nos rhums":"Our rums","Alcools & digestifs":"Spirits & digestifs","Vins rouges":"Red wines","Vins blancs":"White wines","Vins rosés":"Rosé wines","Nos bulles":"Sparkling","Bières":"Beers","Eaux & softs":"Cold drinks","Boissons chaudes":"Hot drinks"};
 const ONGLETS_VINS={"Vins rouges":["Rouges","Red"],"Vins blancs":["Blancs","White"],"Vins rosés":["Rosés","Rosé"],"Nos bulles":["Bulles","Sparkling"]};
 const cleSection=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
   .replace(/&/g,' et ').replace(/^\s*(nos|les)\s+/,'').split(/\s+/).filter(Boolean)
@@ -321,12 +322,13 @@ SECTION_BOISSON[cleSection('Cocktails signatures')]={famille:'cocktails',section
 SECTION_BOISSON[cleSection('Signatures')]={famille:'cocktails',section:'Nos cocktails signatures'};
 SECTION_BOISSON[cleSection('Intemporels')]={famille:'cocktails',section:'Les intemporels'};
 SECTION_BOISSON[cleSection('Cocktails intemporels')]={famille:'cocktails',section:'Les intemporels'};
-SECTION_BOISSON[cleSection('Softs')]={famille:'frais',section:'Nos softs'};
+['Softs','Nos softs','Eaux','Eaux et softs','Softs & eaux'].forEach(a=>{SECTION_BOISSON[cleSection(a)]={famille:'softs',section:'Eaux & softs'};});
 SECTION_BOISSON[cleSection('Bulles')]={famille:'vins',section:'Nos bulles'};
 SECTION_BOISSON[cleSection('Rhums')]={famille:'rhums',section:'Nos rhums'};
 const infoBoisson=p=>SECTION_BOISSON[cleSection(p.Section)]||null;
 const nomFamille=f=>EN?f.en:f.fr;
-const SOUS_RUBRIQUES_FR={"Mocktails":"Mocktails · sans alcool"};
+const nomFamilleEmoji=f=>f.emoji+' '+nomFamille(f);
+const SOUS_RUBRIQUES_FR={"Mocktails":"Mocktails · sans alcool","Eaux & softs":"Boissons fraîches"};
 const nomSousRubrique=s=>EN?(SOUS_RUBRIQUES_EN[s]||s):(SOUS_RUBRIQUES_FR[s]||s);
 
 const nomSection=s=>EN?(SECTIONS_EN[s]||s):s;
@@ -475,7 +477,7 @@ function render(){
   } else {
     onglets=FAMILLES_BOISSONS
       .filter(f=>boissons.some(p=>infoBoisson(p).famille===f.id))
-      .map(f=>({id:'f:'+f.id, nom:nomFamille(f), html:panneauFamille(f,boissons)}));
+      .map(f=>({id:'f:'+f.id, nom:nomFamilleEmoji(f), html:panneauFamille(f,boissons)}));
   }
   if(!onglets.some(o=>o.id===ONGLET[MODE])) ONGLET[MODE]=onglets[0]?onglets[0].id:null;
 
@@ -535,7 +537,7 @@ function panneauFamille(f,boissons){
   const parSection=f.sections
     .map(s=>({s, items:trier(boissons.filter(p=>infoBoisson(p).section===s))}))
     .filter(x=>x.items.length);
-  let html=`<div class="sec-head"><h2>${esc(nomFamille(f))}</h2><div class="rule"></div></div>`;
+  let html=`<div class="sec-head"><h2>${esc(nomFamilleEmoji(f))}</h2><div class="rule"></div></div>`;
 
   if(f.onglets && parSection.length>1){
     if(!parSection.some(x=>x.s===ONGLET_VIN)) ONGLET_VIN=parSection[0].s;
