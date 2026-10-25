@@ -438,6 +438,12 @@ const dateEcrite = (v: string, lang: 'fr-FR' | 'en-GB') => {
   return new Date(y, m - 1, d).toLocaleDateString(lang, { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
+// Fermeture du restaurant : réservations bloquées avant cette date (format AAAA-MM-JJ).
+// Pour une prochaine fermeture, changer simplement la date ci-dessous.
+const RESTO_REOUVERTURE = '2026-11-07'
+const RESTO_FERME = TODAY < RESTO_REOUVERTURE
+const RESTO_MIN_DATE = RESTO_FERME ? RESTO_REOUVERTURE : TODAY
+
 function RestaurantFormContent() {
   const { status, handleSubmit } = useWeb3Form()
   const [dateResa, setDateResa] = useState('')
@@ -466,10 +472,16 @@ function RestaurantFormContent() {
       <LangueField />
       <input type="hidden" name="from_name" value="Site Le Rayon Vert" />
       <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+      {RESTO_FERME && (
+        <p className="font-sans text-xs text-center text-deep bg-cream-soft rounded-2xl px-4 py-3">
+          {t(`Le restaurant est actuellement fermé. Réouverture le ${dateEcrite(RESTO_REOUVERTURE, 'fr-FR')} : réservations possibles à partir de cette date.`,
+             `The restaurant is currently closed. Reopening on ${dateEcrite(RESTO_REOUVERTURE, 'en-GB')}: bookings available from that date.`)}
+        </p>
+      )}
       <div className="grid sm:grid-cols-2 gap-4">
         <div className={fieldWrap}>
           <label className={fieldLabel}>Date *</label>
-          <input type="date" required min={TODAY} value={dateResa} onChange={(e) => changerDate(e.target.value)} className={fieldInput} />
+          <input type="date" required min={RESTO_MIN_DATE} value={dateResa} onChange={(e) => changerDate(e.target.value < RESTO_MIN_DATE ? '' : e.target.value)} className={fieldInput} />
           <input type="hidden" name="date" value={dateEcrite(dateResa, 'fr-FR')} />
           {dateResa && (
             <p className="font-sans text-[11px] text-ink-soft mt-1">{dateEcrite(dateResa, EN ? 'en-GB' : 'fr-FR')}</p>
