@@ -92,6 +92,7 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 .chips button:hover{border-color:var(--gold);color:var(--forest-dark)}
 .chips button.on{background:rgba(191,137,59,.16);border-color:var(--gold);color:var(--gold-dark)}
 .note{font-size:12px;color:var(--ink-soft);padding-top:12px}
+.ast{color:var(--gold-dark);font-weight:500;margin-left:2px}
 .sub{display:none}
 .sub.on{display:block}
 
@@ -517,13 +518,19 @@ function accord(p){
   });
   return `<div class="acc">🍽️ <b>${EN?'Pairs with:':'Avec :'}</b> ${esc(plats.join(', '))}</div>`;
 }
+/* Cocktails proposés aussi en version fraise ou passion (+1 €) : un astérisque
+   après le nom, et le renvoi en bas de leur rubrique. */
+const VARIANTES_FRUITS=['mojito','pina colada'];
+const sansAccent=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+const aVariantes=p=>!!infoBoisson(p) && VARIANTES_FRUITS.includes(sansAccent(p['Nom du plat']));
+const noteVariantes=()=>`<p class="note"><span class="ast">*</span> ${EN?'Also available in strawberry or passion fruit (+€1)':'Aussi en version fraise ou passion (+1 €)'}</p>`;
 function ligne(p){
   const off=(p.Disponible||'').toUpperCase()==='NON';
   const badge=p.Badge?`<span class="tag t-${esc(classeBadge(p.Badge))}">${esc(nomBadge(p.Badge))}</span>`:'';
   const ep=off?`<span class="tag t-epuise">${EN?'Sold out':'Épuisé'}</span>`:'';
   return `<div class="d${off?' off':''}">
     <div>
-      <div class="nm">${esc(nomPlat(p))}${badge}${ep}</div>
+      <div class="nm">${esc(nomPlat(p))}${aVariantes(p)?'<span class="ast">*</span>':''}${badge}${ep}</div>
       ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}</div>`:''}
       ${accord(p)}
     </div>
@@ -541,8 +548,10 @@ function render(){
   const nav=document.getElementById('nav'), main=document.getElementById('main');
   nav.innerHTML=''; main.innerHTML='';
 
-  const plats=PLATS.filter(p=>!infoBoisson(p));
-  const boissons=PLATS.filter(p=>infoBoisson(p));
+  /* « NON » dans la colonne Disponible : la ligne n'apparaît pas du tout */
+  const visibles=PLATS.filter(p=>(p.Disponible||'').trim().toUpperCase()!=='NON');
+  const plats=visibles.filter(p=>!infoBoisson(p));
+  const boissons=visibles.filter(p=>infoBoisson(p));
 
   /* La bascule n'apparaît que lorsqu'il y a des boissons dans le tableur */
   const aBoissons=boissons.length>0;
@@ -641,7 +650,9 @@ function panneauFamille(f,boissons){
     html+='<div>';
     if(titres) html+=`<div class="sub-h">${esc(nomSousRubrique(x.s))}</div>`;
     else if(f.id==='vins' && x.items.some(deuxPrix)) html+=`<p class="note">${EN?'Prices: glass / bottle':'Prix : au verre / à la bouteille'}</p>`;
-    html+=x.items.map(ligne).join('')+'</div>';
+    html+=x.items.map(ligne).join('');
+    if(x.items.some(aVariantes)) html+=noteVariantes();
+    html+='</div>';
   });
   return html;
 }
