@@ -1244,7 +1244,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
               <Waves size={18} className="text-forest-dark flex-shrink-0 mt-0.5" />
               <p className="font-sans text-sm text-forest-dark leading-relaxed">
                 <span className="font-medium">{t('Piscine offerte.', 'Pool included.')}</span>{' '}
-                {t("L'accès à la piscine à débordement est inclus pour tous les clients du restaurant, jusqu'à 17h.", 'Access to the infinity pool is free for all restaurant guests, until 5 pm.')}
+                {t("L'accès à la piscine à débordement est inclus pour tous les clients du restaurant, jusqu'à 16h30.", 'Access to the infinity pool is free for all restaurant guests, until 4:30 pm.')}
               </p>
             </motion.div>
 
