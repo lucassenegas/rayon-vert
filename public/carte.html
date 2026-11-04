@@ -93,6 +93,11 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 .chips button.on{background:rgba(191,137,59,.16);border-color:var(--gold);color:var(--gold-dark)}
 .note{font-size:12px;color:var(--ink-soft);padding-top:12px}
 .ast{color:var(--gold-dark);font-weight:500;margin-left:2px}
+.sauces{border:1.5px solid var(--gold);border-radius:14px;padding:12px 16px 13px;margin:16px 0 4px;background:var(--cream-soft)}
+.sc-t{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px}
+.sc-l{display:flex;flex-wrap:wrap;gap:8px 16px}
+.sc-l>span{font-size:14px;font-weight:500;white-space:nowrap}
+.sc-l .alg{margin-left:5px}
 .accomp{font-size:13.5px;color:var(--gold-dark);background:rgba(191,137,59,.11);border-radius:12px;padding:10px 14px;margin:16px 0 2px}
 .accomp b{font-weight:500}
 .alg{display:inline-flex;gap:3px;margin-left:7px;vertical-align:-2px;white-space:nowrap}
@@ -302,6 +307,9 @@ const PLATS_EN={
 };
 /* Plats ajoutés ou décrits autrement dans le tableur depuis la première traduction */
 Object.assign(PLATS_EN,{
+"Glace 1 boule":["1 scoop of ice cream","Vanille, vanille pacane, mangue, passion, chocolat, acerola, rhum raisin, menthe-coco, café, cacahuète, coco","Vanilla, vanilla pecan, mango, passion fruit, chocolate, acerola, rum & raisin, mint-coconut, coffee, peanut, coconut"],
+"Glace 2 boules":["2 scoops of ice cream","Vanille, vanille pacane, mangue, passion, chocolat, acerola, rhum raisin, menthe-coco, café, cacahuète, coco","Vanilla, vanilla pecan, mango, passion fruit, chocolate, acerola, rum & raisin, mint-coconut, coffee, peanut, coconut"],
+"Glace 3 boules":["3 scoops of ice cream","Vanille, vanille pacane, mangue, passion, chocolat, acerola, rhum raisin, menthe-coco, café, cacahuète, coco","Vanilla, vanilla pecan, mango, passion fruit, chocolate, acerola, rum & raisin, mint-coconut, coffee, peanut, coconut"],
 "Poissons fumés & toasts":["Smoked fish & toast","Thon, marlin, espadon, thazard","Tuna, marlin, swordfish, king mackerel"],
 "Duo de boudins antillais":["West Indian boudin duo","Boudin rouge & boudin poisson","Black pudding & fish boudin"],
 "Tataki de saumon croûte au Colombo":["Colombo-crusted salmon tataki","Saumon mi-cuit en croûte d'épices Colombo","Seared salmon in a colombo spice crust"],
@@ -334,6 +342,7 @@ const BOISSONS_NOMS_EN={
   "délice ananas":"Pineapple delight","douceur des îles":"Island sweetness",
   "rhum blanc sec":"White rum, neat","rhum vieux sec":"Aged rum, neat","ti-punch gingembre":"Ginger ti-punch",
   "ti-punch vieux miel":"Aged rum & honey ti-punch","punch coco":"Coconut punch",
+  "rhum hardy":"Hardy rum","reimonenq 7 ans grande réserve":"Reimonenq 7-year-old Grande Réserve",
   "martini rouge":"Martini Rosso","martini blanc":"Martini Bianco","bière sans alcool":"Alcohol-free beer"
 };
 const BOISSONS_MORCEAUX_EN={
@@ -347,13 +356,14 @@ const BOISSONS_MORCEAUX_EN={
   "purée de mangue":"mango purée","purée de fraise":"strawberry purée","voir au bar":"ask at the bar",
   "fluide":"smooth","léger et peu tannique":"light and low in tannins","rondeur et finesse":"round and elegant",
   "sauvignon et chardonnay":"Sauvignon & Chardonnay","vallée de la loire":"Loire Valley","bière 0%":"0% beer",
-  "coca zéro":"Coke Zero"
+  "coca zéro":"Coke Zero","ananas-passion":"pineapple-passion fruit","cerise pays":"West Indian cherry",
+  "damoiseau":"Damoiseau","longueteau":"Longueteau","bologne":"Bologne","quenette":"quenette (genip)","mombin":"mombin (hog plum)","mangue":"mango"
 };
 const BOISSONS_MOTS_EN={"ananas":"pineapple","passion":"passion fruit","piment":"chilli","coco":"coconut",
   "vanille":"vanilla","goyave":"guava","menthe":"mint","banane":"banana","café":"coffee","chantilly":"whipped cream"};
 const BOISSONS_REGEX_EN=[
   [/vin au verre/gi,'Wine by the glass'],[/bière pression/gi,'Draught beer'],[/bière bouteille/gi,'Bottled beer'],
-  [/punch maison/gi,'Homemade punch'],[/\b[Bb]londe\s+([\wÀ-ÿ-]+)/g,'$1 lager'],[/Vallée de la Loire/g,'Loire Valley'],[/\bBourgogne\b/g,'Burgundy'],
+  [/punch maison/gi,'Homemade punch'],[/\b(\d+) ans\b/g,'$1-year-old'],[/\b[Bb]londe\s+([\wÀ-ÿ-]+)/g,'$1 lager'],[/Vallée de la Loire/g,'Loire Valley'],[/\bBourgogne\b/g,'Burgundy'],
   [/\s+Bio\b/g,' (organic)'],[/\s+et\s+/g,' & '],[/(\d),(\d)/g,'$1.$2']
 ];
 const majuscule=(src,t)=>/^[A-ZÀ-Ý]/.test(src)?t.charAt(0).toUpperCase()+t.slice(1):t;
@@ -401,11 +411,11 @@ function descPlat(p){
 const FAMILLES_BOISSONS=[
   {id:'softs',     emoji:'🥤', fr:'Eaux & softs',        en:'Water & soft drinks', sections:['Eaux & softs','Boissons chaudes']},
   {id:'cocktails', emoji:'🍹', fr:'Cocktails',           en:'Cocktails',           sections:['Nos cocktails signatures','Les intemporels','Mocktails']},
-  {id:'rhums',     emoji:'🥃', fr:'Rhums & spiritueux',  en:'Rum & spirits',       sections:['Nos rhums','Alcools & digestifs']},
+  {id:'rhums',     emoji:'🥃', fr:'Rhums & spiritueux',  en:'Rum & spirits',       sections:['Nos rhums','Nos rhums vieux','Alcools & digestifs']},
   {id:'vins',      emoji:'🍷', fr:'Vins',                en:'Wines',               sections:['Vins rouges','Vins blancs','Vins rosés','Nos bulles'], onglets:true},
   {id:'bieres',    emoji:'🍺', fr:'Bières',              en:'Beers',               sections:['Bières']}
 ];
-const SOUS_RUBRIQUES_EN={"Nos cocktails signatures":"Our signature cocktails","Les intemporels":"The timeless classics","Mocktails":"Mocktails · alcohol-free","Nos rhums":"Our rums","Alcools & digestifs":"Spirits & digestifs","Vins rouges":"Red wines","Vins blancs":"White wines","Vins rosés":"Rosé wines","Nos bulles":"Sparkling","Bières":"Beers","Eaux & softs":"Cold drinks","Boissons chaudes":"Hot drinks"};
+const SOUS_RUBRIQUES_EN={"Nos cocktails signatures":"Our signature cocktails","Les intemporels":"The timeless classics","Mocktails":"Mocktails · alcohol-free","Nos rhums":"Our rums","Nos rhums vieux":"Aged rums","Alcools & digestifs":"Spirits & digestifs","Vins rouges":"Red wines","Vins blancs":"White wines","Vins rosés":"Rosé wines","Nos bulles":"Sparkling","Bières":"Beers","Eaux & softs":"Cold drinks","Boissons chaudes":"Hot drinks"};
 const ONGLETS_VINS={"Vins rouges":["Rouges","Red"],"Vins blancs":["Blancs","White"],"Vins rosés":["Rosés","Rosé"],"Nos bulles":["Bulles","Sparkling"]};
 const cleSection=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
   .replace(/&/g,' et ').replace(/^\s*(nos|les)\s+/,'').split(/\s+/).filter(Boolean)
@@ -422,6 +432,7 @@ SECTION_BOISSON[cleSection('Cocktails intemporels')]={famille:'cocktails',sectio
 ['Softs','Nos softs','Eaux','Eaux et softs','Softs & eaux'].forEach(a=>{SECTION_BOISSON[cleSection(a)]={famille:'softs',section:'Eaux & softs'};});
 SECTION_BOISSON[cleSection('Bulles')]={famille:'vins',section:'Nos bulles'};
 SECTION_BOISSON[cleSection('Rhums')]={famille:'rhums',section:'Nos rhums'};
+['Rhums vieux','Rhum vieux','Nos rhums vieux'].forEach(a=>{SECTION_BOISSON[cleSection(a)]={famille:'rhums',section:'Nos rhums vieux'};});
 const infoBoisson=p=>SECTION_BOISSON[cleSection(p.Section)]||null;
 const nomFamille=f=>EN?f.en:f.fr;
 const nomFamilleEmoji=f=>f.emoji+' '+nomFamille(f);
@@ -462,7 +473,7 @@ const ALLERG_PLATS={};
  ["Mi-cuit de thazard",[4]],["Salade de Chatrou",[6,11,14]],["Moules frites à la crème",[7,12,14]],
  ["Burger Thazard",[1,3,4,7,10,11]],["Langouste grillée à la créole",[2,7]],["Menu enfant",[3,4,7]],
  ["Moelleux au chocolat",[1,3,6,7]],["Profiteroles au chocolat",[1,3,6,7]],["Café ou thé gourmand",[1,3,6,7,8]],
- ["Gaufre",[1,3,7]],["Passion des îles",[3,7]],["Chocolat liégeois",[3,6,7]],["Coco Kiss",[3,6,7,8]],
+ ["Gaufre",[1,3,7]],["Glace 1 boule",[3,5,7,8]],["Glace 2 boules",[3,5,7,8]],["Glace 3 boules",[3,5,7,8]],["Passion des îles",[3,7]],["Chocolat liégeois",[3,6,7]],["Coco Kiss",[3,6,7,8]],
  ["Dame blanche",[3,6,7]],["Banana split créole",[3,6,7,8]],["Piste verte",[3,6,7]],["Chabine",[3,5,6,7]],
  ["Café liégeois",[3,7]],["Ice Green",[3,6,7]],["Amiral",[3,7]],["Pirate",[3,7,8]]
 ].forEach(([n,a])=>{ALLERG_PLATS[cleAlg(n)]=a;});
@@ -490,6 +501,15 @@ const ACCOMPAGNEMENTS={
   "Viandes":{fr:'frites & salade',en:'fries & salad',alg:[10]},
   "Poissons & fruits de mer":{fr:'riz et légumes cuisinés',en:'rice and cooked vegetables',alg:[1,7,10]}
 };
+/* Sauce au choix servie avec les viandes et les poissons */
+const SAUCES=[{fr:'Bleu',en:'Blue cheese',alg:[7]},{fr:'Poivre',en:'Pepper',alg:[7]},{fr:'Créole',en:'Creole',alg:[]},
+  {fr:'Passion',en:'Passion fruit',alg:[7]},{fr:'Échalotes',en:'Shallot',alg:[7,12]},{fr:'Coco curry',en:'Coconut curry',alg:[10]},
+  {fr:'Crème cive',en:'Chive cream',alg:[7]}];
+const SECTIONS_SAUCE=["Viandes","Poissons & fruits de mer"];
+function blocSauces(){
+  return `<div class="sauces"><div class="sc-t">${EN?'Choice of sauce':'Sauce au choix'}</div><div class="sc-l">`+
+    SAUCES.map(x=>`<span>${esc(EN?x.en:x.fr)}${pastilles({'Allergènes':x.alg.length?x.alg.join(','):'aucun'})}</span>`).join('')+'</div></div>';
+}
 function legendeAllergenes(){
   return `<div class="lg-t">${EN?'Allergens':'Allergènes'}</div><div class="lg-g">`+
     ALLERGENES.slice(1).map(a=>`<span><span class="pa">${a.e}</span>${esc(EN?a.en:a.fr)}</span>`).join('')+
@@ -714,6 +734,7 @@ function panneauPlats(s,plats){
   const items=trier(plats.filter(p=>p.Section===s));
   let html=`<div class="sec-head"><h2>${esc(nomSection(s))}</h2><div class="rule"></div></div>`;
   const ac=ACCOMPAGNEMENTS[s];
+  if(SECTIONS_SAUCE.includes(s) && items.length) html+=blocSauces();
   if(ac && items.length) html+=`<div class="accomp"><b>${EN?'Served with:':'Accompagnement :'}</b> ${esc(EN?ac.en:ac.fr)}${pastilles({'Allergènes':ac.alg.join(',')})}</div>`;
   if(!items.length) html+=`<div class="empty">${EN?'No dishes in this section at the moment.':'Aucun plat dans cette section pour le moment.'}</div>`;
   items.forEach(p=>{ html+=ligne(p); });
