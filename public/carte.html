@@ -93,6 +93,17 @@ main{max-width:760px;margin:0 auto;padding:0 24px 40px}
 .chips button.on{background:rgba(191,137,59,.16);border-color:var(--gold);color:var(--gold-dark)}
 .note{font-size:12px;color:var(--ink-soft);padding-top:12px}
 .ast{color:var(--gold-dark);font-weight:500;margin-left:2px}
+.accomp{font-size:13.5px;color:var(--gold-dark);background:rgba(191,137,59,.11);border-radius:12px;padding:10px 14px;margin:16px 0 2px}
+.accomp b{font-weight:500}
+.alg{display:inline-flex;gap:3px;margin-left:7px;vertical-align:-2px;white-space:nowrap}
+.pa{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:#D5E6E1;font-size:11px;line-height:1;flex:none}
+.legende{display:none;max-width:712px;margin:0 auto 34px;padding:20px 24px 16px;background:var(--cream-soft);border:1px solid var(--cream-dark);border-radius:1.5rem}
+@media (max-width:760px){.legende{margin:0 16px 30px}}
+.lg-t{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dark);text-align:center;margin-bottom:12px}
+.lg-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:9px 12px}
+.lg-g>span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink)}
+.lg-g .pa{width:24px;height:24px;font-size:13px}
+.lg-n{font-size:12px;color:var(--ink-soft);text-align:center;line-height:1.5;margin-top:12px}
 .sub{display:none}
 .sub.on{display:block}
 
@@ -185,6 +196,7 @@ footer{background:var(--panel);border-radius:2.75rem 2.75rem 0 0;margin-top:44px
 </div></div>
 <nav><div class="nav-in" id="nav"></div></nav>
 <main id="main"></main>
+<div class="legende" id="legende"></div>
 
 <div class="cta">
   <a class="p" href="tel:+590590284323" data-en="Book a table">Réserver une table</a>
@@ -238,7 +250,7 @@ if(EN){
      afficher une traduction périmée.
    — Pour un nouveau plat : ajouter dans le tableur les colonnes facultatives
      « Nom EN » et « Description EN », elles passent devant ce dictionnaire. */
-const SECTIONS_EN={"Tapas & finger food":"Tapas & finger food","Entrées":"Starters","Spécialités créoles":"Creole specialities","Viandes":"Meat","Poissons & fruits de mer":"Fish & seafood","Desserts":"Desserts","Coupes de glaces":"Ice cream sundaes","Glaces alcoolisées":"Ice creams with spirits"};
+const SECTIONS_EN={"Tapas & finger food":"Tapas & finger food","Entrées":"Starters","Spécialités créoles":"Creole specialities","Viandes":"Meat","Poissons & fruits de mer":"Fish & seafood","Desserts":"Desserts","Coupes de glaces":"Ice cream sundaes","Glaces alcoolisées":"Ice creams with spirits","Menu Ti'Moun":"Kids' menu (Ti'Moun)"};
 const BADGES_EN={"végé":"Veggie","nouveau":"New","suggestion":"Chef's pick","spécialité":"Speciality"};
 const PLATS_EN={
 "Accras de morue":["Salt cod accras","Beignets croustillants, sauce chien maison","Crispy fritters, homemade sauce chien (Creole herb sauce)"],
@@ -288,6 +300,23 @@ const PLATS_EN={
 "Amiral":["Amiral","Mangue, passion, 2 cl rhum blanc","Mango, passion fruit, 2 cl white rum"],
 "Pirate":["Pirate","Rhum raisin, vanille pacane, 2 cl rhum vieux","Rum and raisin, vanilla pecan, 2 cl aged rum"]
 };
+/* Plats ajoutés ou décrits autrement dans le tableur depuis la première traduction */
+Object.assign(PLATS_EN,{
+"Poissons fumés & toasts":["Smoked fish & toast","Thon, marlin, espadon, thazard","Tuna, marlin, swordfish, king mackerel"],
+"Duo de boudins antillais":["West Indian boudin duo","Boudin rouge & boudin poisson","Black pudding & fish boudin"],
+"Tataki de saumon croûte au Colombo":["Colombo-crusted salmon tataki","Saumon mi-cuit en croûte d'épices Colombo","Seared salmon in a colombo spice crust"],
+"Salade de tomate, concombre, avocate et crevettes":["Tomato, cucumber, avocado & shrimp salad","Tomate, concombre, mousse d'avocat au citron vert et au piment","Tomato, cucumber, avocado mousse with lime and chilli"],
+"Assiette créole pour 2 personnes":["Creole platter for 2","Poisson fumé, rillettes de la mer, thon à la tahitienne, accras, boudin antillais et crudités","Smoked fish, seafood rillettes, Tahitian-style tuna, accras, West Indian boudin and crudités"],
+"Burger Rayon Vert":["Rayon Vert burger","Galette de boeuf grillé, ail confit, oignons grillés, cheddar, tomate, sauce créole maison, pain brioché frais","Grilled beef patty, confit garlic, grilled onions, cheddar, tomato, homemade Creole sauce, fresh brioche bun"],
+"Burger Thazard":["King mackerel burger","Pavé de thazard grillé, salade de chou façon pickles, mayonnaise créole, herbes fraîches","Grilled king mackerel steak, pickled-style cabbage slaw, Creole mayonnaise, fresh herbs"],
+"Brochette de marlin mi-cuit":["Seared marlin skewer","",""],
+"Dos de dorade coryphène":["Mahi-mahi loin","",""],
+"Salade de Chatrou":["Octopus salad (chatrou)","Poulpe poché et grillé. Giraumon, ognion rouge, concombre et papaye verte. Vinaigrette asiatique","Poached and grilled octopus. Pumpkin, red onion, cucumber and green papaya. Asian-style dressing"],
+"Chocolat liégeois":["Chocolate liégeois","3 boules chocolat, sauce chocolat, chantilly","3 scoops of chocolate ice cream, chocolate sauce, whipped cream"],
+"Chabine":["Chabine","Coco, cacahuète, chocolat, sauce chocolat, chantilly","Coconut, peanut, chocolate, chocolate sauce, whipped cream"],
+"Café liégeois":["Coffee liégeois","3 boules café, café expresso, chantilly","3 scoops of coffee ice cream, espresso, whipped cream"],
+"Menu enfant":["Kids' menu","Menu enfant, steak ou poulet ou poisson, frite & 1 boule de glace","Steak, chicken or fish, fries & 1 scoop of ice cream"]
+});
 const norm=v=>String(v||'').trim().toLowerCase();
 /* ── Traduction anglaise des boissons ────────────────────────────────
    Par glossaire, pour suivre les modifications du tableur sans retouche :
@@ -406,13 +435,74 @@ const classeBadge=b=>estCoupDeCoeur(b)?'coeur':String(b).toLowerCase().replace(/
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbeWNzrRtMOdtqJR-EUO7fk1XJeJeOvGiKLNmOR1IhT1lCgzZP6rGEGZqDJOsGPWNAWms0WMdEczbE/pub?gid=1933963057&single=true&output=csv";
 
-const ORDRE_SECTIONS = ["Tapas & finger food","Entrées","Spécialités créoles","Viandes","Poissons & fruits de mer","Desserts","Coupes de glaces","Glaces alcoolisées"];
+const ORDRE_SECTIONS = ["Tapas & finger food","Entrées","Spécialités créoles","Viandes","Poissons & fruits de mer","Menu Ti'Moun","Desserts","Coupes de glaces","Glaces alcoolisées"];
+/* Clé sans accents, apostrophes ni espaces : « Menu Ti Moun » = « Menu Ti'Moun » */
+const cleAlg=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const SECTION_CANON={}; ORDRE_SECTIONS.forEach(s=>{SECTION_CANON[cleAlg(s)]=s;});
+
+/* ── Allergènes (numérotation officielle UE) ─────────────────────────
+   Par défaut, la table ci-dessous (à valider par la cuisine). Une colonne
+   « Allergènes » dans le tableur, si elle est remplie, prend le dessus :
+   numéros (« 1, 3, 7 »), noms (« gluten, lait ») ou « aucun ». */
+const ALLERGENES=[null,
+  {e:'🌾',fr:'Gluten',en:'Gluten'},{e:'🦐',fr:'Crustacés',en:'Crustaceans'},{e:'🥚',fr:'Œufs',en:'Eggs'},
+  {e:'🐟',fr:'Poissons',en:'Fish'},{e:'🥜',fr:'Arachides',en:'Peanuts'},{e:'🫘',fr:'Soja',en:'Soy'},
+  {e:'🥛',fr:'Lait',en:'Milk'},{e:'🌰',fr:'Fruits à coque',en:'Tree nuts'},{e:'🥬',fr:'Céleri',en:'Celery'},
+  {e:'🫙',fr:'Moutarde',en:'Mustard'},{e:'🌱',fr:'Sésame',en:'Sesame'},{e:'🍷',fr:'Sulfites',en:'Sulphites'},
+  {e:'🌼',fr:'Lupin',en:'Lupin'},{e:'🐙',fr:'Mollusques',en:'Molluscs'}];
+const ALLERG_PLATS={};
+[["Accras de morue",[1,3,4]],["Rillettes de la mer",[1,3,4,7,10]],["Duo de boudins antillais",[1,4,7]],
+ ["Poissons fumés & toasts",[1,4]],["Poisson à la tahitienne",[4]],["Tataki de saumon croûte au Colombo",[4,10]],
+ ["Tataki de saumon en croûte de colombo",[4,10]],
+ ["Salade de tomate, concombre, avocate et crevettes",[2]],["Salade de tomates, concombre, avocat et crevettes",[2]],
+ ["Méli-mélo du maraîcher",[10]],["Assiette créole pour 2 personnes",[1,3,4,7,10]],["Assiette créole",[1,3,4,7,10]],
+ ["Tartare de bœuf à la créole",[3]],["Colombo de poulet",[10]],["Ouassou et aiguillettes de poulet au lait de coco",[2]],
+ ["Toasts de boudin",[1,7]],["Frites de manioc",[3,10]],
+ ["Burger Rayon Vert",[1,3,7,10,11]],["Brochette de marlin mi-cuit",[4]],["Dos de dorade coryphène",[4]],
+ ["Mi-cuit de thazard",[4]],["Salade de Chatrou",[6,11,14]],["Moules frites à la crème",[7,12,14]],
+ ["Burger Thazard",[1,3,4,7,10,11]],["Langouste grillée à la créole",[2,7]],["Menu enfant",[3,4,7]],
+ ["Moelleux au chocolat",[1,3,6,7]],["Profiteroles au chocolat",[1,3,6,7]],["Café ou thé gourmand",[1,3,6,7,8]],
+ ["Gaufre",[1,3,7]],["Passion des îles",[3,7]],["Chocolat liégeois",[3,6,7]],["Coco Kiss",[3,6,7,8]],
+ ["Dame blanche",[3,6,7]],["Banana split créole",[3,6,7,8]],["Piste verte",[3,6,7]],["Chabine",[3,5,6,7]],
+ ["Café liégeois",[3,7]],["Ice Green",[3,6,7]],["Amiral",[3,7]],["Pirate",[3,7,8]]
+].forEach(([n,a])=>{ALLERG_PLATS[cleAlg(n)]=a;});
+function allergenesDe(p){
+  const col=String(p['Allergènes']||p['Allergenes']||'').trim();
+  if(col){
+    if(/^aucun/i.test(col)) return [];
+    const ids=new Set();
+    col.split(/[,;\/+]+/).map(x=>x.trim()).filter(Boolean).forEach(x=>{
+      const n=parseInt(x,10);
+      if(n>=1&&n<=14){ids.add(n);return;}
+      const k=cleAlg(x);
+      ALLERGENES.forEach((a,i)=>{ if(a && (cleAlg(a.fr).startsWith(k.slice(0,5)) || x.includes(a.e))) ids.add(i); });
+    });
+    return [...ids].sort((a,b)=>a-b);
+  }
+  return ALLERG_PLATS[cleAlg(p['Nom du plat'])]||[];
+}
+const pastilles=p=>{
+  const a=allergenesDe(p); if(!a.length) return '';
+  return '<span class="alg">'+a.map(i=>`<span class="pa" title="${esc(EN?ALLERGENES[i].en:ALLERGENES[i].fr)}" aria-label="${esc(EN?ALLERGENES[i].en:ALLERGENES[i].fr)}">${ALLERGENES[i].e}</span>`).join('')+'</span>';
+};
+/* Garniture servie avec toute une section, et ses allergènes */
+const ACCOMPAGNEMENTS={
+  "Viandes":{fr:'frites & salade',en:'fries & salad',alg:[10]},
+  "Poissons & fruits de mer":{fr:'riz et légumes cuisinés',en:'rice and cooked vegetables',alg:[1,7,10]}
+};
+function legendeAllergenes(){
+  return `<div class="lg-t">${EN?'Allergens':'Allergènes'}</div><div class="lg-g">`+
+    ALLERGENES.slice(1).map(a=>`<span><span class="pa">${a.e}</span>${esc(EN?a.en:a.fr)}</span>`).join('')+
+    `</div><p class="lg-n">${EN?'Our dishes are prepared in a kitchen that handles these 14 allergens, so traces may be present. If you have an allergy or intolerance, please tell our team before ordering.':"Nos plats sont préparés dans une cuisine où sont manipulés ces 14 allergènes : des traces sont possibles. En cas d'allergie ou d'intolérance, parlez-en à notre équipe avant de commander."}</p>`;
+}
 
 /* Sections fusionnées : la clé est renvoyée vers la valeur, en conservant l'ordre
    d'affichage à la suite des plats déjà présents dans la section d'accueil. */
 const FUSIONS = { "Burgers": "Viandes" };
 function fusionner(plats){
   return plats.map(p => {
+    const canon = SECTION_CANON[cleAlg(p.Section)];
+    if(canon && canon!==p.Section) p = { ...p, Section: canon };
     const cible = FUSIONS[p.Section];
     if(!cible) return p;
     return { ...p, Section: cible, Ordre: String((parseInt(p.Ordre)||0) + 50) };
@@ -530,8 +620,8 @@ function ligne(p){
   const ep=off?`<span class="tag t-epuise">${EN?'Sold out':'Épuisé'}</span>`:'';
   return `<div class="d${off?' off':''}">
     <div>
-      <div class="nm">${esc(nomPlat(p))}${aVariantes(p)?'<span class="ast">*</span>':''}${badge}${ep}</div>
-      ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}</div>`:''}
+      <div class="nm">${esc(nomPlat(p))}${aVariantes(p)?'<span class="ast">*</span>':''}${badge}${ep}${(!infoBoisson(p)&&!descPlat(p))?pastilles(p):''}</div>
+      ${descPlat(p)?`<div class="ds">${esc(descPlat(p))}${infoBoisson(p)?'':pastilles(p)}</div>`:''}
       ${accord(p)}
     </div>
     <div class="pr">${esc(prix(p['Prix (€)']))}</div>
@@ -604,6 +694,10 @@ function render(){
     };
   });
 
+  const lg=document.getElementById('legende');
+  lg.innerHTML=legendeAllergenes();
+  lg.style.display=(MODE==='manger'&&plats.length)?'block':'none';
+
   const dispo=plats.filter(p=>(p.Disponible||'').toUpperCase()!=='NON').length;
   document.getElementById('stamp').textContent=EN?`${dispo} dishes on the menu`:`${dispo} plats à la carte`;
 }
@@ -619,6 +713,8 @@ function caler(){
 function panneauPlats(s,plats){
   const items=trier(plats.filter(p=>p.Section===s));
   let html=`<div class="sec-head"><h2>${esc(nomSection(s))}</h2><div class="rule"></div></div>`;
+  const ac=ACCOMPAGNEMENTS[s];
+  if(ac && items.length) html+=`<div class="accomp"><b>${EN?'Served with:':'Accompagnement :'}</b> ${esc(EN?ac.en:ac.fr)}${pastilles({'Allergènes':ac.alg.join(',')})}</div>`;
   if(!items.length) html+=`<div class="empty">${EN?'No dishes in this section at the moment.':'Aucun plat dans cette section pour le moment.'}</div>`;
   items.forEach(p=>{ html+=ligne(p); });
   return html;
