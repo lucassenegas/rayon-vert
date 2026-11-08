@@ -987,7 +987,7 @@ function About() {
       <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center" ref={ref}>
         <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'} custom={0.2}>
           <BlobCluster
-            main={{ src: A('about-principale-v3.jpg'), alt: t("Piscine à débordement face à la mer des Caraïbes", "Infinity pool facing the Caribbean Sea") }}
+            main={{ src: A('about-principale-v4.jpg'), alt: t("Piscine à débordement face à la mer des Caraïbes", "Infinity pool facing the Caribbean Sea") }}
             secondary={{ src: A('about-secondaire-v2.jpg'), alt: t('Arbre du voyageur dans le jardin de l\u2019hôtel', "Traveller's palm in the hotel garden") }}
             mainShape="blob-1"
             secondaryShape="blob-2"
