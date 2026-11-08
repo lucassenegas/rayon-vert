@@ -184,11 +184,20 @@ const gallery = [
   { src: A('galerie-g10-v1.jpg'), alt: t("Salade créole au poisson fumé", "Creole salad with smoked fish") },
   { src: A('galerie-g11-v1.jpg'), alt: t("Jardin fleuri et vue sur la baie", "Flowering garden overlooking the bay") },
   { src: A('galerie-g12-v1.jpg'), alt: t("Transats au bord de la piscine", "Sun loungers by the pool") },
-  { src: A('galerie-g13-v1.jpg'), alt: t("Salle du restaurant ouverte sur la mer", "Restaurant dining room open to the sea") },
   { src: A('galerie-g14-v1.jpg'), alt: t("Buffet de viennoiseries et gâteaux maison", "Pastries and homemade cakes buffet") },
   { src: A('galerie-g15-v1.jpg'), alt: t("Buffet de fruits frais et gâteau au chocolat", "Fresh fruit buffet and chocolate cake") },
   { src: A('galerie-g16-v1.jpg'), alt: t("Stand de desserts et douceurs créoles", "Dessert stand with Creole sweets") },
   { src: A('galerie-g17-v1.jpg'), alt: t("Vue plongeante sur la piscine et la baie", "Looking down on the pool and the bay") },
+  { src: A('galerie-g18-v1.jpg'), alt: t("Terrasse du restaurant au bord de la piscine", "Restaurant terrace by the pool") },
+  { src: A('galerie-g19-v1.jpg'), alt: t("Coin enfants avec livres et jeux", "Kids' corner with books and toys") },
+  { src: A('galerie-g20-v1.jpg'), alt: t("Le restaurant illuminé le soir", "The restaurant lit up in the evening") },
+  { src: A('galerie-g21-v1.jpg'), alt: t("Assiette de poulpe grillé", "Grilled octopus dish") },
+  { src: A('galerie-g22-v1.jpg'), alt: t("Palmiers et vue sur la baie", "Palm trees overlooking the bay") },
+  { src: A('galerie-g23-v1.jpg'), alt: t("Pavé de poisson et tomates cerises", "Fish fillet with cherry tomatoes") },
+  { src: A('galerie-g24-v1.jpg'), alt: t("Piscine et transats sous les parasols", "Pool and sun loungers under parasols") },
+  { src: A('galerie-g25-v1.jpg'), alt: t("Tranches de poisson mi-cuit aux herbes fraîches", "Seared fish slices with fresh herbs") },
+  { src: A('galerie-g26-v1.jpg'), alt: t("Le bar et la salle du restaurant", "The bar and the restaurant dining room") },
+  { src: A('galerie-g27-v1.jpg'), alt: t("Terrasse de chambre avec vue sur la baie", "Room terrace overlooking the bay") },
 ]
 
 const amenities = [
@@ -1206,7 +1215,7 @@ function Restaurant({ onReserveTable }: { onReserveTable: () => void }) {
           <motion.div variants={fadeIn} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
             <BlobCluster
               main={{ src: A('dinerdegroupe1-scaled.jpg'), alt: t('Restaurant panoramique Le Rayon Vert', 'Le Rayon Vert panoramic restaurant') }}
-              secondary={{ src: A('restaurant-secondaire-v2.jpg'), alt: t("Salade créole au poisson fumé", "Creole salad with smoked fish") }}
+              secondary={{ src: A('restaurant-secondaire-v3.jpg'), alt: t("Salade créole au poisson fumé", "Creole salad with smoked fish") }}
               mainShape="blob-2"
               secondaryShape="blob-1"
               accentBg="bg-gold"
