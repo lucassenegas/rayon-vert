@@ -473,7 +473,7 @@ function RestaurantFormContent() {
     if (j !== null && j >= 1 && j <= 4 && estDejeuner(heure)) setHeure('')
   }
 
-  if (status === 'success') return <SuccessNote>{t("Demande envoyée ! Confirmation par téléphone ou email sous 24h.", "Request sent! We will confirm by phone or email within 24 hours.")}</SuccessNote>
+  if (status === 'success') return <SuccessNote>{t("Demande envoyée ! Nous vous envoyons une confirmation par email sous 24h.", "Request sent! We will send you a confirmation by email within 24 hours.")}</SuccessNote>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -539,8 +539,9 @@ function RestaurantFormContent() {
           <input type="text" name="nom" required placeholder={t("Marie Dupont", "Mary Smith")} className={fieldInput} />
         </div>
         <div className={fieldWrap}>
-          <label className={fieldLabel}>Email <span className="normal-case text-ink-soft/50">{t("(optionnel)", "(optional)")}</span></label>
-          <input type="email" name="email" placeholder={t("marie@exemple.com", "mary@example.com")} className={fieldInput} />
+          <label className={fieldLabel}>Email *</label>
+          <input type="email" name="email" required placeholder={t("marie@exemple.com", "mary@example.com")} className={fieldInput} />
+          <p className="font-sans text-[11px] text-ink-soft mt-1">{t("Nous vous enverrons une confirmation par email", "We will send you a confirmation by email")}</p>
         </div>
       </div>
       <div className={fieldWrap}>
